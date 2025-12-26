@@ -1,0 +1,5 @@
+{
+  "name": "Ink Studio Manager",
+  "description": "Um painel de gestão profissional para Estúdios de Tatuagem, com agendamento, gestão de clientes e acompanhamento de artistas.",
+  "requestFramePermissions": []
+}
