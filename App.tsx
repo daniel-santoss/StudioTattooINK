@@ -80,8 +80,17 @@ const App: React.FC = () => {
                 </RequireAuth>
                 } 
             />
+            {/* Gallery is now Protected */}
+            <Route 
+                path="/gallery" 
+                element={
+                <RequireAuth>
+                    <Gallery />
+                </RequireAuth>
+                } 
+            />
+
             {/* Shared Pages with Sidebar context for logged in users */}
-            <Route path="/gallery" element={<Gallery />} />
             <Route path="/artists" element={<Artists />} />
 
 
