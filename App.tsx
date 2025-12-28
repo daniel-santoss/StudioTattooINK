@@ -16,6 +16,7 @@ import BookingRequests from './pages/BookingRequests'; // New Artist Booking Req
 import ServiceHistory from './pages/ServiceHistory';
 import Reports from './pages/Reports';
 import Profile from './pages/Profile'; // New Profile Page
+import ArtistAppointmentDetails from './pages/ArtistAppointmentDetails'; // Nova página
 
 // Client Pages
 import Landing from './pages/client/Landing';
@@ -24,6 +25,7 @@ import Artists from './pages/client/Artists';
 import ArtistProfile from './pages/client/ArtistProfile'; // New Artist Public Profile
 import Gallery from './pages/client/Gallery';
 import ClientDashboard from './pages/client/ClientDashboard';
+import ClientAppointmentDetails from './pages/client/ClientAppointmentDetails'; // Nova página
 import Matchmaker from './pages/client/Matchmaker';
 
 // Component to protect routes that require client login
@@ -49,7 +51,7 @@ const App: React.FC = () => {
           <Route path="/match" element={<Matchmaker />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/artist-profile" element={<ArtistProfile />} /> {/* New Route */}
+          <Route path="/artist-profile" element={<ArtistProfile />} />
           
           <Route 
             path="/profile" 
@@ -69,6 +71,15 @@ const App: React.FC = () => {
                 element={
                 <RequireAuth>
                     <ClientDashboard />
+                </RequireAuth>
+                } 
+            />
+            {/* Rota para Detalhes (Cliente) */}
+            <Route 
+                path="/my-appointments/:id" 
+                element={
+                <RequireAuth>
+                    <ClientAppointmentDetails />
                 </RequireAuth>
                 } 
             />
@@ -97,8 +108,12 @@ const App: React.FC = () => {
             {/* Admin Routes */}
             <Route path="/admin">
                 <Route path="dashboard" element={<Dashboard />} />
-                <Route path="booking-requests" element={<BookingRequests />} /> {/* New Artist Route */}
+                <Route path="booking-requests" element={<BookingRequests />} />
                 <Route path="schedule" element={<Schedule />} />
+                
+                {/* Rota Detalhes Agendamento (Artista) */}
+                <Route path="appointment/:id" element={<ArtistAppointmentDetails />} />
+
                 <Route path="clients" element={<Clients />} />
                 <Route path="staff" element={<Staff />} />
                 <Route path="requests" element={<Requests />} />

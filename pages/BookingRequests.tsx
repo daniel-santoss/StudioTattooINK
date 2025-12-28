@@ -62,13 +62,15 @@ const BookingRequests: React.FC = () => {
   const [requests, setRequests] = useState<BookingRequest[]>(initialRequests);
   const [selectedRequest, setSelectedRequest] = useState<BookingRequest | null>(null);
   
-  // Modals
+  // Modals visibility
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false); // Novo modal
 
-  // Rejection State
+  // Action States
   const [rejectionData, setRejectionData] = useState({ reason: '', note: '' });
-  const [requestToRejectId, setRequestToRejectId] = useState<number | null>(null);
+  const [requestToActId, setRequestToActId] = useState<number | null>(null);
+  const [negotiatedPrice, setNegotiatedPrice] = useState(''); // Novo estado para o preço
 
   const rejectionReasons = [
       "Agenda indisponível para esta data",
@@ -88,28 +90,68 @@ const BookingRequests: React.FC = () => {
     setSelectedRequest(null);
   };
 
-  const handleApprove = (id: number) => {
-    // Lógica de aprovação (API call)
-    alert("Agendamento confirmado! O cliente será notificado.");
-    setRequests(prev => prev.filter(req => req.id !== id));
-    handleCloseDetails();
+  // Abre o modal de aprovação (passo intermediário)
+  const handleOpenApprove = (id: number) => {
+    setRequestToActId(id);
+    setNegotiatedPrice(''); // Limpa o preço anterior
+    setIsApproveModalOpen(true);
+  };
+
+  // Formata o valor monetário enquanto o usuário digita
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      let value = e.target.value;
+      
+      // Remove tudo que não é dígito
+      value = value.replace(/\D/g, "");
+
+      if (value === "") {
+          setNegotiatedPrice("");
+          return;
+      }
+
+      // Converte para centavos e formata
+      const amount = parseFloat(value) / 100;
+      const formatted = amount.toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+      });
+
+      setNegotiatedPrice(formatted);
+  };
+
+  // Efetiva a aprovação
+  const confirmApprove = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!negotiatedPrice) {
+        alert("Por favor, insira o valor combinado.");
+        return;
+    }
+
+    // Lógica de aprovação (API call) enviando o preço
+    console.log(`Aprovando ID ${requestToActId} com valor R$ ${negotiatedPrice}`);
+    
+    setRequests(prev => prev.filter(req => req.id !== requestToActId));
+    setIsApproveModalOpen(false);
+    setIsDetailsModalOpen(false); // Fecha detalhes se estiver aberto
+    setRequestToActId(null);
+    alert(`Agendamento confirmado! Valor registrado: R$ ${negotiatedPrice}`);
   };
 
   const handleOpenReject = (id: number) => {
-      setRequestToRejectId(id);
+      setRequestToActId(id);
       setRejectionData({ reason: rejectionReasons[0], note: '' });
       setIsRejectModalOpen(true);
   };
 
   const confirmReject = (e: React.FormEvent) => {
       e.preventDefault();
-      if (requestToRejectId) {
+      if (requestToActId) {
           // Lógica de API para recusar com motivo
-          console.log("Recusando ID:", requestToRejectId, rejectionData);
-          setRequests(prev => prev.filter(req => req.id !== requestToRejectId));
+          console.log("Recusando ID:", requestToActId, rejectionData);
+          setRequests(prev => prev.filter(req => req.id !== requestToActId));
           setIsRejectModalOpen(false);
           setIsDetailsModalOpen(false); // Fecha o detalhe se estiver aberto
-          setRequestToRejectId(null);
+          setRequestToActId(null);
           alert("Solicitação recusada. O motivo foi enviado ao cliente.");
       }
   };
@@ -166,7 +208,7 @@ const BookingRequests: React.FC = () => {
                               Ver Detalhes
                           </button>
                           <button 
-                            onClick={() => handleApprove(req.id)}
+                            onClick={() => handleOpenApprove(req.id)}
                             className="size-10 shrink-0 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 rounded-lg transition-colors"
                             title="Aprovar Agendamento"
                           >
@@ -304,7 +346,7 @@ const BookingRequests: React.FC = () => {
                         Recusar
                     </button>
                     <button 
-                        onClick={() => handleApprove(selectedRequest.id)}
+                        onClick={() => handleOpenApprove(selectedRequest.id)}
                         className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-sm uppercase tracking-wide transition-all shadow-lg shadow-emerald-900/20 flex items-center gap-2"
                     >
                         <span className="material-symbols-outlined">check_circle</span>
@@ -358,6 +400,59 @@ const BookingRequests: React.FC = () => {
                           <button type="button" onClick={() => setIsRejectModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Cancelar</button>
                           <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-red-900/20">
                               Confirmar Recusa
+                          </button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      )}
+
+      {/* Approve Price Modal (NEW) */}
+      {isApproveModalOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+              <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-sm shadow-2xl relative animate-fade-in">
+                  <form onSubmit={confirmApprove}>
+                      <div className="p-6 border-b border-border-dark flex justify-between items-center bg-emerald-500/5 rounded-t-2xl">
+                          <div className="flex items-center gap-2 text-emerald-500">
+                               <span className="material-symbols-outlined">attach_money</span>
+                               <h3 className="text-xl font-bold">Definir Valor</h3>
+                          </div>
+                          <button type="button" onClick={() => setIsApproveModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
+                      </div>
+                      <div className="p-6">
+                          <p className="text-text-muted text-sm mb-6">Confirme o valor final negociado para esta sessão.</p>
+                          
+                          <div>
+                              <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Valor da Sessão (R$)</label>
+                              <div className="relative">
+                                  {/* Ícone centralizado verticalmente */}
+                                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted font-bold pointer-events-none text-lg">R$</span>
+                                  <input 
+                                      required
+                                      type="text" // Mudado para text para permitir formatação
+                                      inputMode="numeric"
+                                      autoFocus
+                                      value={negotiatedPrice}
+                                      onChange={handlePriceChange}
+                                      className="w-full bg-background-dark border border-border-dark rounded-xl py-4 pl-14 text-white text-2xl font-bold focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-zinc-700 outline-none transition-all"
+                                      placeholder="0,00"
+                                  />
+                              </div>
+                          </div>
+                      </div>
+                      <div className="p-6 border-t border-border-dark flex gap-3 bg-background-dark rounded-b-2xl">
+                          <button 
+                            type="button" 
+                            onClick={() => setIsApproveModalOpen(false)} 
+                            className="flex-1 bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-red-900/20"
+                          >
+                              Cancelar
+                          </button>
+                          <button 
+                            type="submit" 
+                            className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-emerald-900/20"
+                          >
+                              Confirmar
                           </button>
                       </div>
                   </form>
