@@ -85,7 +85,7 @@ const ClientLayout: React.FC = () => {
              {isLoggedIn ? (
                 <div className="flex items-center gap-4">
                     <button 
-                        onClick={() => navigate(userRole === 'client' ? '/profile' : '/admin/dashboard')}
+                        onClick={() => navigate(userRole === 'client' ? '/my-appointments' : '/admin/dashboard')}
                         className="text-xs font-bold text-white hover:text-primary transition-colors uppercase tracking-wider"
                     >
                         Olá, {userRole === 'client' ? 'Cliente' : 'Artista'}
@@ -128,7 +128,7 @@ const ClientLayout: React.FC = () => {
                     {isLoggedIn ? (
                         <>
                             <button 
-                                onClick={() => { navigate(userRole === 'client' ? '/profile' : '/admin/dashboard'); closeMenu(); }}
+                                onClick={() => { navigate(userRole === 'client' ? '/my-appointments' : '/admin/dashboard'); closeMenu(); }}
                                 className="w-full py-3 rounded bg-surface-light text-white font-bold uppercase tracking-wider"
                             >
                                 Minha Conta

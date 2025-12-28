@@ -10,7 +10,7 @@ interface ScheduleItem {
   clientAvatar: string;
   artistName: string;
   service: string;
-  status: 'confirmado' | 'pendente' | 'em-andamento' | 'cancelado' | 'rescheduling';
+  status: 'confirmado' | 'pendente' | 'em-andamento' | 'cancelado' | 'rescheduling' | 'concluido';
   type: 'tattoo' | 'piercing' | 'orcamento';
   rescheduleInfo?: {
       newDate: string;
@@ -21,6 +21,17 @@ interface ScheduleItem {
 }
 
 const initialSchedule: ScheduleItem[] = [
+  {
+    id: 7,
+    time: "09:00",
+    endTime: "10:30",
+    clientName: "Leticia Sabatella",
+    clientAvatar: "https://i.pravatar.cc/150?u=30",
+    artistName: "Alex Rivera",
+    service: "Piercing Umbigo",
+    status: "concluido",
+    type: "piercing"
+  },
   {
     id: 1,
     time: "10:00",
@@ -95,23 +106,6 @@ const initialSchedule: ScheduleItem[] = [
   }
 ];
 
-// Helper to generate next 7 days
-const getNextDays = () => {
-    const days = [];
-    const today = new Date();
-    for (let i = 0; i < 7; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i);
-        days.push({
-            dateObj: date,
-            dayName: date.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '').toUpperCase(),
-            dayNumber: date.getDate(),
-            fullDate: date.toISOString().split('T')[0] // YYYY-MM-DD
-        });
-    }
-    return days;
-};
-
 const availableTimeSlots = ["10:00", "11:00", "13:00", "14:30", "16:00", "18:00"];
 
 const Schedule: React.FC = () => {
@@ -134,11 +128,15 @@ const Schedule: React.FC = () => {
   const [itemToReschedule, setItemToReschedule] = useState<number | null>(null);
   const [rescheduleData, setRescheduleData] = useState({ newDate: '', newTime: '', reason: '' });
 
+  // Calendar State
+  const [viewDate, setViewDate] = useState(new Date());
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dateInput, setDateInput] = useState("");
+  const calendarRef = useRef<HTMLDivElement>(null);
+
   // View Details Modal (for Rescheduling)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ScheduleItem | null>(null);
-
-  const nextDays = getNextDays();
 
   const cancellationReasons = [
       "Imprevisto pessoal do tatuador",
@@ -161,10 +159,97 @@ const Schedule: React.FC = () => {
         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
             setActiveMenuId(null);
         }
+        if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+            setIsCalendarOpen(false);
+        }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // --- Calendar Logic ---
+  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+
+  const handlePrevMonth = () => {
+      const newDate = new Date(viewDate);
+      newDate.setMonth(newDate.getMonth() - 1);
+      setViewDate(newDate);
+  };
+
+  const handleNextMonth = () => {
+      const newDate = new Date(viewDate);
+      newDate.setMonth(newDate.getMonth() + 1);
+      setViewDate(newDate);
+  };
+
+  const handleDateSelect = (day: number) => {
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth() + 1;
+      
+      // Format ISO for State
+      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      setRescheduleData({...rescheduleData, newDate: dateStr});
+      
+      // Format DD/MM/YYYY for Input
+      const displayStr = `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+      setDateInput(displayStr);
+      
+      setIsCalendarOpen(false);
+  };
+
+  const handleManualDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      let val = e.target.value.replace(/\D/g, ''); // Remove não dígitos
+      
+      if (val.length > 8) val = val.substring(0, 8); // Max 8 digitos
+
+      // Máscara DD/MM/AAAA
+      if (val.length >= 5) {
+          val = val.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1/$2/$3');
+      } else if (val.length >= 3) {
+          val = val.replace(/(\d{2})(\d{1,2})/, '$1/$2');
+      }
+
+      setDateInput(val);
+
+      // Validação ao completar a data (10 chars = DD/MM/AAAA)
+      if (val.length === 10) {
+          const [day, month, year] = val.split('/').map(Number);
+          const daysInMonth = new Date(year, month, 0).getDate();
+          
+          if (month < 1 || month > 12 || day < 1 || day > daysInMonth) {
+              setRescheduleData({...rescheduleData, newDate: ''}); // Data inválida
+              return;
+          }
+
+          const testDate = new Date(year, month - 1, day);
+          const today = new Date();
+          today.setHours(0,0,0,0);
+
+          if (testDate >= today) {
+              const isoDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+              setRescheduleData({...rescheduleData, newDate: isoDate});
+              setViewDate(testDate);
+          } else {
+              setRescheduleData({...rescheduleData, newDate: ''}); // Data no passado
+          }
+      } else {
+          setRescheduleData({...rescheduleData, newDate: ''}); // Data incompleta
+      }
+  };
+
+  const isPastDate = (day: number) => {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const checkDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
+      return checkDate < today;
+  };
+
+  const isSelected = (day: number) => {
+      if (!rescheduleData.newDate) return false;
+      const [y, m, d] = rescheduleData.newDate.split('-').map(Number);
+      return viewDate.getFullYear() === y && viewDate.getMonth() + 1 === m && day === d;
+  };
 
   // --- Handlers ---
 
@@ -187,6 +272,7 @@ const Schedule: React.FC = () => {
   const handleOpenReschedule = (id: number) => {
       setItemToReschedule(id);
       setRescheduleData({ newDate: '', newTime: '', reason: '' });
+      setDateInput("");
       setIsRescheduleModalOpen(true);
       setActiveMenuId(null);
   };
@@ -218,7 +304,8 @@ const Schedule: React.FC = () => {
           }
           
           // Format date for display
-          const dateObj = new Date(rescheduleData.newDate);
+          const [y, m, d] = rescheduleData.newDate.split('-');
+          const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
           const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
 
           setSchedule(prev => prev.map(item => 
@@ -251,12 +338,14 @@ const Schedule: React.FC = () => {
         if (filterArtist === 'Todos') return true;
         return item.artistName === filterArtist;
     })
+    .filter(item => item.status !== 'concluido')
     .sort((a, b) => a.time.localeCompare(b.time));
 
   const getStatusStyle = (status: string) => {
       switch(status) {
           case 'confirmado': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
           case 'em-andamento': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 animate-pulse';
+          case 'concluido': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
           case 'pendente': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
           case 'rescheduling': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
           case 'cancelado': return 'bg-red-500/10 text-red-500 border-red-500/20 opacity-60';
@@ -329,7 +418,7 @@ const Schedule: React.FC = () => {
                       <span className="material-symbols-outlined text-text-muted text-3xl">event_busy</span>
                   </div>
                   <h3 className="text-white font-bold text-lg">Agenda Livre</h3>
-                  <p className="text-text-muted text-sm">Nenhum agendamento encontrado para este filtro.</p>
+                  <p className="text-text-muted text-sm">Nenhum agendamento pendente para este filtro.</p>
               </div>
           ) : (
               filteredSchedule.map((item) => (
@@ -400,6 +489,14 @@ const Schedule: React.FC = () => {
                                                 </button>
                                             )}
                                             
+                                            <button 
+                                                onClick={() => handleCardClick(item.id)}
+                                                className="w-full text-left px-3 py-2 text-sm text-white hover:bg-white/10 rounded-lg flex items-center gap-2 font-medium"
+                                            >
+                                                <span className="material-symbols-outlined text-lg">visibility</span>
+                                                Ver Detalhes
+                                            </button>
+
                                             {item.status !== 'cancelado' && item.status !== 'em-andamento' && (
                                                 <button 
                                                     onClick={() => handleOpenReschedule(item.id)}
@@ -490,49 +587,111 @@ const Schedule: React.FC = () => {
           </div>
       )}
 
-      {/* Reschedule Modal (Visual Customizado) */}
+      {/* Reschedule Modal (Visual Padronizado em Vermelho) */}
       {isRescheduleModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={(e) => e.stopPropagation()}>
               <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-lg shadow-2xl relative animate-fade-in flex flex-col max-h-[90vh]">
                   <form onSubmit={confirmReschedule} className="flex flex-col h-full">
                       <div className="p-6 border-b border-border-dark flex justify-between items-center bg-surface-dark rounded-t-2xl">
-                          <div>
-                              <h3 className="text-2xl font-display font-bold text-white mb-1">Disponibilidade</h3>
-                              <p className="text-text-muted text-xs">Selecione uma nova data e horário.</p>
+                          <div className="flex items-center gap-2 text-primary">
+                              <span className="material-symbols-outlined">edit_calendar</span>
+                              <h3 className="text-xl font-bold text-white">Solicitar Mudança</h3>
                           </div>
                           <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
                       </div>
                       
                       <div className="p-6 overflow-y-auto space-y-8 flex-1">
+                          <p className="text-text-muted text-sm">Sugira uma nova data e horário. O tatuador precisará aprovar.</p>
                           
-                          {/* Date Selection */}
-                          <div>
-                              <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Escolha a Data</label>
-                              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
-                                  {nextDays.map((day) => {
-                                      const isSelected = rescheduleData.newDate === day.fullDate;
-                                      return (
-                                          <button
-                                              key={day.fullDate}
-                                              type="button"
-                                              onClick={() => setRescheduleData({...rescheduleData, newDate: day.fullDate})}
-                                              className={`flex flex-col items-center justify-center min-w-[80px] h-24 rounded-xl border transition-all ${
-                                                  isSelected 
-                                                  ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20 scale-105' 
-                                                  : 'bg-surface-light/30 border-border-dark text-text-muted hover:border-white/30 hover:bg-surface-light'
-                                              }`}
-                                          >
-                                              <span className="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-80">{day.dayName}</span>
-                                              <span className="text-3xl font-display font-bold">{day.dayNumber}</span>
-                                          </button>
-                                      );
-                                  })}
+                          {/* Date Selection (Input Manual + Calendar Popover) */}
+                          <div className="relative" ref={calendarRef}>
+                              <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Nova Data <span className="text-primary">*</span></label>
+                              
+                              {/* Input com ícone */}
+                              <div className="relative">
+                                  <input 
+                                      type="text"
+                                      value={dateInput}
+                                      onChange={handleManualDateChange}
+                                      onClick={() => setIsCalendarOpen(true)}
+                                      placeholder="DD/MM/AAAA"
+                                      maxLength={10}
+                                      className={`w-full bg-background-dark border rounded-lg p-3 text-sm text-white placeholder-text-muted focus:outline-none transition-all ${
+                                          isCalendarOpen 
+                                              ? 'border-primary ring-1 ring-primary' 
+                                              : 'border-border-dark hover:border-white/30'
+                                      }`}
+                                  />
+                                  <button 
+                                      type="button" 
+                                      onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                                      className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-white"
+                                  >
+                                      <span className="material-symbols-outlined text-xl">calendar_month</span>
+                                  </button>
                               </div>
+
+                              {/* Floating Calendar */}
+                              {isCalendarOpen && (
+                                  <div className="absolute top-full left-0 mt-2 z-20 bg-[#1a1a1a] border border-border-dark rounded-xl p-3 shadow-2xl w-full max-w-[280px] animate-fade-in select-none">
+                                      {/* Header */}
+                                      <div className="flex items-center justify-between mb-3">
+                                          <button type="button" onClick={handlePrevMonth} className="text-text-muted hover:text-white p-1 rounded hover:bg-white/10 transition-colors">
+                                              <span className="material-symbols-outlined text-sm">chevron_left</span>
+                                          </button>
+                                          <span className="text-white font-bold capitalize text-xs">
+                                              {viewDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                                          </span>
+                                          <button type="button" onClick={handleNextMonth} className="text-text-muted hover:text-white p-1 rounded hover:bg-white/10 transition-colors">
+                                              <span className="material-symbols-outlined text-sm">chevron_right</span>
+                                          </button>
+                                      </div>
+
+                                      {/* Grid */}
+                                      <div className="grid grid-cols-7 gap-1 text-center mb-1">
+                                          {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(d => (
+                                              <span key={d} className="text-[9px] font-black text-text-muted uppercase">{d}</span>
+                                          ))}
+                                      </div>
+                                      <div className="grid grid-cols-7 gap-1">
+                                          {/* Empty slots */}
+                                          {Array.from({ length: getFirstDayOfMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => (
+                                              <div key={`empty-${i}`} />
+                                          ))}
+                                          {/* Days */}
+                                          {Array.from({ length: getDaysInMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => {
+                                              const day = i + 1;
+                                              const disabled = isPastDate(day);
+                                              const selected = isSelected(day);
+
+                                              return (
+                                                  <button 
+                                                      key={day}
+                                                      type="button"
+                                                      disabled={disabled}
+                                                      onClick={() => handleDateSelect(day)}
+                                                      className={`
+                                                          size-7 rounded-md flex items-center justify-center text-xs font-bold transition-all
+                                                          ${selected 
+                                                              ? 'bg-primary text-white shadow-md' 
+                                                              : disabled 
+                                                                  ? 'text-zinc-700 cursor-not-allowed' 
+                                                                  : 'text-zinc-300 hover:bg-surface-light hover:text-white'
+                                                          }
+                                                      `}
+                                                  >
+                                                      {day}
+                                                  </button>
+                                              )
+                                          })}
+                                      </div>
+                                  </div>
+                              )}
                           </div>
 
                           {/* Time Selection */}
                           <div>
-                              <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Horários Disponíveis</label>
+                              <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Horários Disponíveis <span className="text-primary">*</span></label>
                               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                                   {availableTimeSlots.map((time) => (
                                       <button
@@ -553,22 +712,22 @@ const Schedule: React.FC = () => {
 
                           {/* Reason */}
                           <div>
-                              <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Motivo da Alteração</label>
+                              <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Motivo <span className="text-primary">*</span></label>
                               <textarea 
                                   required
                                   value={rescheduleData.reason}
                                   onChange={(e) => setRescheduleData({...rescheduleData, reason: e.target.value})}
                                   className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-primary placeholder-zinc-700"
                                   rows={3}
-                                  placeholder="Informe o motivo para o cliente..."
+                                  placeholder="Ex: Tive um imprevisto no trabalho..."
                               ></textarea>
                           </div>
                       </div>
 
                       <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
-                          <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm uppercase tracking-wide">Voltar</button>
+                          <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm uppercase tracking-wide">Cancelar</button>
                           <button type="submit" className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-primary/20">
-                              Continuar
+                              ENVIAR
                           </button>
                       </div>
                   </form>
@@ -612,11 +771,9 @@ const Schedule: React.FC = () => {
                       </div>
                   </div>
                   <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
-                        {/* Se foi o cliente que pediu, o tatuador pode aceitar ou recusar */}
                        <button onClick={() => setIsDetailsModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Fechar</button>
                        {selectedItem.rescheduleInfo.requestedBy === 'client' && (
                            <button onClick={() => {
-                               // Lógica de aceitar
                                setIsDetailsModalOpen(false);
                                alert("Mudança aceita!");
                            }} className="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-sm uppercase tracking-wide">

@@ -161,6 +161,7 @@ const ClientAppointmentDetails: React.FC = () => {
     const [cancelReasonData, setCancelReasonData] = useState({ reason: 'Imprevisto pessoal', note: '' });
     const [rescheduleData, setRescheduleData] = useState({ newDate: '', newTime: '', reason: '' });
     const [ratingValue, setRatingValue] = useState(0);
+    const [showErrors, setShowErrors] = useState(false);
 
     // Calendar State & Manual Input
     const [viewDate, setViewDate] = useState(new Date());
@@ -203,13 +204,18 @@ const ClientAppointmentDetails: React.FC = () => {
 
     const handleReschedule = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Show validation errors if any field is invalid
+        const isDateValid = !!rescheduleData.newDate;
+        const isTimeValid = !!rescheduleData.newTime;
+        const isReasonValid = !!rescheduleData.reason.trim();
+
+        if (!isDateValid || !isTimeValid || !isReasonValid) {
+            setShowErrors(true);
+            return;
+        }
+
         if (appointment) {
-            // Verifica se a data no state é válida (foi populada pela seleção ou digitação correta)
-            if (!rescheduleData.newDate || !rescheduleData.newTime) {
-                alert("Por favor, informe uma data válida e um horário.");
-                return;
-            }
-            
             // Format for display: DD/MM/YYYY
             const [y, m, d] = rescheduleData.newDate.split('-');
             const formattedDisplay = `${d}/${m}/${y}`; // Simples string build para evitar timezone shift na exibição
@@ -273,6 +279,8 @@ const ClientAppointmentDetails: React.FC = () => {
         setDateInput(displayStr);
         
         setIsCalendarOpen(false);
+        // Reset errors for date if present
+        if (showErrors && dateStr) setShowErrors(false); 
     };
 
     const handleManualDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -293,13 +301,19 @@ const ClientAppointmentDetails: React.FC = () => {
         if (val.length === 10) {
             const [day, month, year] = val.split('/').map(Number);
             
+            // Check for valid day in month (e.g. 30/02)
+            const daysInMonth = new Date(year, month, 0).getDate();
+            
+            if (month < 1 || month > 12 || day < 1 || day > daysInMonth) {
+                setRescheduleData({...rescheduleData, newDate: ''}); // Data inválida
+                return;
+            }
+
             const testDate = new Date(year, month - 1, day);
             const today = new Date();
             today.setHours(0,0,0,0);
 
             const isValid = 
-                testDate.getDate() === day &&
-                testDate.getMonth() === month - 1 &&
                 testDate.getFullYear() === year &&
                 year >= today.getFullYear() && 
                 testDate >= today;
@@ -385,9 +399,10 @@ const ClientAppointmentDetails: React.FC = () => {
                                                 // Reset reschedule state when opening
                                                 setRescheduleData({ newDate: '', newTime: '', reason: '' });
                                                 setDateInput('');
+                                                setShowErrors(false);
                                                 setIsRescheduleModalOpen(true);
                                             }}
-                                            className="flex-1 md:flex-none px-5 py-2.5 bg-blue-600/10 text-blue-500 border border-blue-600/20 hover:bg-blue-600/20 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
+                                            className="flex-1 md:flex-none px-5 py-2.5 bg-surface-light border border-border-dark text-white hover:bg-white/10 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
                                         >
                                             <span className="material-symbols-outlined text-sm">edit_calendar</span>
                                             Remarcar
@@ -510,7 +525,7 @@ const ClientAppointmentDetails: React.FC = () => {
 
                                 {/* Date & Time Card */}
                                 <div className="bg-surface-light/10 border border-white/5 rounded-2xl p-6">
-                                    <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Data e Hora</h3>
+                                    <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Agenda</h3>
                                     
                                     <div className="flex items-start gap-4 mb-6">
                                         <div className="bg-surface-dark p-3 rounded-lg border border-border-dark text-white">
@@ -631,24 +646,25 @@ const ClientAppointmentDetails: React.FC = () => {
                 </div>
             )}
 
-            {/* Reschedule Modal */}
+            {/* Reschedule Modal (Visual Padronizado em Vermelho) */}
             {isRescheduleModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={(e) => e.stopPropagation()}>
                     <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-lg shadow-2xl relative animate-fade-in flex flex-col max-h-[90vh]">
                         <form onSubmit={handleReschedule} className="flex flex-col h-full">
-                            <div className="p-6 border-b border-border-dark flex justify-between items-center bg-blue-500/5 rounded-t-2xl">
-                                <div className="flex items-center gap-2 text-blue-500">
+                            <div className="p-6 border-b border-border-dark flex justify-between items-center bg-surface-dark rounded-t-2xl">
+                                <div className="flex items-center gap-2 text-primary">
                                     <span className="material-symbols-outlined">edit_calendar</span>
-                                    <h3 className="text-xl font-bold">Solicitar Mudança</h3>
+                                    <h3 className="text-xl font-bold text-white">Solicitar Mudança</h3>
                                 </div>
                                 <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
                             </div>
+                            
                             <div className="p-6 overflow-y-auto space-y-8 flex-1">
                                 <p className="text-text-muted text-sm">Sugira uma nova data e horário. O tatuador precisará aprovar.</p>
                                 
                                 {/* Date Selection (Input Manual + Calendar Popover) */}
                                 <div className="relative" ref={calendarRef}>
-                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Nova Data</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Nova Data <span className="text-primary">*</span></label>
                                     
                                     {/* Input com ícone */}
                                     <div className="relative">
@@ -660,9 +676,11 @@ const ClientAppointmentDetails: React.FC = () => {
                                             placeholder="DD/MM/AAAA"
                                             maxLength={10}
                                             className={`w-full bg-background-dark border rounded-lg p-3 text-sm text-white placeholder-text-muted focus:outline-none transition-all ${
-                                                isCalendarOpen 
-                                                ? 'border-primary ring-1 ring-primary' 
-                                                : 'border-border-dark hover:border-white/30'
+                                                showErrors && !rescheduleData.newDate
+                                                ? 'border-red-500 focus:border-red-500'
+                                                : isCalendarOpen 
+                                                    ? 'border-primary ring-1 ring-primary' 
+                                                    : 'border-border-dark hover:border-white/30'
                                             }`}
                                         />
                                         <button 
@@ -673,6 +691,9 @@ const ClientAppointmentDetails: React.FC = () => {
                                             <span className="material-symbols-outlined text-xl">calendar_month</span>
                                         </button>
                                     </div>
+                                    {showErrors && !rescheduleData.newDate && (
+                                        <p className="text-red-500 text-xs mt-1">Data inválida ou inexistente</p>
+                                    )}
 
                                     {/* Floating Calendar */}
                                     {isCalendarOpen && (
@@ -734,8 +755,8 @@ const ClientAppointmentDetails: React.FC = () => {
 
                                 {/* Time Selection */}
                                 <div>
-                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Horários Disponíveis</label>
-                                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Horários Disponíveis <span className="text-primary">*</span></label>
+                                    <div className={`grid grid-cols-3 sm:grid-cols-4 gap-3 p-1 rounded-lg ${showErrors && !rescheduleData.newTime ? 'border border-red-500/50' : ''}`}>
                                         {availableTimeSlots.map((time) => (
                                             <button
                                                 key={time}
@@ -751,25 +772,34 @@ const ClientAppointmentDetails: React.FC = () => {
                                             </button>
                                         ))}
                                     </div>
+                                    {showErrors && !rescheduleData.newTime && (
+                                        <p className="text-red-500 text-xs mt-1">Selecione um horário</p>
+                                    )}
                                 </div>
 
                                 {/* Reason */}
                                 <div>
-                                    <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Motivo</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Motivo <span className="text-primary">*</span></label>
                                     <textarea 
-                                        required
                                         value={rescheduleData.reason}
                                         onChange={(e) => setRescheduleData({...rescheduleData, reason: e.target.value})}
-                                        className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-blue-500 placeholder-zinc-700"
+                                        className={`w-full bg-background-dark border rounded-lg p-3 text-white text-sm focus:outline-none placeholder-zinc-700 ${
+                                            showErrors && !rescheduleData.reason.trim()
+                                            ? 'border-red-500 focus:border-red-500'
+                                            : 'border-border-dark focus:border-primary'
+                                        }`}
                                         rows={3}
                                         placeholder="Ex: Tive um imprevisto no trabalho..."
                                     ></textarea>
+                                    {showErrors && !rescheduleData.reason.trim() && (
+                                        <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                                    )}
                                 </div>
                             </div>
                             <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
-                                <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Cancelar</button>
-                                <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors">
-                                    Enviar
+                                <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm uppercase tracking-wide">Cancelar</button>
+                                <button type="submit" className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-primary/20">
+                                    ENVIAR
                                 </button>
                             </div>
                         </form>

@@ -571,7 +571,7 @@ const Signup: React.FC = () => {
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 mb-2 text-primary">
                                 <span className="material-symbols-outlined text-sm">medical_information</span>
-                                <h3 className="text-sm font-bold uppercase tracking-wider">Ficha de Saúde (Privado)</h3>
+                                <h3 className="text-sm font-bold uppercase tracking-wider">Ficha de Saúde</h3>
                             </div>
                             <div className="grid grid-cols-1 gap-4">
                                 <div className="space-y-1">
@@ -582,7 +582,7 @@ const Signup: React.FC = () => {
                                         onChange={handleChange}
                                         rows={2}
                                         className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white focus:border-primary placeholder-zinc-700 text-sm"
-                                        placeholder="Tem alergia a látex, tintas ou toma algum remédio controlado? (Opcional)"
+                                        placeholder="Tem alergia a látex, tintas ou toma algum remédio controlado?"
                                     />
                                 </div>
                                 <div className="space-y-1">
@@ -593,7 +593,7 @@ const Signup: React.FC = () => {
                                         onChange={handleChange}
                                         rows={2}
                                         className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white focus:border-primary placeholder-zinc-700 text-sm"
-                                        placeholder="Diabetes, problemas cardíacos, pele sensível, quelóides... (Opcional)"
+                                        placeholder="Diabetes, problemas cardíacos, pele sensível, quelóides..."
                                     />
                                 </div>
                             </div>
