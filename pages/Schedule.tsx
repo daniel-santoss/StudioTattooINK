@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ScheduleItem {
   id: number;
@@ -114,6 +115,7 @@ const getNextDays = () => {
 const availableTimeSlots = ["10:00", "11:00", "13:00", "14:30", "16:00", "18:00"];
 
 const Schedule: React.FC = () => {
+  const navigate = useNavigate();
   const [schedule, setSchedule] = useState<ScheduleItem[]>(initialSchedule);
   const [role, setRole] = useState<string | null>(null);
   const [filterArtist, setFilterArtist] = useState<string>('Todos');
@@ -165,6 +167,10 @@ const Schedule: React.FC = () => {
   }, []);
 
   // --- Handlers ---
+
+  const handleCardClick = (id: number) => {
+      navigate(`/admin/appointment/${id}`);
+  };
 
   const toggleMenu = (id: number, e: React.MouseEvent) => {
       e.stopPropagation();
@@ -327,7 +333,11 @@ const Schedule: React.FC = () => {
               </div>
           ) : (
               filteredSchedule.map((item) => (
-                <div key={item.id} className="group flex flex-col md:flex-row bg-surface-dark border border-border-dark hover:border-primary/50 rounded-2xl overflow-visible transition-all shadow-lg hover:shadow-xl relative">
+                <div 
+                    key={item.id} 
+                    onClick={() => handleCardClick(item.id)}
+                    className="group flex flex-col md:flex-row bg-surface-dark border border-border-dark hover:border-primary/50 rounded-2xl overflow-visible transition-all shadow-lg hover:shadow-xl relative cursor-pointer"
+                >
                     
                     {/* Time Column */}
                     <div className="bg-surface-light/30 md:w-32 p-6 flex flex-col justify-center items-center border-b md:border-b-0 md:border-r border-border-dark rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
@@ -346,7 +356,7 @@ const Schedule: React.FC = () => {
                         <div className="flex items-center gap-4">
                             <img src={item.clientAvatar} alt={item.clientName} className="size-12 rounded-full border border-border-dark object-cover" />
                             <div>
-                                <h3 className="text-lg font-bold text-white leading-tight">{item.clientName}</h3>
+                                <h3 className="text-lg font-bold text-white leading-tight group-hover:text-primary transition-colors">{item.clientName}</h3>
                                 <p className="text-sm text-text-light mb-1">{item.service}</p>
                                 {role === 'admin' && (
                                     <div className="flex items-center gap-1 text-xs text-text-muted">

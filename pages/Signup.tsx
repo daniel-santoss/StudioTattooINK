@@ -1,6 +1,119 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+
+// --- Componente Reutilizável de Select com Busca ---
+interface Option {
+    value: string;
+    label: string;
+}
+
+interface SearchableSelectProps {
+    options: Option[];
+    value: string;
+    onChange: (value: string) => void;
+    placeholder?: string;
+    disabled?: boolean;
+    loading?: boolean;
+    name?: string;
+}
+
+const SearchableSelect: React.FC<SearchableSelectProps> = ({ 
+    options, 
+    value, 
+    onChange, 
+    placeholder = "Selecione...", 
+    disabled = false,
+    loading = false
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    // Encontra o label do valor atual para exibir
+    const selectedLabel = options.find(opt => opt.value === value)?.label || "";
+
+    // Atualiza o termo de busca quando o valor muda externamente ou quando fecha
+    useEffect(() => {
+        if (!isOpen) {
+            setSearchTerm(selectedLabel);
+        }
+    }, [isOpen, selectedLabel, value]);
+
+    // Fecha ao clicar fora
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+                setSearchTerm(selectedLabel); // Reseta o texto para o valor selecionado
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [selectedLabel]);
+
+    const filteredOptions = options.filter(opt => 
+        opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSelect = (val: string) => {
+        onChange(val);
+        setIsOpen(false);
+    };
+
+    return (
+        <div className="relative" ref={wrapperRef}>
+            <div className="relative">
+                <input
+                    type="text"
+                    disabled={disabled}
+                    value={searchTerm}
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        if (!isOpen) setIsOpen(true);
+                    }}
+                    onFocus={() => {
+                        setIsOpen(true);
+                        setSearchTerm(""); // Limpa ao focar para facilitar busca
+                    }}
+                    placeholder={loading ? "Carregando..." : placeholder}
+                    className={`w-full bg-background-dark border border-border-dark rounded-lg p-2.5 pr-8 text-white focus:border-primary text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed ${isOpen ? 'ring-1 ring-primary border-primary' : ''}`}
+                />
+                <div className="absolute right-2.5 top-2.5 text-text-muted pointer-events-none">
+                     {loading ? (
+                         <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+                     ) : (
+                         <span className="material-symbols-outlined text-sm">expand_more</span>
+                     )}
+                </div>
+            </div>
+
+            {isOpen && !disabled && (
+                <div className="absolute z-50 w-full mt-1 bg-surface-dark border border-border-dark rounded-lg shadow-xl max-h-60 overflow-y-auto animate-fade-in scrollbar-thin scrollbar-thumb-surface-light">
+                    {filteredOptions.length > 0 ? (
+                        filteredOptions.map((opt) => (
+                            <button
+                                key={opt.value}
+                                type="button"
+                                onClick={() => handleSelect(opt.value)}
+                                className={`w-full text-left px-4 py-2 text-sm hover:bg-surface-light transition-colors ${
+                                    opt.value === value ? 'text-primary font-bold bg-surface-light/30' : 'text-white'
+                                }`}
+                            >
+                                {opt.label}
+                            </button>
+                        ))
+                    ) : (
+                        <div className="px-4 py-3 text-sm text-text-muted text-center">
+                            Nenhuma opção encontrada.
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+// ---------------------------------------------------
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -9,6 +122,14 @@ const Signup: React.FC = () => {
   const [step, setStep] = useState(1); // Controla a etapa do formulário
   const [loading, setLoading] = useState(false);
   
+  // Estado para listas de Cidades (carregado via API IBGE)
+  // Agora armazenamos objetos {value, label} para o componente customizado
+  const [cityOptions, setCityOptions] = useState<Option[]>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
+  
+  // Estado de erro do CEP
+  const [cepError, setCepError] = useState(false);
+
   const [formData, setFormData] = useState({
     // Basic Info
     name: '',
@@ -22,6 +143,8 @@ const Signup: React.FC = () => {
     complement: '',
     city: '',
     state: '',
+    // Hidden internal state for neighborhood in case we need it later or API returns it
+    neighborhood: '', 
     // Artist specific
     artistRole: 'Tatuador', 
     portfolio: '',
@@ -33,11 +156,63 @@ const Signup: React.FC = () => {
     medicalNotes: ''
   });
 
+  // Lista formatada para o Select
+  const statesOptions: Option[] = [
+      { value: "AC", label: "Acre - AC" },
+      { value: "AL", label: "Alagoas - AL" },
+      { value: "AP", label: "Amapá - AP" },
+      { value: "AM", label: "Amazonas - AM" },
+      { value: "BA", label: "Bahia - BA" },
+      { value: "CE", label: "Ceará - CE" },
+      { value: "DF", label: "Distrito Federal - DF" },
+      { value: "ES", label: "Espírito Santo - ES" },
+      { value: "GO", label: "Goiás - GO" },
+      { value: "MA", label: "Maranhão - MA" },
+      { value: "MT", label: "Mato Grosso - MT" },
+      { value: "MS", label: "Mato Grosso do Sul - MS" },
+      { value: "MG", label: "Minas Gerais - MG" },
+      { value: "PA", label: "Pará - PA" },
+      { value: "PB", label: "Paraíba - PB" },
+      { value: "PR", label: "Paraná - PR" },
+      { value: "PE", label: "Pernambuco - PE" },
+      { value: "PI", label: "Piauí - PI" },
+      { value: "RJ", label: "Rio de Janeiro - RJ" },
+      { value: "RN", label: "Rio Grande do Norte - RN" },
+      { value: "RS", label: "Rio Grande do Sul - RS" },
+      { value: "RO", label: "Rondônia - RO" },
+      { value: "RR", label: "Roraima - RR" },
+      { value: "SC", label: "Santa Catarina - SC" },
+      { value: "SP", label: "São Paulo - SP" },
+      { value: "SE", label: "Sergipe - SE" },
+      { value: "TO", label: "Tocantins - TO" }
+  ];
+
   useEffect(() => {
     if (searchParams.get('type') === 'artist') {
       setRole('artist');
     }
   }, [searchParams]);
+
+  // Efeito para carregar cidades quando o Estado muda
+  useEffect(() => {
+      if (formData.state) {
+          setLoadingCities(true);
+          fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${formData.state}/municipios`)
+              .then(res => res.json())
+              .then(data => {
+                  const cities = data.map((c: any) => ({ value: c.nome, label: c.nome })).sort((a: Option, b: Option) => a.label.localeCompare(b.label));
+                  setCityOptions(cities);
+                  setLoadingCities(false);
+              })
+              .catch(err => {
+                  console.error("Erro ao carregar cidades", err);
+                  setLoadingCities(false);
+                  setCityOptions([]);
+              });
+      } else {
+          setCityOptions([]);
+      }
+  }, [formData.state]);
 
   const availableStyles = [
       "Realismo", "Old School", "Neo Traditional", "Blackwork", 
@@ -46,7 +221,76 @@ const Signup: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    
+    // Máscara simples para CEP
+    if (name === 'cep') {
+        setCepError(false); // Limpa erro ao digitar
+        const masked = value
+            .replace(/\D/g, '') // Remove tudo que não é dígito
+            .replace(/(\d{5})(\d)/, '$1-$2') // Coloca o hífen
+            .substring(0, 9); // Limita tamanho
+        setFormData(prev => ({ ...prev, [name]: masked }));
+        return;
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Handlers específicos para os componentes customizados
+  const handleStateChange = (value: string) => {
+      setFormData(prev => ({ ...prev, state: value, city: '' }));
+  };
+
+  const handleCityChange = (value: string) => {
+      setFormData(prev => ({ ...prev, city: value }));
+  };
+
+  // Função para buscar o CEP
+  const checkCEP = async (e: React.FocusEvent<HTMLInputElement>) => {
+      const cep = e.target.value.replace(/\D/g, '');
+      
+      if (cep.length === 8) {
+          try {
+              // Feedback visual simples mudando o cursor
+              document.body.style.cursor = 'wait';
+              
+              const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+              const data = await response.json();
+              
+              document.body.style.cursor = 'default';
+
+              if (!data.erro) {
+                  setCepError(false);
+                  // Atualiza o estado primeiro, o useEffect vai disparar o load das cidades.
+                  // O React pode não renderizar a cidade imediatamente se a lista não estiver carregada,
+                  // mas ao carregar a lista, o value 'data.localidade' será casado corretamente.
+                  setFormData(prev => ({
+                      ...prev,
+                      street: data.logradouro,
+                      neighborhood: data.bairro,
+                      state: data.uf,
+                      city: data.localidade, // ViaCEP retorna cidade correta
+                      // Foca no número após preencher
+                  }));
+                  // Tenta focar no campo número após preencher
+                  document.getElementById('numberInput')?.focus();
+              } else {
+                  setCepError(true);
+                  // Limpa campos se CEP não encontrado
+                  setFormData(prev => ({
+                      ...prev,
+                      street: '',
+                      neighborhood: '',
+                      state: '',
+                      city: ''
+                  }));
+              }
+          } catch (error) {
+              console.error("Erro ao buscar CEP", error);
+              document.body.style.cursor = 'default';
+              setCepError(true);
+          }
+      }
   };
 
   const handleStyleToggle = (style: string) => {
@@ -74,6 +318,14 @@ const Signup: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Verificação de erro no CEP antes de enviar
+    if (cepError) {
+        alert("Por favor, informe um CEP válido antes de concluir o cadastro.");
+        document.querySelector<HTMLInputElement>('input[name="cep"]')?.focus();
+        return;
+    }
+
     setLoading(true);
     
     // Simulação de cadastro
@@ -144,7 +396,7 @@ const Signup: React.FC = () => {
             {step === 1 && (
                 <div className="space-y-4 animate-fade-in">
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Nome Completo</label>
+                        <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Nome Completo <span className="text-primary">*</span></label>
                         <input 
                             type="text" 
                             name="name"
@@ -157,7 +409,7 @@ const Signup: React.FC = () => {
                     </div>
 
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-text-muted uppercase tracking-widest">E-mail</label>
+                        <label className="text-xs font-bold text-text-muted uppercase tracking-widest">E-mail <span className="text-primary">*</span></label>
                         <input 
                             type="email" 
                             name="email"
@@ -171,7 +423,7 @@ const Signup: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Senha</label>
+                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Senha <span className="text-primary">*</span></label>
                             <input 
                                 type="password" 
                                 name="password"
@@ -183,7 +435,7 @@ const Signup: React.FC = () => {
                             />
                         </div>
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Confirmar</label>
+                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Confirmar <span className="text-primary">*</span></label>
                             <input 
                                 type="password" 
                                 name="confirmPassword"
@@ -198,7 +450,7 @@ const Signup: React.FC = () => {
                                 placeholder="••••••••"
                             />
                             {passwordsMismatch && (
-                                <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1 animate-pulse">
+                                <p className="text-xs text-red-500 font-bold flex items-center gap-1 mt-1">
                                     <span className="material-symbols-outlined text-[14px]">error</span>
                                     As senhas não coincidem.
                                 </p>
@@ -221,47 +473,57 @@ const Signup: React.FC = () => {
                         
                         <div className="grid grid-cols-3 gap-4">
                             <div className="space-y-1 col-span-1">
-                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">CEP</label>
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">CEP <span className="text-primary">*</span></label>
                                 <input 
                                     type="text" 
                                     name="cep"
                                     required
+                                    maxLength={9}
                                     value={formData.cep}
                                     onChange={handleChange}
-                                    className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
+                                    onBlur={checkCEP}
+                                    className={`w-full bg-background-dark border rounded-lg p-2.5 text-white text-sm transition-colors ${
+                                        cepError 
+                                        ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' 
+                                        : 'border-border-dark focus:border-primary'
+                                    }`}
                                     placeholder="00000-000"
                                 />
+                                {cepError && (
+                                    <span className="text-[10px] text-red-500 font-bold block mt-1 flex items-center gap-1">
+                                        <span className="material-symbols-outlined text-[12px]">error</span>
+                                        CEP não encontrado
+                                    </span>
+                                )}
                             </div>
                             <div className="space-y-1 col-span-2">
-                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Cidade</label>
-                                <input 
-                                    type="text" 
-                                    name="city"
-                                    required
-                                    value={formData.city}
-                                    onChange={handleChange}
-                                    className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
-                                    placeholder="Cidade"
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Estado (UF) <span className="text-primary">*</span></label>
+                                <SearchableSelect 
+                                    options={statesOptions}
+                                    value={formData.state}
+                                    onChange={handleStateChange}
+                                    placeholder="Selecione o Estado"
                                 />
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-4 gap-4">
-                            <div className="space-y-1 col-span-3">
-                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Rua</label>
-                                <input 
-                                    type="text" 
-                                    name="street"
-                                    required
-                                    value={formData.street}
-                                    onChange={handleChange}
-                                    className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
-                                    placeholder="Nome da rua"
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div className="space-y-1 md:col-span-3">
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Cidade <span className="text-primary">*</span></label>
+                                <SearchableSelect 
+                                    options={cityOptions}
+                                    value={formData.city}
+                                    onChange={handleCityChange}
+                                    placeholder={formData.state ? "Digite a cidade..." : "Selecione o estado primeiro"}
+                                    disabled={!formData.state}
+                                    loading={loadingCities}
                                 />
                             </div>
-                            <div className="space-y-1 col-span-1">
-                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Nº</label>
+                            {/* Ajuste de layout responsivo para o número */}
+                            <div className="space-y-1 md:col-span-1">
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Nº <span className="text-primary">*</span></label>
                                 <input 
+                                    id="numberInput"
                                     type="text" 
                                     name="number"
                                     required
@@ -273,7 +535,19 @@ const Signup: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Rua <span className="text-primary">*</span></label>
+                                <input 
+                                    type="text" 
+                                    name="street"
+                                    required
+                                    value={formData.street}
+                                    onChange={handleChange}
+                                    className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
+                                    placeholder="Nome da rua"
+                                />
+                            </div>
                             <div className="space-y-1">
                                 <label className="text-xs font-bold text-text-muted uppercase tracking-widest">
                                     Complemento <span className="text-[10px] lowercase font-normal opacity-70">(Opcional)</span>
@@ -284,20 +558,7 @@ const Signup: React.FC = () => {
                                     value={formData.complement}
                                     onChange={handleChange}
                                     className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm placeholder-zinc-700"
-                                    placeholder="Apto, Bloco..."
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Estado (UF)</label>
-                                <input 
-                                    type="text" 
-                                    name="state"
-                                    required
-                                    maxLength={2}
-                                    value={formData.state}
-                                    onChange={handleChange}
-                                    className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
-                                    placeholder="SP"
+                                    placeholder="Apto, Bloco, Bairro..."
                                 />
                             </div>
                         </div>
@@ -364,7 +625,7 @@ const Signup: React.FC = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Link do Portfólio</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Link do Portfólio <span className="text-primary">*</span></label>
                                     <input 
                                         type="url" 
                                         name="portfolio"
@@ -377,7 +638,7 @@ const Signup: React.FC = () => {
                                 </div>
                                 
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Experiência</label>
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Experiência <span className="text-primary">*</span></label>
                                     <select 
                                         name="experience"
                                         required
@@ -395,7 +656,7 @@ const Signup: React.FC = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest block">Especialidades (Múltipla escolha)</label>
+                                <label className="text-xs font-bold text-text-muted uppercase tracking-widest block">Especialidades (Múltipla escolha) <span className="text-primary">*</span></label>
                                 <div className="flex flex-wrap gap-2">
                                     {availableStyles.map(style => (
                                         <button
@@ -445,7 +706,7 @@ const Signup: React.FC = () => {
                 
                 <button 
                     type="submit" 
-                    disabled={loading || (step === 1 && passwordsMismatch)}
+                    disabled={loading || (step === 1 && passwordsMismatch) || (step === 2 && cepError)}
                     className="flex-1 bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg shadow-[0_0_20px_rgba(212,17,50,0.3)] hover:shadow-[0_0_25px_rgba(212,17,50,0.5)] transition-all uppercase tracking-wider text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                     {loading 
