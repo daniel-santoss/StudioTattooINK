@@ -89,6 +89,33 @@ const artistAppointmentsDB: ArtistAppointmentView[] = [
            conditions: "Pele sensível",
            skinType: "Clara"
        }
+    },
+    {
+       id: 7,
+       clientName: "Leticia Sabatella",
+       clientAvatar: "https://i.pravatar.cc/150?u=30",
+       clientType: "Novo Cliente",
+       clientPhone: "(11) 97777-1234",
+       clientRating: 0,
+       clientRatingCount: 0,
+       service: "Piercing Umbigo",
+       date: "28 Dez, 2025",
+       fullDate: "Domingo, 28 de Dezembro de 2025",
+       time: "09:00",
+       duration: "1h 30min",
+       status: "concluido",
+       price: "R$ 150,00",
+       deposit: "R$ 50,00",
+       remaining: "R$ 0,00",
+       paymentStatus: "Total Pago",
+       description: "Aplicação de joia em titânio no umbigo. Joia básica prata.",
+       referenceImages: [],
+       medicalInfo: {
+           allergies: "Nenhuma",
+           conditions: "Nenhuma",
+           skinType: "Normal"
+       },
+       internalNotes: "Cliente nervosa, mas correu tudo bem."
     }
 ];
 

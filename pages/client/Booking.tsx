@@ -318,7 +318,7 @@ const Booking: React.FC = () => {
                              <br/>Você receberá uma confirmação via WhatsApp e E-mail em breve com o orçamento.
                          </p>
                          <button 
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/my-appointments')}
                             className="text-white border border-zinc-700 hover:bg-white hover:text-black px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
                          >
                              Voltar ao Início
