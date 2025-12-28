@@ -14,7 +14,7 @@ interface ScheduleItem {
   type: 'tattoo' | 'piercing' | 'orcamento';
   rescheduleInfo?: {
       newDate: string;
-      newTime: string;
+      newTime: string; // Will store "Manhã", "Tarde", "Noite"
       reason: string;
       requestedBy: 'artist' | 'client';
   };
@@ -77,7 +77,7 @@ const initialSchedule: ScheduleItem[] = [
     type: "tattoo",
     rescheduleInfo: {
         newDate: "2025-12-22",
-        newTime: "09:00",
+        newTime: "Manhã",
         reason: "Cliente solicitou mudança por imprevisto no trabalho.",
         requestedBy: "client"
     }
@@ -106,7 +106,11 @@ const initialSchedule: ScheduleItem[] = [
   }
 ];
 
-const availableTimeSlots = ["10:00", "11:00", "13:00", "14:30", "16:00", "18:00"];
+const periods = [
+    { id: 'Manhã', label: 'Manhã', range: '06h - 12h', icon: 'wb_twilight' },
+    { id: 'Tarde', label: 'Tarde', range: '12h - 18h', icon: 'wb_sunny' },
+    { id: 'Noite', label: 'Noite', range: '18h - 00h', icon: 'dark_mode' },
+];
 
 const Schedule: React.FC = () => {
   const navigate = useNavigate();
@@ -126,7 +130,7 @@ const Schedule: React.FC = () => {
   // Reschedule Modal State
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
   const [itemToReschedule, setItemToReschedule] = useState<number | null>(null);
-  const [rescheduleData, setRescheduleData] = useState({ newDate: '', newTime: '', reason: '' });
+  const [rescheduleData, setRescheduleData] = useState({ newDate: '', newPeriod: '', reason: '' });
 
   // Calendar State
   const [viewDate, setViewDate] = useState(new Date());
@@ -271,7 +275,7 @@ const Schedule: React.FC = () => {
 
   const handleOpenReschedule = (id: number) => {
       setItemToReschedule(id);
-      setRescheduleData({ newDate: '', newTime: '', reason: '' });
+      setRescheduleData({ newDate: '', newPeriod: '', reason: '' });
       setDateInput("");
       setIsRescheduleModalOpen(true);
       setActiveMenuId(null);
@@ -298,8 +302,8 @@ const Schedule: React.FC = () => {
   const confirmReschedule = (e: React.FormEvent) => {
       e.preventDefault();
       if (itemToReschedule) {
-          if (!rescheduleData.newDate || !rescheduleData.newTime) {
-              alert("Por favor, selecione uma data e um horário.");
+          if (!rescheduleData.newDate || !rescheduleData.newPeriod) {
+              alert("Por favor, selecione uma data e um período.");
               return;
           }
           
@@ -314,7 +318,7 @@ const Schedule: React.FC = () => {
                   status: 'rescheduling',
                   rescheduleInfo: {
                       newDate: formattedDate,
-                      newTime: rescheduleData.newTime,
+                      newTime: rescheduleData.newPeriod, // Saving period label instead of exact time
                       reason: rescheduleData.reason,
                       requestedBy: 'artist'
                   }
@@ -347,7 +351,7 @@ const Schedule: React.FC = () => {
           case 'em-andamento': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 animate-pulse';
           case 'concluido': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
           case 'pendente': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
-          case 'rescheduling': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
+          case 'rescheduling': return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
           case 'cancelado': return 'bg-red-500/10 text-red-500 border-red-500/20 opacity-60';
           default: return 'bg-surface-light text-text-muted';
       }
@@ -484,7 +488,7 @@ const Schedule: React.FC = () => {
                                                     onClick={() => handleViewRescheduleDetails(item)}
                                                     className="w-full text-left px-3 py-2 text-sm text-white hover:bg-white/10 rounded-lg flex items-center gap-2 font-medium"
                                                 >
-                                                    <span className="material-symbols-outlined text-orange-500 text-lg">info</span>
+                                                    <span className="material-symbols-outlined text-amber-500 text-lg">info</span>
                                                     Ver Detalhes
                                                 </button>
                                             )}
@@ -587,7 +591,7 @@ const Schedule: React.FC = () => {
           </div>
       )}
 
-      {/* Reschedule Modal (Visual Padronizado em Vermelho) */}
+      {/* Reschedule Modal (Com Períodos) */}
       {isRescheduleModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={(e) => e.stopPropagation()}>
               <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-lg shadow-2xl relative animate-fade-in flex flex-col max-h-[90vh]">
@@ -601,7 +605,7 @@ const Schedule: React.FC = () => {
                       </div>
                       
                       <div className="p-6 overflow-y-auto space-y-8 flex-1">
-                          <p className="text-text-muted text-sm">Sugira uma nova data e horário. O tatuador precisará aprovar.</p>
+                          <p className="text-text-muted text-sm">Sugira uma nova data e turno. O tatuador precisará aprovar.</p>
                           
                           {/* Date Selection (Input Manual + Calendar Popover) */}
                           <div className="relative" ref={calendarRef}>
@@ -689,22 +693,24 @@ const Schedule: React.FC = () => {
                               )}
                           </div>
 
-                          {/* Time Selection */}
+                          {/* Period Selection (Cards) */}
                           <div>
-                              <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Horários Disponíveis <span className="text-primary">*</span></label>
-                              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                                  {availableTimeSlots.map((time) => (
+                              <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Turno de Preferência <span className="text-primary">*</span></label>
+                              <div className="grid grid-cols-3 gap-3">
+                                  {periods.map((period) => (
                                       <button
-                                          key={time}
+                                          key={period.id}
                                           type="button"
-                                          onClick={() => setRescheduleData({...rescheduleData, newTime: time})}
-                                          className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${
-                                              rescheduleData.newTime === time 
-                                              ? 'bg-white text-black border-white shadow-lg' 
-                                              : 'bg-transparent border-border-dark text-white hover:border-primary hover:text-primary'
+                                          onClick={() => setRescheduleData({...rescheduleData, newPeriod: period.id})}
+                                          className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300 gap-1 ${
+                                              rescheduleData.newPeriod === period.id 
+                                              ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105' 
+                                              : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
                                           }`}
                                       >
-                                          {time}
+                                          <span className="material-symbols-outlined text-xl">{period.icon}</span>
+                                          <span className="text-xs font-bold uppercase">{period.label}</span>
+                                          <span className="text-[9px] font-medium opacity-80">{period.range}</span>
                                       </button>
                                   ))}
                               </div>
@@ -758,7 +764,7 @@ const Schedule: React.FC = () => {
                               <p className="text-lg font-bold text-white">{selectedItem.rescheduleInfo.newDate}</p>
                           </div>
                           <div>
-                              <p className="text-xs text-text-muted uppercase font-bold mb-1">Novo Horário</p>
+                              <p className="text-xs text-text-muted uppercase font-bold mb-1">Novo Período</p>
                               <p className="text-lg font-bold text-white">{selectedItem.rescheduleInfo.newTime}</p>
                           </div>
                       </div>

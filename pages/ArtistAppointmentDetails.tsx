@@ -130,6 +130,13 @@ const formatCurrency = (value: number): string => {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 };
 
+const getPeriodFromTime = (time: string) => {
+    const hour = parseInt(time.split(':')[0]);
+    if (hour >= 6 && hour < 12) return { label: 'Manhã (06h-12h)', icon: 'wb_twilight' };
+    if (hour >= 12 && hour < 18) return { label: 'Tarde (12h-18h)', icon: 'wb_sunny' };
+    return { label: 'Noite (18h-00h)', icon: 'dark_mode' };
+};
+
 const ArtistAppointmentDetails: React.FC = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -331,12 +338,15 @@ const ArtistAppointmentDetails: React.FC = () => {
             case 'em-andamento': return <span className="bg-purple-500/20 text-purple-500 border border-purple-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide animate-pulse">Em Andamento</span>;
             case 'cancelado': return <span className="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Cancelado</span>;
             case 'noshow': return <span className="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Não Compareceu</span>;
+            case 'rescheduling': return <span className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Reagendando</span>;
             default: return null;
         }
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center text-text-muted">Carregando dados da sessão...</div>;
     if (!appointment) return <div className="min-h-screen flex items-center justify-center text-text-muted">Agendamento não encontrado.</div>;
+
+    const periodData = getPeriodFromTime(appointment.time);
 
     return (
         <div className="min-h-screen bg-background-dark p-6 md:p-12">
@@ -357,7 +367,8 @@ const ArtistAppointmentDetails: React.FC = () => {
                     <div className={`h-2 w-full ${
                         appointment.status === 'em-andamento' ? 'bg-purple-500 animate-pulse' : 
                         appointment.status === 'concluido' ? 'bg-emerald-500' :
-                        appointment.status === 'cancelado' || appointment.status === 'noshow' ? 'bg-red-500' : 'bg-blue-500'
+                        appointment.status === 'cancelado' || appointment.status === 'noshow' ? 'bg-red-500' : 
+                        appointment.status === 'rescheduling' ? 'bg-yellow-500' : 'bg-blue-500'
                     }`}></div>
 
                     <div className="p-8 md:p-10">
@@ -550,24 +561,28 @@ const ArtistAppointmentDetails: React.FC = () => {
                             <div className="space-y-6">
                                 {/* Date & Time Card */}
                                 <div className="bg-surface-light/10 border border-white/5 rounded-2xl p-6">
-                                    <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Agenda</h3>
+                                    <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Agenda</h3>
                                     
-                                    <div className="flex items-start gap-4 mb-6">
-                                        <div className="bg-surface-dark p-3 rounded-lg border border-border-dark text-white">
-                                            <span className="material-symbols-outlined">calendar_month</span>
-                                        </div>
+                                    <div className="space-y-6">
+                                        {/* Data Block */}
                                         <div>
-                                            <p className="text-white font-bold text-lg leading-tight">{appointment.fullDate}</p>
-                                            <p className="text-sm text-text-muted mt-1">{appointment.duration} estimada</p>
+                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Data</span>
+                                            <div className="flex items-center gap-3">
+                                                <span className="material-symbols-outlined text-white">calendar_today</span>
+                                                <div>
+                                                    <p className="text-white font-bold text-lg leading-tight">{appointment.fullDate}</p>
+                                                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-wide mt-0.5">{appointment.duration} estimada</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="flex items-center gap-4">
-                                        <div className="bg-surface-dark p-3 rounded-lg border border-border-dark text-white">
-                                            <span className="material-symbols-outlined">schedule</span>
-                                        </div>
+                                        {/* Turno/Horário Block - Updated to Match Requested Style */}
                                         <div>
-                                            <p className="text-white font-bold text-3xl font-display">{appointment.time}</p>
+                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Turno/Horário</span>
+                                            <div className="flex items-center gap-3">
+                                                <span className="material-symbols-outlined text-white">{periodData.icon}</span>
+                                                <span className="text-white font-bold text-xl">{periodData.label}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
