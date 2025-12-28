@@ -84,7 +84,7 @@ const ClientDashboard: React.FC = () => {
           case 'completed': return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
           case 'cancelled': return 'bg-red-500/10 text-red-500 border-red-500/20 opacity-70';
           case 'pending': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
-          case 'rescheduling': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
+          case 'rescheduling': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
           default: return 'bg-text-muted/10 text-text-muted border-text-muted/20';
       }
   };

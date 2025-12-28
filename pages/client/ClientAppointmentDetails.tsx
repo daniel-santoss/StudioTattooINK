@@ -24,7 +24,7 @@ interface AppointmentDetail {
     cancellationReason?: string;
     rescheduleInfo?: {
         newDate: string;
-        newTime: string;
+        newTime: string; // Armazena "Manhã", "Tarde" etc.
         reason: string;
         requestedBy: 'artist' | 'client';
     };
@@ -95,7 +95,7 @@ const appointmentsDB: AppointmentDetail[] = [
         referenceImages: [],
         rescheduleInfo: {
             newDate: "28 Nov, 2024",
-            newTime: "10:00",
+            newTime: "Manhã",
             reason: "Imprevisto de saúde.",
             requestedBy: "artist"
         }
@@ -143,7 +143,18 @@ const appointmentsDB: AppointmentDetail[] = [
     }
 ];
 
-const availableTimeSlots = ["10:00", "11:00", "13:00", "14:30", "16:00", "18:00"];
+const periods = [
+    { id: 'Manhã', label: 'Manhã', range: '06h - 12h', icon: 'wb_twilight' },
+    { id: 'Tarde', label: 'Tarde', range: '12h - 18h', icon: 'wb_sunny' },
+    { id: 'Noite', label: 'Noite', range: '18h - 00h', icon: 'dark_mode' },
+];
+
+const getPeriodFromTime = (time: string) => {
+    const hour = parseInt(time.split(':')[0]);
+    if (hour >= 6 && hour < 12) return { label: 'Manhã (06h-12h)', icon: 'wb_twilight' };
+    if (hour >= 12 && hour < 18) return { label: 'Tarde (12h-18h)', icon: 'wb_sunny' };
+    return { label: 'Noite (18h-00h)', icon: 'dark_mode' };
+};
 
 const ClientAppointmentDetails: React.FC = () => {
     const { id } = useParams();
@@ -159,7 +170,7 @@ const ClientAppointmentDetails: React.FC = () => {
 
     // Form States
     const [cancelReasonData, setCancelReasonData] = useState({ reason: 'Imprevisto pessoal', note: '' });
-    const [rescheduleData, setRescheduleData] = useState({ newDate: '', newTime: '', reason: '' });
+    const [rescheduleData, setRescheduleData] = useState({ newDate: '', newPeriod: '', reason: '' });
     const [ratingValue, setRatingValue] = useState(0);
     const [showErrors, setShowErrors] = useState(false);
 
@@ -207,7 +218,7 @@ const ClientAppointmentDetails: React.FC = () => {
         
         // Show validation errors if any field is invalid
         const isDateValid = !!rescheduleData.newDate;
-        const isTimeValid = !!rescheduleData.newTime;
+        const isTimeValid = !!rescheduleData.newPeriod;
         const isReasonValid = !!rescheduleData.reason.trim();
 
         if (!isDateValid || !isTimeValid || !isReasonValid) {
@@ -218,8 +229,8 @@ const ClientAppointmentDetails: React.FC = () => {
         if (appointment) {
             // Format for display: DD/MM/YYYY
             const [y, m, d] = rescheduleData.newDate.split('-');
-            const formattedDisplay = `${d}/${m}/${y}`; // Simples string build para evitar timezone shift na exibição
-
+            // Simples string build para evitar timezone shift na exibição
+            
             const formattedFullDate = new Date(rescheduleData.newDate).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
             setAppointment({
@@ -227,7 +238,7 @@ const ClientAppointmentDetails: React.FC = () => {
                 status: 'rescheduling',
                 rescheduleInfo: {
                     newDate: formattedFullDate,
-                    newTime: rescheduleData.newTime,
+                    newTime: rescheduleData.newPeriod, // Saving period label
                     reason: rescheduleData.reason,
                     requestedBy: 'client'
                 }
@@ -349,13 +360,15 @@ const ClientAppointmentDetails: React.FC = () => {
             case 'completed': return <span className="bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Concluído</span>;
             case 'cancelled': return <span className="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Cancelado</span>;
             case 'pending': return <span className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Aguardando</span>;
-            case 'rescheduling': return <span className="bg-orange-500/20 text-orange-500 border border-orange-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Reagendando</span>;
+            case 'rescheduling': return <span className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Reagendando</span>;
             default: return null;
         }
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center text-text-muted">Carregando detalhes...</div>;
     if (!appointment) return <div className="min-h-screen flex items-center justify-center text-text-muted">Agendamento não encontrado.</div>;
+
+    const periodData = getPeriodFromTime(appointment.time);
 
     return (
         <div className="min-h-screen bg-background-dark p-6 md:p-12">
@@ -397,7 +410,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                         <button 
                                             onClick={() => {
                                                 // Reset reschedule state when opening
-                                                setRescheduleData({ newDate: '', newTime: '', reason: '' });
+                                                setRescheduleData({ newDate: '', newPeriod: '', reason: '' });
                                                 setDateInput('');
                                                 setShowErrors(false);
                                                 setIsRescheduleModalOpen(true);
@@ -497,19 +510,19 @@ const ClientAppointmentDetails: React.FC = () => {
                             <div className="space-y-6">
                                 {/* Reschedule Info Box if Active */}
                                 {appointment.status === 'rescheduling' && appointment.rescheduleInfo && (
-                                    <div className="bg-orange-500/10 border border-orange-500/20 rounded-2xl p-6 relative overflow-hidden">
+                                    <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-6 relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-3 opacity-10">
-                                            <span className="material-symbols-outlined text-6xl text-orange-500">change_circle</span>
+                                            <span className="material-symbols-outlined text-6xl text-yellow-500">change_circle</span>
                                         </div>
-                                        <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <h3 className="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <span className="material-symbols-outlined text-sm">info</span>
                                             Em Reagendamento
                                         </h3>
                                         <div className="space-y-3 relative z-10">
                                             <p className="text-sm text-white">Solicitado por: <strong>{appointment.rescheduleInfo.requestedBy === 'client' ? 'Você' : 'Profissional'}</strong></p>
-                                            <div className="bg-background-dark/50 p-3 rounded-lg border border-orange-500/10">
+                                            <div className="bg-background-dark/50 p-3 rounded-lg border border-yellow-500/10">
                                                 <p className="text-xs text-text-muted uppercase font-bold mb-1">Sugestão</p>
-                                                <p className="text-white font-bold">{appointment.rescheduleInfo.newDate} às {appointment.rescheduleInfo.newTime}</p>
+                                                <p className="text-white font-bold">{appointment.rescheduleInfo.newDate} • {appointment.rescheduleInfo.newTime}</p>
                                             </div>
                                             <p className="text-xs text-text-light italic">"{appointment.rescheduleInfo.reason}"</p>
                                             
@@ -525,24 +538,28 @@ const ClientAppointmentDetails: React.FC = () => {
 
                                 {/* Date & Time Card */}
                                 <div className="bg-surface-light/10 border border-white/5 rounded-2xl p-6">
-                                    <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-4">Agenda</h3>
+                                    <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Agenda</h3>
                                     
-                                    <div className="flex items-start gap-4 mb-6">
-                                        <div className="bg-surface-dark p-3 rounded-lg border border-border-dark text-white">
-                                            <span className="material-symbols-outlined">calendar_month</span>
-                                        </div>
+                                    <div className="space-y-6">
+                                        {/* Data Block */}
                                         <div>
-                                            <p className="text-white font-bold text-lg leading-tight">{appointment.fullDate}</p>
-                                            <p className="text-sm text-text-muted mt-1">{appointment.duration} de sessão prevista</p>
+                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Data</span>
+                                            <div className="flex items-center gap-3">
+                                                <span className="material-symbols-outlined text-white">calendar_today</span>
+                                                <div>
+                                                    <p className="text-white font-bold text-lg leading-tight">{appointment.fullDate}</p>
+                                                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-wide mt-0.5">{appointment.duration} prevista</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="flex items-center gap-4">
-                                        <div className="bg-surface-dark p-3 rounded-lg border border-border-dark text-white">
-                                            <span className="material-symbols-outlined">schedule</span>
-                                        </div>
+                                        {/* Turno/Horário Block - Updated to Match Requested Style */}
                                         <div>
-                                            <p className="text-white font-bold text-3xl font-display">{appointment.time}</p>
+                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Turno/Horário</span>
+                                            <div className="flex items-center gap-3">
+                                                <span className="material-symbols-outlined text-white">{periodData.icon}</span>
+                                                <span className="text-white font-bold text-xl">{periodData.label}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -660,7 +677,7 @@ const ClientAppointmentDetails: React.FC = () => {
                             </div>
                             
                             <div className="p-6 overflow-y-auto space-y-8 flex-1">
-                                <p className="text-text-muted text-sm">Sugira uma nova data e horário. O tatuador precisará aprovar.</p>
+                                <p className="text-text-muted text-sm">Sugira uma nova data e turno. O tatuador precisará aprovar.</p>
                                 
                                 {/* Date Selection (Input Manual + Calendar Popover) */}
                                 <div className="relative" ref={calendarRef}>
@@ -753,28 +770,27 @@ const ClientAppointmentDetails: React.FC = () => {
                                     )}
                                 </div>
 
-                                {/* Time Selection */}
+                                {/* Period Selection (Cards) */}
                                 <div>
-                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Horários Disponíveis <span className="text-primary">*</span></label>
-                                    <div className={`grid grid-cols-3 sm:grid-cols-4 gap-3 p-1 rounded-lg ${showErrors && !rescheduleData.newTime ? 'border border-red-500/50' : ''}`}>
-                                        {availableTimeSlots.map((time) => (
+                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Turno de Preferência <span className="text-primary">*</span></label>
+                                    <div className="grid grid-cols-3 gap-3">
+                                        {periods.map((period) => (
                                             <button
-                                                key={time}
+                                                key={period.id}
                                                 type="button"
-                                                onClick={() => setRescheduleData({...rescheduleData, newTime: time})}
-                                                className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${
-                                                    rescheduleData.newTime === time 
-                                                    ? 'bg-white text-black border-white shadow-lg' 
-                                                    : 'bg-transparent border-border-dark text-white hover:border-primary hover:text-primary'
+                                                onClick={() => setRescheduleData({...rescheduleData, newPeriod: period.id})}
+                                                className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300 gap-1 ${
+                                                    rescheduleData.newPeriod === period.id 
+                                                    ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105' 
+                                                    : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
                                                 }`}
                                             >
-                                                {time}
+                                                <span className="material-symbols-outlined text-xl">{period.icon}</span>
+                                                <span className="text-xs font-bold uppercase">{period.label}</span>
+                                                <span className="text-[9px] font-medium opacity-80">{period.range}</span>
                                             </button>
                                         ))}
                                     </div>
-                                    {showErrors && !rescheduleData.newTime && (
-                                        <p className="text-red-500 text-xs mt-1">Selecione um horário</p>
-                                    )}
                                 </div>
 
                                 {/* Reason */}

@@ -10,7 +10,11 @@ const artists = [
    { id: 4, name: "Elena Rosa", role: "Fine Line", price: 120, rating: 4.8, ratingCount: 1105, img: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=200&auto=format&fit=crop" }
 ];
 
-const timeSlots = ["10:00", "11:00", "13:00", "14:30", "16:00", "18:00"];
+const periods = [
+    { id: 'Manhã', label: 'Manhã', range: '06:00 - 12:00', icon: 'wb_twilight' },
+    { id: 'Tarde', label: 'Tarde', range: '12:00 - 18:00', icon: 'wb_sunny' },
+    { id: 'Noite', label: 'Noite', range: '18:00 - 00:00', icon: 'dark_mode' },
+];
 
 const Booking: React.FC = () => {
   const navigate = useNavigate();
@@ -19,10 +23,10 @@ const Booking: React.FC = () => {
   const [selectedArtist, setSelectedArtist] = useState<number | null>(null);
   
   // Date State
-  const [selectedDate, setSelectedDate] = useState<string>(""); // Format: YYYY-MM-DD
+  const [selectedDate, setSelectedDate] = useState<string>(""); // Format: Display String
   const [viewDate, setViewDate] = useState(new Date()); // Controls the calendar month view
   
-  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("");
 
   useEffect(() => {
     const artistParam = searchParams.get('artistId');
@@ -56,10 +60,7 @@ const Booking: React.FC = () => {
 
   const handleDateSelect = (day: number) => {
       const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-      // Format YYYY-MM-DD manually to avoid timezone issues or use ISO split
-      const dateStr = newDate.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-      // Store as pt-BR string for display consistency with previous logic, or ISO
-      // Using localized string for display logic later
+      // Using localized string for display logic
       const displayStr = newDate.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
       setSelectedDate(displayStr);
   };
@@ -96,7 +97,7 @@ const Booking: React.FC = () => {
              {/* Steps Container */}
              <div className="relative z-10 flex-1">
                 <div className="relative flex flex-col gap-10 pl-2">
-                    {/* Linha de fundo (cinza) - Posicionada Absolutamente em relação ao container das bolinhas */}
+                    {/* Linha de fundo (cinza) */}
                     <div className="absolute left-[13px] top-4 bottom-4 w-[2px] bg-zinc-800/50 -z-10"></div>
                     
                     {/* Linha de progresso (vermelha) */}
@@ -105,7 +106,7 @@ const Booking: React.FC = () => {
                         style={{ height: `${Math.max(0, (step - 1) * 33.33)}%` }} // Aproximadamente 33% por passo num gap-10
                     ></div>
 
-                    {['PROFISSIONAL', 'DATA', 'DETALHES', 'CONFIRMAR'].map((label, idx) => {
+                    {['PROFISSIONAL', 'DATA E TURNO', 'DETALHES', 'CONFIRMAR'].map((label, idx) => {
                         const s = idx + 1;
                         const active = step === s;
                         const completed = step > s;
@@ -140,7 +141,7 @@ const Booking: React.FC = () => {
                         {selectedArtist ? artists.find(a => a.id === selectedArtist)?.name : 'Selecione um Artista'}
                      </p>
                      <p className="text-sm text-zinc-400 font-medium">
-                         {selectedDate ? `${selectedDate.toLowerCase()} às ${selectedTime || '--:--'}` : 'Data a definir'}
+                         {selectedDate ? `${selectedDate.toLowerCase()} • ${selectedPeriod || 'Turno a definir'}` : 'Data a definir'}
                      </p>
                  </div>
              </div>
@@ -189,83 +190,100 @@ const Booking: React.FC = () => {
                  )}
 
                  {step === 2 && (
-                     <div className="animate-fade-in flex flex-col md:flex-row gap-8">
-                         {/* Coluna Esquerda: Calendário */}
-                         <div className="flex-1">
-                             <h3 className="text-3xl font-display font-bold text-white mb-2">Data</h3>
-                             <p className="text-zinc-500 mb-6 text-sm">Selecione o dia ideal.</p>
-                             
-                             <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-6 select-none">
-                                {/* Calendar Header */}
-                                <div className="flex items-center justify-between mb-6">
-                                    <button onClick={handlePrevMonth} className="text-zinc-400 hover:text-white p-2">
-                                        <span className="material-symbols-outlined">chevron_left</span>
-                                    </button>
-                                    <span className="text-white font-bold capitalize">
-                                        {viewDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
-                                    </span>
-                                    <button onClick={handleNextMonth} className="text-zinc-400 hover:text-white p-2">
-                                        <span className="material-symbols-outlined">chevron_right</span>
-                                    </button>
-                                </div>
+                     <div className="animate-fade-in flex flex-col gap-8">
+                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                             {/* Coluna Esquerda: Calendário */}
+                             <div className="flex-1">
+                                 <h3 className="text-3xl font-display font-bold text-white mb-2">Data</h3>
+                                 <p className="text-zinc-500 mb-6 text-sm">Selecione o dia ideal.</p>
+                                 
+                                 <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-6 select-none h-full">
+                                    {/* Calendar Header */}
+                                    <div className="flex items-center justify-between mb-6">
+                                        <button onClick={handlePrevMonth} className="text-zinc-400 hover:text-white p-2">
+                                            <span className="material-symbols-outlined">chevron_left</span>
+                                        </button>
+                                        <span className="text-white font-bold capitalize">
+                                            {viewDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                                        </span>
+                                        <button onClick={handleNextMonth} className="text-zinc-400 hover:text-white p-2">
+                                            <span className="material-symbols-outlined">chevron_right</span>
+                                        </button>
+                                    </div>
 
-                                {/* Calendar Grid */}
-                                <div className="grid grid-cols-7 gap-1 text-center mb-2">
-                                    {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(d => (
-                                        <span key={d} className="text-[10px] font-black text-zinc-600 uppercase">{d}</span>
-                                    ))}
-                                </div>
-                                <div className="grid grid-cols-7 gap-2">
-                                    {/* Empty slots for start of month */}
-                                    {Array.from({ length: getFirstDayOfMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => (
-                                        <div key={`empty-${i}`} />
-                                    ))}
-                                    
-                                    {/* Days */}
-                                    {Array.from({ length: getDaysInMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => {
-                                        const day = i + 1;
-                                        const disabled = isPastDate(day);
-                                        const selected = isSelected(day);
+                                    {/* Calendar Grid */}
+                                    <div className="grid grid-cols-7 gap-1 text-center mb-2">
+                                        {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(d => (
+                                            <span key={d} className="text-[10px] font-black text-zinc-600 uppercase">{d}</span>
+                                        ))}
+                                    </div>
+                                    <div className="grid grid-cols-7 gap-2">
+                                        {/* Empty slots for start of month */}
+                                        {Array.from({ length: getFirstDayOfMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => (
+                                            <div key={`empty-${i}`} />
+                                        ))}
+                                        
+                                        {/* Days */}
+                                        {Array.from({ length: getDaysInMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => {
+                                            const day = i + 1;
+                                            const disabled = isPastDate(day);
+                                            const selected = isSelected(day);
 
-                                        return (
-                                            <button 
-                                                key={day}
-                                                disabled={disabled}
-                                                onClick={() => handleDateSelect(day)}
-                                                className={`
-                                                    size-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all duration-300
-                                                    ${selected 
-                                                        ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' 
-                                                        : disabled 
-                                                            ? 'text-zinc-700 cursor-not-allowed' 
-                                                            : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
-                                                    }
-                                                `}
-                                            >
-                                                {day}
-                                            </button>
-                                        )
-                                    })}
+                                            return (
+                                                <button 
+                                                    key={day}
+                                                    disabled={disabled}
+                                                    onClick={() => handleDateSelect(day)}
+                                                    className={`
+                                                        size-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all duration-300
+                                                        ${selected 
+                                                            ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' 
+                                                            : disabled 
+                                                                ? 'text-zinc-700 cursor-not-allowed' 
+                                                                : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                                                        }
+                                                    `}
+                                                >
+                                                    {day}
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
+                                 </div>
+                             </div>
+
+                             {/* Coluna Direita: Períodos (Substituindo Horários Fixos) */}
+                             <div className={`flex flex-col transition-all duration-500 ${selectedDate ? 'opacity-100 translate-x-0' : 'opacity-30 translate-x-4 pointer-events-none'}`}>
+                                <h3 className="text-3xl font-display font-bold text-white mb-2">Período</h3>
+                                <p className="text-zinc-500 mb-6 text-sm">Escolha seu turno de preferência.</p>
+
+                                <div className="flex flex-col gap-3 h-full">
+                                    {periods.map(period => (
+                                        <button 
+                                            key={period.id} 
+                                            onClick={() => setSelectedPeriod(period.id)} 
+                                            className={`flex-1 flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 group ${
+                                                selectedPeriod === period.id 
+                                                ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105' 
+                                                : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <span className={`material-symbols-outlined text-2xl ${selectedPeriod === period.id ? 'text-primary' : 'text-zinc-600 group-hover:text-primary'}`}>
+                                                    {period.icon}
+                                                </span>
+                                                <div className="text-left">
+                                                    <span className="block font-black text-sm uppercase tracking-wide">{period.label}</span>
+                                                    <span className={`text-[10px] font-bold ${selectedPeriod === period.id ? 'text-zinc-300' : 'text-zinc-600'}`}>{period.range}</span>
+                                                </div>
+                                            </div>
+                                            {selectedPeriod === period.id && (
+                                                <span className="material-symbols-outlined text-primary">check_circle</span>
+                                            )}
+                                        </button>
+                                    ))}
                                 </div>
                              </div>
-                         </div>
-
-                         {/* Coluna Direita: Horários (Só aparece se data selecionada) */}
-                         <div className={`md:w-48 transition-all duration-500 ${selectedDate ? 'opacity-100 translate-x-0' : 'opacity-30 translate-x-4 pointer-events-none'}`}>
-                            <h3 className="text-3xl font-display font-bold text-white mb-2">Hora</h3>
-                             <p className="text-zinc-500 mb-6 text-sm">Disponibilidade.</p>
-
-                            <div className="flex flex-col gap-3">
-                                {timeSlots.map(time => (
-                                    <button 
-                                        key={time} 
-                                        onClick={() => setSelectedTime(time)} 
-                                        className={`py-3 rounded-xl border text-sm font-black transition-all duration-300 ${selectedTime === time ? 'bg-white text-black border-white shadow-lg scale-105' : 'bg-transparent border-zinc-800 text-white hover:border-primary hover:text-primary'}`}
-                                    >
-                                        {time}
-                                    </button>
-                                ))}
-                            </div>
                          </div>
                      </div>
                  )}
@@ -299,7 +317,7 @@ const Booking: React.FC = () => {
                                          <span className="text-xs font-black uppercase tracking-wider">Importante</span>
                                      </div>
                                      <p className="text-xs text-zinc-400 font-medium leading-relaxed">
-                                         Entraremos em contato via WhatsApp para confirmar os detalhes, ver as referências e enviar o orçamento final antes da sessão.
+                                         Entraremos em contato via WhatsApp para confirmar o horário exato dentro do período <strong>{selectedPeriod}</strong>, ver as referências e enviar o orçamento final.
                                      </p>
                                  </div>
                              </div>
@@ -315,7 +333,7 @@ const Booking: React.FC = () => {
                          <h3 className="font-tattoo text-5xl text-white mb-4">Solicitação Enviada!</h3>
                          <p className="text-zinc-400 max-w-md mx-auto text-sm leading-relaxed mb-10">
                              Seu pedido foi encaminhado para <strong className="text-white">{artists.find(a => a.id === selectedArtist)?.name}</strong>. 
-                             <br/>Você receberá uma confirmação via WhatsApp e E-mail em breve com o orçamento.
+                             <br/>Você receberá uma confirmação via WhatsApp e E-mail em breve com o orçamento e horário definido.
                          </p>
                          <button 
                             onClick={() => navigate('/my-appointments')}
@@ -339,12 +357,8 @@ const Booking: React.FC = () => {
                     
                     <button 
                         onClick={handleNext}
-                        disabled={step === 1 && !selectedArtist || step === 2 && (!selectedDate || !selectedTime)}
-                        className={`px-10 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center gap-2 ${
-                            step === 3 
-                            ? 'bg-primary hover:bg-primary-hover text-white shadow-[0_0_25px_rgba(212,17,50,0.4)] hover:shadow-[0_0_35px_rgba(212,17,50,0.6)] hover:-translate-y-0.5' 
-                            : 'bg-white text-black hover:bg-zinc-200 shadow-lg shadow-white/10'
-                        } disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none`}
+                        disabled={step === 1 && !selectedArtist || step === 2 && (!selectedDate || !selectedPeriod)}
+                        className={`px-10 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center gap-2 bg-primary hover:bg-primary-hover text-white shadow-[0_0_25px_rgba(212,17,50,0.4)] hover:shadow-[0_0_35px_rgba(212,17,50,0.6)] hover:-translate-y-0.5 disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none`}
                     >
                         {step === 3 ? 'ENVIAR SOLICITAÇÃO' : 'CONTINUAR'}
                         {step !== 3 && <span className="material-symbols-outlined text-base">arrow_forward</span>}

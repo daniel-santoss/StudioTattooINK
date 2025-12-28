@@ -31,7 +31,7 @@ const initialRequests: BookingRequest[] = [
     clientRating: 5.0,
     service: "Realismo Preto e Cinza",
     requestedDate: "20 Nov, 2024",
-    requestedTime: "14:00",
+    requestedTime: "Tarde (12h-18h)",
     description: "Gostaria de fazer um retrato realista do meu cachorro no antebraço. Tenho uma foto de referência em alta qualidade.",
     medicalInfo: {
         allergies: "Nenhuma conhecida",
@@ -48,7 +48,7 @@ const initialRequests: BookingRequest[] = [
     clientRating: 4.8,
     service: "Old School",
     requestedDate: "22 Nov, 2024",
-    requestedTime: "10:00",
+    requestedTime: "Manhã (06h-12h)",
     description: "Quero uma adaga atravessando uma rosa no estilo clássico, colorida. Local: Panturrilha.",
     medicalInfo: {
         allergies: "Látex (Precisa de luva nitrílica)",
@@ -265,7 +265,7 @@ const BookingRequests: React.FC = () => {
                             </div>
                         </div>
                         <div className="bg-surface-light/30 p-4 rounded-xl border border-white/5">
-                            <span className="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Horário</span>
+                            <span className="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Turno/Horário</span>
                             <div className="flex items-center gap-2">
                                 <span className="material-symbols-outlined text-white">schedule</span>
                                 <span className="text-lg font-bold text-white">{selectedRequest.requestedTime}</span>
