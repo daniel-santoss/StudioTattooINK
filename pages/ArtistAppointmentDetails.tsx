@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { RatingDisplay } from './Staff'; // Importando componente de estrelas existente
+import { RatingDisplay } from '../components/RatingDisplay'; // Importando componente de estrelas
 
 // Interface adaptada para a visão do Artista
 interface ArtistAppointmentView {
@@ -35,87 +35,87 @@ interface ArtistAppointmentView {
 // Mock Data Database
 const artistAppointmentsDB: ArtistAppointmentView[] = [
     {
-       id: 1,
-       clientName: "Marcus Thorn",
-       clientAvatar: "https://i.pravatar.cc/150?u=1",
-       clientType: "Recorrente",
-       clientPhone: "(11) 99999-1234",
-       clientRating: 4.8,
-       clientRatingCount: 12,
-       service: "Fechamento de Braço - Sessão 2",
-       date: "15 Nov, 2024",
-       fullDate: "Sexta-feira, 15 de Novembro de 2024",
-       time: "14:00",
-       duration: "4 horas",
-       status: "confirmado",
-       price: "R$ 1.200,00",
-       deposit: "R$ 400,00",
-       remaining: "R$ 800,00",
-       paymentStatus: "Sinal Pago",
-       description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
-       referenceImages: [
-           "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=300",
-           "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=300"
-       ],
-       medicalInfo: {
-           allergies: "Nenhuma",
-           conditions: "Nenhuma",
-           skinType: "Normal, boa cicatrização"
-       },
-       internalNotes: "Cliente aguenta bem sessões longas. Gosta de conversar."
+        id: 1,
+        clientName: "Marcus Thorn",
+        clientAvatar: "https://i.pravatar.cc/150?u=1",
+        clientType: "Recorrente",
+        clientPhone: "(11) 99999-1234",
+        clientRating: 4.8,
+        clientRatingCount: 12,
+        service: "Fechamento de Braço - Sessão 2",
+        date: "15 Nov, 2024",
+        fullDate: "Sexta-feira, 15 de Novembro de 2024",
+        time: "14:00",
+        duration: "4 horas",
+        status: "confirmado",
+        price: "R$ 1.200,00",
+        deposit: "R$ 400,00",
+        remaining: "R$ 800,00",
+        paymentStatus: "Sinal Pago",
+        description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
+        referenceImages: [
+            "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=300",
+            "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=300"
+        ],
+        medicalInfo: {
+            allergies: "Nenhuma",
+            conditions: "Nenhuma",
+            skinType: "Normal, boa cicatrização"
+        },
+        internalNotes: "Cliente aguenta bem sessões longas. Gosta de conversar."
     },
     {
-       id: 2,
-       clientName: "Sarah Jones",
-       clientAvatar: "https://i.pravatar.cc/150?u=5",
-       clientType: "Novo Cliente",
-       clientPhone: "(11) 98888-5555",
-       clientRating: 5.0,
-       clientRatingCount: 1,
-       service: "Rosas Ombro",
-       date: "15 Nov, 2024",
-       fullDate: "Sexta-feira, 15 de Novembro de 2024",
-       time: "11:00",
-       duration: "2 horas",
-       status: "concluido",
-       price: "R$ 600,00",
-       deposit: "R$ 200,00",
-       remaining: "R$ 0,00",
-       paymentStatus: "Total Pago",
-       description: "Duas rosas no estilo Neo Tradicional no ombro direito.",
-       referenceImages: [],
-       medicalInfo: {
-           allergies: "Látex (Usar luva Nitrílica)",
-           conditions: "Pele sensível",
-           skinType: "Clara"
-       }
+        id: 2,
+        clientName: "Sarah Jones",
+        clientAvatar: "https://i.pravatar.cc/150?u=5",
+        clientType: "Novo Cliente",
+        clientPhone: "(11) 98888-5555",
+        clientRating: 5.0,
+        clientRatingCount: 1,
+        service: "Rosas Ombro",
+        date: "15 Nov, 2024",
+        fullDate: "Sexta-feira, 15 de Novembro de 2024",
+        time: "11:00",
+        duration: "2 horas",
+        status: "concluido",
+        price: "R$ 600,00",
+        deposit: "R$ 200,00",
+        remaining: "R$ 0,00",
+        paymentStatus: "Total Pago",
+        description: "Duas rosas no estilo Neo Tradicional no ombro direito.",
+        referenceImages: [],
+        medicalInfo: {
+            allergies: "Látex (Usar luva Nitrílica)",
+            conditions: "Pele sensível",
+            skinType: "Clara"
+        }
     },
     {
-       id: 7,
-       clientName: "Leticia Sabatella",
-       clientAvatar: "https://i.pravatar.cc/150?u=30",
-       clientType: "Novo Cliente",
-       clientPhone: "(11) 97777-1234",
-       clientRating: 0,
-       clientRatingCount: 0,
-       service: "Piercing Umbigo",
-       date: "28 Dez, 2025",
-       fullDate: "Domingo, 28 de Dezembro de 2025",
-       time: "09:00",
-       duration: "1h 30min",
-       status: "concluido",
-       price: "R$ 150,00",
-       deposit: "R$ 50,00",
-       remaining: "R$ 0,00",
-       paymentStatus: "Total Pago",
-       description: "Aplicação de joia em titânio no umbigo. Joia básica prata.",
-       referenceImages: [],
-       medicalInfo: {
-           allergies: "Nenhuma",
-           conditions: "Nenhuma",
-           skinType: "Normal"
-       },
-       internalNotes: "Cliente nervosa, mas correu tudo bem."
+        id: 7,
+        clientName: "Leticia Sabatella",
+        clientAvatar: "https://i.pravatar.cc/150?u=30",
+        clientType: "Novo Cliente",
+        clientPhone: "(11) 97777-1234",
+        clientRating: 0,
+        clientRatingCount: 0,
+        service: "Piercing Umbigo",
+        date: "28 Dez, 2025",
+        fullDate: "Domingo, 28 de Dezembro de 2025",
+        time: "09:00",
+        duration: "1h 30min",
+        status: "concluido",
+        price: "R$ 150,00",
+        deposit: "R$ 50,00",
+        remaining: "R$ 0,00",
+        paymentStatus: "Total Pago",
+        description: "Aplicação de joia em titânio no umbigo. Joia básica prata.",
+        referenceImages: [],
+        medicalInfo: {
+            allergies: "Nenhuma",
+            conditions: "Nenhuma",
+            skinType: "Normal"
+        },
+        internalNotes: "Cliente nervosa, mas correu tudo bem."
     }
 ];
 
@@ -142,7 +142,7 @@ const ArtistAppointmentDetails: React.FC = () => {
     const navigate = useNavigate();
     const [appointment, setAppointment] = useState<ArtistAppointmentView | null>(null);
     const [loading, setLoading] = useState(true);
-    
+
     // Actions State
     const [notes, setNotes] = useState("");
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success'>('idle');
@@ -167,7 +167,7 @@ const ArtistAppointmentDetails: React.FC = () => {
         title: '',
         message: '',
         type: 'neutral',
-        onConfirm: () => {}
+        onConfirm: () => { }
     });
 
     useEffect(() => {
@@ -192,7 +192,7 @@ const ArtistAppointmentDetails: React.FC = () => {
     const handleConfirmation = (action: 'reschedule' | 'noshow' | 'report' | 'start' | 'finish') => {
         setIsMenuOpen(false); // Fecha menu se estiver aberto
 
-        switch(action) {
+        switch (action) {
             case 'start':
                 setConfirmModal({
                     isOpen: true,
@@ -262,7 +262,7 @@ const ArtistAppointmentDetails: React.FC = () => {
         // Limpa o "R$" para o input, mantendo formatação numérica (Ex: 1.200,00)
         const cleanTotal = appointment.price.replace('R$', '').trim();
         const cleanDeposit = appointment.deposit.replace('R$', '').trim();
-        
+
         setFinanceData({
             total: cleanTotal,
             deposit: cleanDeposit
@@ -290,11 +290,11 @@ const ArtistAppointmentDetails: React.FC = () => {
 
     const handleSaveFinance = () => {
         if (!appointment) return;
-        
+
         const totalVal = parseCurrency(financeData.total);
         const depositVal = parseCurrency(financeData.deposit);
         const remainingVal = totalVal - depositVal;
-        
+
         // Determine payment status based on math
         let newStatus: 'Pendente' | 'Sinal Pago' | 'Total Pago' = 'Pendente';
         if (remainingVal <= 0) newStatus = 'Total Pago';
@@ -327,12 +327,12 @@ const ArtistAppointmentDetails: React.FC = () => {
     };
 
     // Calcular restante em tempo real para display
-    const currentRemaining = isEditingFinance 
+    const currentRemaining = isEditingFinance
         ? formatCurrency(Math.max(0, parseCurrency(financeData.total) - parseCurrency(financeData.deposit)))
         : "R$ 0,00";
 
     const getStatusBadge = (status: string) => {
-        switch(status) {
+        switch (status) {
             case 'confirmado': return <span className="bg-blue-500/20 text-blue-500 border border-blue-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Confirmado</span>;
             case 'concluido': return <span className="bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Finalizado</span>;
             case 'em-andamento': return <span className="bg-purple-500/20 text-purple-500 border border-purple-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide animate-pulse">Em Andamento</span>;
@@ -352,8 +352,8 @@ const ArtistAppointmentDetails: React.FC = () => {
         <div className="min-h-screen bg-background-dark p-6 md:p-12">
             <div className="max-w-6xl mx-auto">
                 {/* Header Navigation */}
-                <button 
-                    onClick={() => navigate('/admin/schedule')} 
+                <button
+                    onClick={() => navigate('/admin/schedule')}
                     className="flex items-center gap-2 text-text-muted hover:text-white mb-8 transition-colors text-sm font-bold uppercase tracking-wide"
                 >
                     <span className="material-symbols-outlined">arrow_back</span>
@@ -362,14 +362,13 @@ const ArtistAppointmentDetails: React.FC = () => {
 
                 {/* Main Card */}
                 <div className="bg-surface-dark border border-border-dark rounded-3xl overflow-hidden shadow-2xl relative">
-                    
+
                     {/* Status Strip */}
-                    <div className={`h-2 w-full ${
-                        appointment.status === 'em-andamento' ? 'bg-purple-500 animate-pulse' : 
-                        appointment.status === 'concluido' ? 'bg-emerald-500' :
-                        appointment.status === 'cancelado' || appointment.status === 'noshow' ? 'bg-red-500' : 
-                        appointment.status === 'rescheduling' ? 'bg-yellow-500' : 'bg-blue-500'
-                    }`}></div>
+                    <div className={`h-2 w-full ${appointment.status === 'em-andamento' ? 'bg-purple-500 animate-pulse' :
+                            appointment.status === 'concluido' ? 'bg-emerald-500' :
+                                appointment.status === 'cancelado' || appointment.status === 'noshow' ? 'bg-red-500' :
+                                    appointment.status === 'rescheduling' ? 'bg-yellow-500' : 'bg-blue-500'
+                        }`}></div>
 
                     <div className="p-8 md:p-10">
                         {/* Title & Status Header */}
@@ -384,22 +383,22 @@ const ArtistAppointmentDetails: React.FC = () => {
                                     ID Sessão: #{appointment.id}882024
                                 </p>
                             </div>
-                            
+
                             {/* Operational Actions */}
                             <div className="flex flex-wrap items-center gap-3">
                                 {appointment.status === 'confirmado' && (
                                     <>
-                                        <button 
+                                        <button
                                             onClick={() => handleConfirmation('start')}
                                             className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm uppercase tracking-wide shadow-lg shadow-emerald-900/20 flex items-center gap-2 transition-all"
                                         >
                                             <span className="material-symbols-outlined">play_arrow</span>
                                             Iniciar Sessão
                                         </button>
-                                        
+
                                         {/* Botão de Menu com 3 pontos */}
                                         <div className="relative" ref={menuRef}>
-                                            <button 
+                                            <button
                                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                                 className={`size-11 flex items-center justify-center rounded-xl border border-border-dark hover:bg-white/10 text-text-muted hover:text-white transition-all ${isMenuOpen ? 'bg-white/10 text-white' : ''}`}
                                             >
@@ -410,14 +409,14 @@ const ArtistAppointmentDetails: React.FC = () => {
                                             {isMenuOpen && (
                                                 <div className="absolute right-0 top-full mt-2 w-56 bg-surface-light border border-border-dark rounded-xl shadow-2xl z-50 overflow-hidden animate-fade-in">
                                                     <div className="p-1.5 flex flex-col gap-0.5">
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleConfirmation('reschedule')}
                                                             className="w-full text-left px-3 py-2.5 text-sm text-white hover:bg-white/10 rounded-lg flex items-center gap-3 font-medium transition-colors"
                                                         >
                                                             <span className="material-symbols-outlined text-blue-400">edit_calendar</span>
                                                             Remarcar
                                                         </button>
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleConfirmation('noshow')}
                                                             className="w-full text-left px-3 py-2.5 text-sm text-white hover:bg-white/10 rounded-lg flex items-center gap-3 font-medium transition-colors"
                                                         >
@@ -425,7 +424,7 @@ const ArtistAppointmentDetails: React.FC = () => {
                                                             No-Show
                                                         </button>
                                                         <div className="h-px bg-white/10 my-1"></div>
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleConfirmation('report')}
                                                             className="w-full text-left px-3 py-2.5 text-sm text-red-400 hover:bg-red-500/10 rounded-lg flex items-center gap-3 font-medium transition-colors"
                                                         >
@@ -438,9 +437,9 @@ const ArtistAppointmentDetails: React.FC = () => {
                                         </div>
                                     </>
                                 )}
-                                
+
                                 {appointment.status === 'em-andamento' && (
-                                    <button 
+                                    <button
                                         onClick={() => handleConfirmation('finish')}
                                         className="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm uppercase tracking-wide shadow-lg shadow-primary/20 flex items-center gap-2 transition-all"
                                     >
@@ -461,14 +460,13 @@ const ArtistAppointmentDetails: React.FC = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                             {/* Left Column: Client & Project Info */}
                             <div className="lg:col-span-2 space-y-8">
-                                
+
                                 {/* Client Card */}
                                 <div className="bg-surface-light/20 rounded-2xl p-6 border border-white/5 flex flex-col sm:flex-row items-center sm:items-start gap-6 relative overflow-hidden">
                                     {/* Client Label */}
-                                    <div className={`absolute top-0 right-0 px-3 py-1 rounded-bl-xl text-[10px] font-bold uppercase tracking-widest ${
-                                        appointment.clientType === 'VIP' ? 'bg-amber-500 text-black' : 
-                                        appointment.clientType === 'Novo Cliente' ? 'bg-blue-500 text-white' : 'bg-surface-light text-text-muted'
-                                    }`}>
+                                    <div className={`absolute top-0 right-0 px-3 py-1 rounded-bl-xl text-[10px] font-bold uppercase tracking-widest ${appointment.clientType === 'VIP' ? 'bg-amber-500 text-black' :
+                                            appointment.clientType === 'Novo Cliente' ? 'bg-blue-500 text-white' : 'bg-surface-light text-text-muted'
+                                        }`}>
                                         {appointment.clientType}
                                     </div>
 
@@ -501,14 +499,12 @@ const ArtistAppointmentDetails: React.FC = () => {
                                 </div>
 
                                 {/* Medical Alert (Critical for Artists) */}
-                                <div className={`rounded-2xl p-6 border ${
-                                    appointment.medicalInfo.allergies !== "Nenhuma" 
-                                    ? 'bg-red-500/10 border-red-500/30' 
-                                    : 'bg-surface-light/10 border-white/5'
-                                }`}>
-                                    <h3 className={`text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${
-                                        appointment.medicalInfo.allergies !== "Nenhuma" ? 'text-red-500' : 'text-text-muted'
+                                <div className={`rounded-2xl p-6 border ${appointment.medicalInfo.allergies !== "Nenhuma"
+                                        ? 'bg-red-500/10 border-red-500/30'
+                                        : 'bg-surface-light/10 border-white/5'
                                     }`}>
+                                    <h3 className={`text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${appointment.medicalInfo.allergies !== "Nenhuma" ? 'text-red-500' : 'text-text-muted'
+                                        }`}>
                                         <span className="material-symbols-outlined">medical_information</span>
                                         Ficha Médica
                                     </h3>
@@ -562,7 +558,7 @@ const ArtistAppointmentDetails: React.FC = () => {
                                 {/* Date & Time Card */}
                                 <div className="bg-surface-light/10 border border-white/5 rounded-2xl p-6">
                                     <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Agenda</h3>
-                                    
+
                                     <div className="space-y-6">
                                         {/* Data Block */}
                                         <div>
@@ -597,12 +593,12 @@ const ArtistAppointmentDetails: React.FC = () => {
                                             </button>
                                         )}
                                     </div>
-                                    
+
                                     {isEditingFinance ? (
                                         <div className="space-y-4 mb-6 animate-fade-in">
                                             <div>
                                                 <label className="text-xs text-text-muted uppercase font-bold block mb-1">Valor Total (Fixo)</label>
-                                                <input 
+                                                <input
                                                     type="text"
                                                     value={financeData.total}
                                                     disabled
@@ -611,7 +607,7 @@ const ArtistAppointmentDetails: React.FC = () => {
                                             </div>
                                             <div>
                                                 <label className="text-xs text-text-muted uppercase font-bold block mb-1">Sinal Pago</label>
-                                                <input 
+                                                <input
                                                     type="text"
                                                     inputMode="numeric"
                                                     value={financeData.deposit}
@@ -654,7 +650,7 @@ const ArtistAppointmentDetails: React.FC = () => {
                                         Notas Internas
                                         <span className="material-symbols-outlined text-xs">lock</span>
                                     </h3>
-                                    <textarea 
+                                    <textarea
                                         className="w-full bg-background-dark border border-border-dark rounded-xl p-3 text-white text-sm focus:border-primary placeholder-zinc-700 resize-none transition-all"
                                         rows={4}
                                         maxLength={MAX_NOTES_LENGTH}
@@ -673,7 +669,7 @@ const ArtistAppointmentDetails: React.FC = () => {
                                             </span>
                                         )}
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={handleSaveNotes}
                                         disabled={saveStatus === 'saving'}
                                         className="w-full py-2 bg-surface-dark hover:bg-white/5 border border-border-dark text-text-muted hover:text-white rounded-lg text-xs font-bold uppercase tracking-wide transition-all disabled:opacity-50"
@@ -692,9 +688,8 @@ const ArtistAppointmentDetails: React.FC = () => {
                 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
                     <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
                         <div className="p-6 text-center">
-                            <div className={`size-12 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                                confirmModal.type === 'danger' ? 'bg-red-500/10 text-red-500' : 'bg-primary/10 text-primary'
-                            }`}>
+                            <div className={`size-12 rounded-full flex items-center justify-center mx-auto mb-4 ${confirmModal.type === 'danger' ? 'bg-red-500/10 text-red-500' : 'bg-primary/10 text-primary'
+                                }`}>
                                 <span className="material-symbols-outlined text-3xl">
                                     {confirmModal.type === 'danger' ? 'warning' : 'info'}
                                 </span>
@@ -703,18 +698,17 @@ const ArtistAppointmentDetails: React.FC = () => {
                             <p className="text-text-muted text-sm leading-relaxed">{confirmModal.message}</p>
                         </div>
                         <div className="flex border-t border-border-dark">
-                            <button 
-                                onClick={() => setConfirmModal(prev => ({...prev, isOpen: false}))}
+                            <button
+                                onClick={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
                                 className="flex-1 py-4 text-sm font-bold text-text-muted hover:text-white hover:bg-white/5 transition-colors"
                             >
                                 Cancelar
                             </button>
                             <div className="w-px bg-border-dark"></div>
-                            <button 
+                            <button
                                 onClick={confirmModal.onConfirm}
-                                className={`flex-1 py-4 text-sm font-bold uppercase tracking-wide hover:bg-white/5 transition-colors ${
-                                    confirmModal.type === 'danger' ? 'text-red-500' : 'text-primary'
-                                }`}
+                                className={`flex-1 py-4 text-sm font-bold uppercase tracking-wide hover:bg-white/5 transition-colors ${confirmModal.type === 'danger' ? 'text-red-500' : 'text-primary'
+                                    }`}
                             >
                                 Confirmar
                             </button>
