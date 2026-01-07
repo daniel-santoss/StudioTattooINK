@@ -23,7 +23,7 @@ const initialReports: Report[] = [
         reporterName: "Marcus Thorn",
         reporterImage: "https://i.pravatar.cc/150?u=1",
         reportedName: "Alex Rivera",
-        reportedImage: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&q=80&w=200",
+        reportedImage: "/src/assets/images/tatuadores/tatuador1.jpg",
         date: "20 Out, 2024",
         category: "Atraso excessivo",
         description: "O tatuador chegou com 1 hora de atraso e não avisou previamente.",
@@ -33,8 +33,8 @@ const initialReports: Report[] = [
     {
         id: 2,
         type: 'artist_report',
-        reporterName: "Sarah Vane",
-        reporterImage: "https://images.unsplash.com/photo-1596204368623-2895f543666f?auto=format&fit=crop&q=80&w=200",
+        reporterName: "Lucas Vane",
+        reporterImage: "/src/assets/images/tatuadores/tatuador2.jpg",
         reportedName: "John Doe",
         reportedImage: "https://i.pravatar.cc/150?u=4",
         date: "18 Out, 2024",
@@ -48,8 +48,8 @@ const initialReports: Report[] = [
         type: 'client_report',
         reporterName: "Jessica Rabbit",
         reporterImage: "https://i.pravatar.cc/150?u=3",
-        reportedName: "Mike Chen",
-        reportedImage: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&q=80&w=200",
+        reportedName: "Mika Chen",
+        reportedImage: "/src/assets/images/tatuadores/tatuador3.jpg",
         date: "15 Out, 2024",
         category: "Comportamento inadequado",
         description: "Senti desconforto com alguns comentários feitos durante a sessão.",
@@ -87,7 +87,7 @@ const Reports: React.FC = () => {
     };
 
     const getSeverityStyle = (sev: string) => {
-        switch(sev) {
+        switch (sev) {
             case 'Alta': return 'text-red-500 bg-red-500/10 border-red-500/20';
             case 'Média': return 'text-amber-500 bg-amber-500/10 border-amber-500/20';
             default: return 'text-blue-500 bg-blue-500/10 border-blue-500/20';
@@ -95,7 +95,7 @@ const Reports: React.FC = () => {
     };
 
     const getStatusStyle = (status: string) => {
-        switch(status) {
+        switch (status) {
             case 'Resolvido': return 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20';
             case 'Em Análise': return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
             default: return 'text-text-muted bg-surface-light border-border-dark';
@@ -104,12 +104,12 @@ const Reports: React.FC = () => {
 
     // Date parsing helper for sorting
     const parseDate = (dateStr: string) => {
-        const months: {[key: string]: string} = {
+        const months: { [key: string]: string } = {
             'Jan': 'Jan', 'Fev': 'Feb', 'Mar': 'Mar', 'Abr': 'Apr', 'Mai': 'May', 'Jun': 'Jun',
             'Jul': 'Jul', 'Ago': 'Aug', 'Set': 'Sep', 'Out': 'Oct', 'Nov': 'Nov', 'Dez': 'Dec'
         };
         const parts = dateStr.split(' '); // ["20", "Out,", "2024"]
-        if(parts.length < 3) return 0;
+        if (parts.length < 3) return 0;
         const day = parts[0];
         const monthRaw = parts[1].replace(',', '');
         const year = parts[2];
@@ -134,13 +134,12 @@ const Reports: React.FC = () => {
                     <h1 className="font-tattoo text-4xl text-white mb-2">Ocorrências</h1>
                     <p className="text-text-muted text-sm">Gerencie reports enviados por clientes e equipe.</p>
                 </div>
-                <button 
+                <button
                     onClick={() => setShowFilters(!showFilters)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${
-                        showFilters 
-                        ? 'bg-primary text-white shadow-lg shadow-primary/20' 
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${showFilters
+                        ? 'bg-primary text-white shadow-lg shadow-primary/20'
                         : 'bg-surface-light text-text-muted hover:bg-white/10 hover:text-white'
-                    }`}
+                        }`}
                 >
                     <span className="material-symbols-outlined">filter_list</span>
                     Filtros
@@ -154,7 +153,7 @@ const Reports: React.FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Gravidade</label>
-                            <select 
+                            <select
                                 value={filterSeverity}
                                 onChange={(e) => setFilterSeverity(e.target.value)}
                                 className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
@@ -167,7 +166,7 @@ const Reports: React.FC = () => {
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Status</label>
-                            <select 
+                            <select
                                 value={filterStatus}
                                 onChange={(e) => setFilterStatus(e.target.value)}
                                 className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
@@ -180,7 +179,7 @@ const Reports: React.FC = () => {
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Momento</label>
-                            <select 
+                            <select
                                 value={sortOrder}
                                 onChange={(e) => setSortOrder(e.target.value)}
                                 className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white focus:border-primary text-sm"
@@ -190,7 +189,7 @@ const Reports: React.FC = () => {
                             </select>
                         </div>
                         <div className="flex items-end">
-                            <button 
+                            <button
                                 onClick={() => {
                                     setFilterSeverity('Todas');
                                     setFilterStatus('Todos');
@@ -210,14 +209,14 @@ const Reports: React.FC = () => {
                     <div key={report.id} className="bg-surface-dark border border-border-dark rounded-xl p-5 flex flex-col md:flex-row gap-6 hover:border-primary/30 transition-all group animate-fade-in">
                         {/* Imagem do Relator (Destaque Esquerdo) */}
                         <div className="flex flex-col items-center justify-center gap-2 min-w-[80px]">
-                             <img 
-                                src={report.reporterImage} 
+                            <img
+                                src={report.reporterImage}
                                 alt={report.reporterName}
                                 className="size-14 rounded-full object-cover border-2 border-surface-light shadow-lg"
-                             />
-                             <span className="text-[10px] uppercase font-bold text-text-muted tracking-wider">
-                                 {report.type === 'client_report' ? 'Cliente' : 'Artista'}
-                             </span>
+                            />
+                            <span className="text-[10px] uppercase font-bold text-text-muted tracking-wider">
+                                {report.type === 'client_report' ? 'Cliente' : 'Artista'}
+                            </span>
                         </div>
 
                         {/* Conteúdo */}
@@ -228,9 +227,9 @@ const Reports: React.FC = () => {
                                     <span className="material-symbols-outlined text-sm">calendar_today</span> {report.date}
                                 </span>
                             </div>
-                            
+
                             <p className="text-text-muted text-sm mb-4 line-clamp-2">{report.description}</p>
-                            
+
                             <div className="flex items-center gap-4 text-sm">
                                 <div className="flex items-center gap-2">
                                     <span className="text-text-muted text-xs uppercase font-bold">Relator:</span>
@@ -255,7 +254,7 @@ const Reports: React.FC = () => {
                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border w-full text-center ${getStatusStyle(report.status)}`}>
                                 {report.status}
                             </span>
-                            <button 
+                            <button
                                 onClick={() => handleOpenDetails(report)}
                                 className="w-full py-1.5 text-xs font-bold text-text-muted hover:text-white border border-transparent hover:border-white/10 rounded transition-all uppercase tracking-wide"
                             >
@@ -277,13 +276,13 @@ const Reports: React.FC = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
                     <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-lg shadow-2xl relative animate-fade-in">
                         <div className="flex items-center justify-between p-6 border-b border-border-dark">
-                             <div className="flex items-center gap-3">
-                                 <span className="material-symbols-outlined text-red-500">warning</span>
-                                 <h3 className="text-xl font-bold text-white">Detalhes da Ocorrência</h3>
-                             </div>
-                             <button onClick={() => setIsModalOpen(false)} className="text-text-muted hover:text-white">
-                                 <span className="material-symbols-outlined">close</span>
-                             </button>
+                            <div className="flex items-center gap-3">
+                                <span className="material-symbols-outlined text-red-500">warning</span>
+                                <h3 className="text-xl font-bold text-white">Detalhes da Ocorrência</h3>
+                            </div>
+                            <button onClick={() => setIsModalOpen(false)} className="text-text-muted hover:text-white">
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
                         </div>
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-6 bg-surface-light/20 p-4 rounded-xl">
@@ -316,7 +315,7 @@ const Reports: React.FC = () => {
                                             <p className="text-xs text-text-muted capitalize">{selectedReport.type === 'client_report' ? 'Cliente' : 'Tatuador'}</p>
                                         </div>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={handleViewProfile}
                                         className="text-xs text-primary hover:text-white font-bold uppercase tracking-wide flex items-center gap-1 transition-colors"
                                     >
@@ -330,7 +329,7 @@ const Reports: React.FC = () => {
                                         <img src={selectedReport.reportedImage} className="size-6 rounded-full object-cover" />
                                         <p className="text-sm font-bold text-white">{selectedReport.reportedName}</p>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={handleViewProfile}
                                         className="text-xs text-primary hover:text-white font-bold uppercase tracking-wide flex items-center gap-1 transition-colors"
                                     >
@@ -342,19 +341,19 @@ const Reports: React.FC = () => {
                         </div>
 
                         <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark/50 rounded-b-2xl">
-                             <button 
+                            <button
                                 onClick={() => handleStatusChange('Em Análise')}
                                 disabled={selectedReport.status !== 'Pendente'}
                                 className="px-4 py-2 border border-border-dark hover:bg-white/5 text-text-muted hover:text-white rounded-lg font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                             >
-                                 Marcar Em Análise
-                             </button>
-                             <button 
+                            >
+                                Marcar Em Análise
+                            </button>
+                            <button
                                 onClick={() => handleStatusChange('Resolvido')}
                                 className="px-6 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-sm transition-colors shadow-lg shadow-primary/20"
-                             >
-                                 Resolver Caso
-                             </button>
+                            >
+                                Resolver Caso
+                            </button>
                         </div>
                     </div>
                 </div>

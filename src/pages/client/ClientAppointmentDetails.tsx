@@ -33,32 +33,32 @@ interface AppointmentDetail {
 // Mock Data Database
 const appointmentsDB: AppointmentDetail[] = [
     {
-       id: 1,
-       artist: "Alex Rivera",
-       artistRole: "Realismo Preto e Cinza",
-       artistAvatar: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&q=80&w=200",
-       service: "Fechamento de Braço - Sessão 2",
-       date: "15 Nov, 2024",
-       fullDate: "Sexta-feira, 15 de Novembro de 2024",
-       time: "14:00",
-       duration: "4 horas",
-       status: "upcoming",
-       price: "R$ 1.200,00",
-       paidAmount: "R$ 400,00", // Sinal
-       remainingAmount: "R$ 800,00",
-       paymentStatus: "Pendente",
-       location: "Ink Studio - Sala 02",
-       description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
-       referenceImages: [
-           "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=300",
-           "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=300"
-       ]
+        id: 1,
+        artist: "Alex Rivera",
+        artistRole: "Realismo Preto e Cinza",
+        artistAvatar: "/src/assets/images/tatuadores/tatuador1.jpg",
+        service: "Fechamento de Braço - Sessão 2",
+        date: "15 Nov, 2024",
+        fullDate: "Sexta-feira, 15 de Novembro de 2024",
+        time: "14:00",
+        duration: "4 horas",
+        status: "upcoming",
+        price: "R$ 1.200,00",
+        paidAmount: "R$ 400,00", // Sinal
+        remainingAmount: "R$ 800,00",
+        paymentStatus: "Pendente",
+        location: "Ink Studio - Sala 02",
+        description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
+        referenceImages: [
+            "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=300",
+            "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=300"
+        ]
     },
     {
         id: 4,
         artist: "Elena Rosa",
         artistRole: "Fine Line",
-        artistAvatar: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=200&auto=format&fit=crop",
+        artistAvatar: "/src/assets/images/tatuadores/tatuador4.jpg",
         service: "Fine Line Minimalista",
         date: "20 Dez, 2024",
         fullDate: "Sexta-feira, 20 de Dezembro de 2024",
@@ -79,7 +79,7 @@ const appointmentsDB: AppointmentDetail[] = [
         id: 5,
         artist: "Alex Rivera",
         artistRole: "Realismo",
-        artistAvatar: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&q=80&w=200",
+        artistAvatar: "/src/assets/images/tatuadores/tatuador1.jpg",
         service: "Retoque Realismo",
         date: "25 Nov, 2024",
         fullDate: "Segunda-feira, 25 de Novembro de 2024",
@@ -101,45 +101,45 @@ const appointmentsDB: AppointmentDetail[] = [
         }
     },
     {
-       id: 2,
-       artist: "Sarah Vane",
-       artistRole: "Neo Traditional",
-       artistAvatar: "https://images.unsplash.com/photo-1596204368623-2895f543666f?auto=format&fit=crop&q=80&w=200",
-       service: "Rosa Old School",
-       date: "10 Out, 2024",
-       fullDate: "Quinta-feira, 10 de Outubro de 2024",
-       time: "10:00",
-       duration: "2 horas",
-       status: "completed",
-       price: "R$ 450,00",
-       paidAmount: "R$ 450,00",
-       remainingAmount: "R$ 0,00",
-       paymentStatus: "Pago",
-       location: "Ink Studio - Sala 03",
-       description: "Rosa clássica old school na mão direita. Cores sólidas: Vermelho, Verde e Amarelo.",
-       referenceImages: [
-           "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=300"
-       ]
+        id: 2,
+        artist: "Lucas Vane",
+        artistRole: "Neo Traditional",
+        artistAvatar: "/src/assets/images/tatuadores/tatuador2.jpg",
+        service: "Rosa Old School",
+        date: "10 Out, 2024",
+        fullDate: "Quinta-feira, 10 de Outubro de 2024",
+        time: "10:00",
+        duration: "2 horas",
+        status: "completed",
+        price: "R$ 450,00",
+        paidAmount: "R$ 450,00",
+        remainingAmount: "R$ 0,00",
+        paymentStatus: "Pago",
+        location: "Ink Studio - Sala 03",
+        description: "Rosa clássica old school na mão direita. Cores sólidas: Vermelho, Verde e Amarelo.",
+        referenceImages: [
+            "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=300"
+        ]
     },
     {
-       id: 3,
-       artist: "Mike Chen",
-       artistRole: "Oriental",
-       artistAvatar: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&q=80&w=200",
-       service: "Dragão Oriental",
-       date: "05 Out, 2024",
-       fullDate: "Sábado, 05 de Outubro de 2024",
-       time: "16:00",
-       duration: "4 horas",
-       status: "cancelled",
-       price: "R$ 0,00",
-       paidAmount: "R$ 0,00",
-       remainingAmount: "R$ 0,00",
-       paymentStatus: "Pendente",
-       location: "Ink Studio - Sala 04",
-       description: "Sessão cancelada.",
-       referenceImages: [],
-       cancellationReason: "Indisponibilidade de agenda do tatuador."
+        id: 3,
+        artist: "Mika Chen",
+        artistRole: "Oriental",
+        artistAvatar: "/src/assets/images/tatuadores/tatuador3.jpg",
+        service: "Dragão Oriental",
+        date: "05 Out, 2024",
+        fullDate: "Sábado, 05 de Outubro de 2024",
+        time: "16:00",
+        duration: "4 horas",
+        status: "cancelled",
+        price: "R$ 0,00",
+        paidAmount: "R$ 0,00",
+        remainingAmount: "R$ 0,00",
+        paymentStatus: "Pendente",
+        location: "Ink Studio - Sala 04",
+        description: "Sessão cancelada.",
+        referenceImages: [],
+        cancellationReason: "Indisponibilidade de agenda do tatuador."
     }
 ];
 
@@ -203,10 +203,10 @@ const ClientAppointmentDetails: React.FC = () => {
     const handleCancel = (e: React.FormEvent) => {
         e.preventDefault();
         if (appointment) {
-            setAppointment({ 
-                ...appointment, 
-                status: 'cancelled', 
-                cancellationReason: `${cancelReasonData.reason}: ${cancelReasonData.note}` 
+            setAppointment({
+                ...appointment,
+                status: 'cancelled',
+                cancellationReason: `${cancelReasonData.reason}: ${cancelReasonData.note}`
             });
             setIsCancelModalOpen(false);
             alert("Agendamento cancelado com sucesso.");
@@ -215,7 +215,7 @@ const ClientAppointmentDetails: React.FC = () => {
 
     const handleReschedule = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // Show validation errors if any field is invalid
         const isDateValid = !!rescheduleData.newDate;
         const isTimeValid = !!rescheduleData.newPeriod;
@@ -230,7 +230,7 @@ const ClientAppointmentDetails: React.FC = () => {
             // Format for display: DD/MM/YYYY
             const [y, m, d] = rescheduleData.newDate.split('-');
             // Simples string build para evitar timezone shift na exibição
-            
+
             const formattedFullDate = new Date(rescheduleData.newDate).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
             setAppointment({
@@ -280,23 +280,23 @@ const ClientAppointmentDetails: React.FC = () => {
     const handleDateSelect = (day: number) => {
         const year = viewDate.getFullYear();
         const month = viewDate.getMonth() + 1;
-        
+
         // Format ISO for State
         const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        setRescheduleData({...rescheduleData, newDate: dateStr});
-        
+        setRescheduleData({ ...rescheduleData, newDate: dateStr });
+
         // Format DD/MM/YYYY for Input
         const displayStr = `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
         setDateInput(displayStr);
-        
+
         setIsCalendarOpen(false);
         // Reset errors for date if present
-        if (showErrors && dateStr) setShowErrors(false); 
+        if (showErrors && dateStr) setShowErrors(false);
     };
 
     const handleManualDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let val = e.target.value.replace(/\D/g, ''); // Remove não dígitos
-        
+
         if (val.length > 8) val = val.substring(0, 8); // Max 8 digitos
 
         // Máscara DD/MM/AAAA
@@ -311,39 +311,39 @@ const ClientAppointmentDetails: React.FC = () => {
         // Validação ao completar a data (10 chars = DD/MM/AAAA)
         if (val.length === 10) {
             const [day, month, year] = val.split('/').map(Number);
-            
+
             // Check for valid day in month (e.g. 30/02)
             const daysInMonth = new Date(year, month, 0).getDate();
-            
+
             if (month < 1 || month > 12 || day < 1 || day > daysInMonth) {
-                setRescheduleData({...rescheduleData, newDate: ''}); // Data inválida
+                setRescheduleData({ ...rescheduleData, newDate: '' }); // Data inválida
                 return;
             }
 
             const testDate = new Date(year, month - 1, day);
             const today = new Date();
-            today.setHours(0,0,0,0);
+            today.setHours(0, 0, 0, 0);
 
-            const isValid = 
+            const isValid =
                 testDate.getFullYear() === year &&
-                year >= today.getFullYear() && 
+                year >= today.getFullYear() &&
                 testDate >= today;
 
             if (isValid) {
                 const isoDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                setRescheduleData({...rescheduleData, newDate: isoDate});
+                setRescheduleData({ ...rescheduleData, newDate: isoDate });
                 setViewDate(testDate); // Sincroniza o calendário visual
             } else {
-                setRescheduleData({...rescheduleData, newDate: ''}); // Data inválida
+                setRescheduleData({ ...rescheduleData, newDate: '' }); // Data inválida
             }
         } else {
-            setRescheduleData({...rescheduleData, newDate: ''}); // Data incompleta
+            setRescheduleData({ ...rescheduleData, newDate: '' }); // Data incompleta
         }
     };
 
     const isPastDate = (day: number) => {
         const today = new Date();
-        today.setHours(0,0,0,0);
+        today.setHours(0, 0, 0, 0);
         const checkDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
         return checkDate < today;
     };
@@ -355,7 +355,7 @@ const ClientAppointmentDetails: React.FC = () => {
     };
 
     const getStatusBadge = (status: string) => {
-        switch(status) {
+        switch (status) {
             case 'upcoming': return <span className="bg-blue-500/20 text-blue-500 border border-blue-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Agendado</span>;
             case 'completed': return <span className="bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Concluído</span>;
             case 'cancelled': return <span className="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Cancelado</span>;
@@ -374,8 +374,8 @@ const ClientAppointmentDetails: React.FC = () => {
         <div className="min-h-screen bg-background-dark p-6 md:p-12">
             <div className="max-w-5xl mx-auto">
                 {/* Header Navigation */}
-                <button 
-                    onClick={() => navigate('/my-appointments')} 
+                <button
+                    onClick={() => navigate('/my-appointments')}
                     className="flex items-center gap-2 text-text-muted hover:text-white mb-8 transition-colors text-sm font-bold uppercase tracking-wide"
                 >
                     <span className="material-symbols-outlined">arrow_back</span>
@@ -384,13 +384,12 @@ const ClientAppointmentDetails: React.FC = () => {
 
                 {/* Main Card */}
                 <div className="bg-surface-dark border border-border-dark rounded-3xl overflow-hidden shadow-2xl relative">
-                    
+
                     {/* Status Strip */}
-                    <div className={`h-2 w-full ${
-                        appointment.status === 'upcoming' ? 'bg-blue-500' : 
+                    <div className={`h-2 w-full ${appointment.status === 'upcoming' ? 'bg-blue-500' :
                         appointment.status === 'completed' ? 'bg-emerald-500' :
-                        appointment.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
-                    }`}></div>
+                            appointment.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
+                        }`}></div>
 
                     <div className="p-8 md:p-10">
                         {/* Title & Status Header & Actions */}
@@ -402,12 +401,12 @@ const ClientAppointmentDetails: React.FC = () => {
                                 </div>
                                 <p className="text-text-muted text-sm">ID do Agendamento: #{appointment.id}882024</p>
                             </div>
-                            
+
                             {/* Actions Group */}
                             <div className="flex flex-wrap gap-3 w-full md:w-auto">
                                 {(appointment.status === 'upcoming' || appointment.status === 'pending') && (
                                     <>
-                                        <button 
+                                        <button
                                             onClick={() => {
                                                 // Reset reschedule state when opening
                                                 setRescheduleData({ newDate: '', newPeriod: '', reason: '' });
@@ -420,7 +419,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                             <span className="material-symbols-outlined text-sm">edit_calendar</span>
                                             Remarcar
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => setIsCancelModalOpen(true)}
                                             className="flex-1 md:flex-none px-5 py-2.5 border border-red-500/30 text-red-500 hover:bg-red-500/10 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
                                         >
@@ -432,14 +431,14 @@ const ClientAppointmentDetails: React.FC = () => {
 
                                 {appointment.status === 'completed' && (
                                     <>
-                                        <button 
+                                        <button
                                             onClick={() => setIsRateModalOpen(true)}
                                             className="flex-1 md:flex-none px-5 py-2.5 bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
                                         >
                                             <span className="material-symbols-outlined text-sm">star</span>
                                             Avaliar Serviço
                                         </button>
-                                        <button 
+                                        <button
                                             onClick={() => setIsReportModalOpen(true)}
                                             className="flex-1 md:flex-none px-5 py-2.5 border border-border-dark text-text-muted hover:text-red-400 hover:border-red-500/30 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
                                         >
@@ -454,7 +453,7 @@ const ClientAppointmentDetails: React.FC = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                             {/* Left Column: Info */}
                             <div className="lg:col-span-2 space-y-8">
-                                
+
                                 {/* Artist Section */}
                                 <div className="bg-surface-light/20 rounded-2xl p-6 border border-white/5 flex items-center gap-5">
                                     <img src={appointment.artistAvatar} alt={appointment.artist} className="size-16 rounded-xl object-cover border-2 border-surface-dark" />
@@ -464,7 +463,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                         <p className="text-sm text-primary font-medium">{appointment.artistRole}</p>
                                     </div>
                                     <div className="ml-auto">
-                                        <button 
+                                        <button
                                             onClick={() => navigate('/artist-profile?id=1')} // Mock ID
                                             className="size-10 rounded-lg bg-surface-dark hover:bg-white/10 flex items-center justify-center text-text-muted hover:text-white transition-colors border border-border-dark"
                                             title="Ver Perfil"
@@ -525,7 +524,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                                 <p className="text-white font-bold">{appointment.rescheduleInfo.newDate} • {appointment.rescheduleInfo.newTime}</p>
                                             </div>
                                             <p className="text-xs text-text-light italic">"{appointment.rescheduleInfo.reason}"</p>
-                                            
+
                                             {appointment.rescheduleInfo.requestedBy === 'artist' && (
                                                 <div className="flex gap-2 mt-2">
                                                     <button className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-bold text-xs uppercase">Aceitar</button>
@@ -539,7 +538,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                 {/* Date & Time Card */}
                                 <div className="bg-surface-light/10 border border-white/5 rounded-2xl p-6">
                                     <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Agenda</h3>
-                                    
+
                                     <div className="space-y-6">
                                         {/* Data Block */}
                                         <div>
@@ -599,7 +598,7 @@ const ClientAppointmentDetails: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* Cancellation Notice if Cancelled */}
                     {appointment.status === 'cancelled' && (
                         <div className="bg-red-500/10 border-t border-red-500/20 p-6 text-center">
@@ -629,9 +628,9 @@ const ClientAppointmentDetails: React.FC = () => {
                                 <div className="space-y-4">
                                     <div>
                                         <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Motivo</label>
-                                        <select 
+                                        <select
                                             value={cancelReasonData.reason}
-                                            onChange={(e) => setCancelReasonData({...cancelReasonData, reason: e.target.value})}
+                                            onChange={(e) => setCancelReasonData({ ...cancelReasonData, reason: e.target.value })}
                                             className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white text-sm focus:border-red-500"
                                         >
                                             <option>Imprevisto pessoal</option>
@@ -642,9 +641,9 @@ const ClientAppointmentDetails: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Detalhes</label>
-                                        <textarea 
+                                        <textarea
                                             value={cancelReasonData.note}
-                                            onChange={(e) => setCancelReasonData({...cancelReasonData, note: e.target.value})}
+                                            onChange={(e) => setCancelReasonData({ ...cancelReasonData, note: e.target.value })}
                                             className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-red-500 placeholder-zinc-700"
                                             rows={3}
                                             placeholder="Explique melhor se desejar..."
@@ -675,33 +674,32 @@ const ClientAppointmentDetails: React.FC = () => {
                                 </div>
                                 <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
                             </div>
-                            
+
                             <div className="p-6 overflow-y-auto space-y-8 flex-1">
                                 <p className="text-text-muted text-sm">Sugira uma nova data e turno. O tatuador precisará aprovar.</p>
-                                
+
                                 {/* Date Selection (Input Manual + Calendar Popover) */}
                                 <div className="relative" ref={calendarRef}>
                                     <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Nova Data <span className="text-primary">*</span></label>
-                                    
+
                                     {/* Input com ícone */}
                                     <div className="relative">
-                                        <input 
+                                        <input
                                             type="text"
                                             value={dateInput}
                                             onChange={handleManualDateChange}
                                             onClick={() => setIsCalendarOpen(true)}
                                             placeholder="DD/MM/AAAA"
                                             maxLength={10}
-                                            className={`w-full bg-background-dark border rounded-lg p-3 text-sm text-white placeholder-text-muted focus:outline-none transition-all ${
-                                                showErrors && !rescheduleData.newDate
+                                            className={`w-full bg-background-dark border rounded-lg p-3 text-sm text-white placeholder-text-muted focus:outline-none transition-all ${showErrors && !rescheduleData.newDate
                                                 ? 'border-red-500 focus:border-red-500'
-                                                : isCalendarOpen 
-                                                    ? 'border-primary ring-1 ring-primary' 
+                                                : isCalendarOpen
+                                                    ? 'border-primary ring-1 ring-primary'
                                                     : 'border-border-dark hover:border-white/30'
-                                            }`}
+                                                }`}
                                         />
-                                        <button 
-                                            type="button" 
+                                        <button
+                                            type="button"
                                             onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-white"
                                         >
@@ -746,17 +744,17 @@ const ClientAppointmentDetails: React.FC = () => {
                                                     const selected = isSelected(day);
 
                                                     return (
-                                                        <button 
+                                                        <button
                                                             key={day}
                                                             type="button"
                                                             disabled={disabled}
                                                             onClick={() => handleDateSelect(day)}
                                                             className={`
                                                                 size-7 rounded-md flex items-center justify-center text-xs font-bold transition-all
-                                                                ${selected 
-                                                                    ? 'bg-primary text-white shadow-md' 
-                                                                    : disabled 
-                                                                        ? 'text-zinc-700 cursor-not-allowed' 
+                                                                ${selected
+                                                                    ? 'bg-primary text-white shadow-md'
+                                                                    : disabled
+                                                                        ? 'text-zinc-700 cursor-not-allowed'
                                                                         : 'text-zinc-300 hover:bg-surface-light hover:text-white'
                                                                 }
                                                             `}
@@ -778,12 +776,11 @@ const ClientAppointmentDetails: React.FC = () => {
                                             <button
                                                 key={period.id}
                                                 type="button"
-                                                onClick={() => setRescheduleData({...rescheduleData, newPeriod: period.id})}
-                                                className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300 gap-1 ${
-                                                    rescheduleData.newPeriod === period.id 
-                                                    ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105' 
+                                                onClick={() => setRescheduleData({ ...rescheduleData, newPeriod: period.id })}
+                                                className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300 gap-1 ${rescheduleData.newPeriod === period.id
+                                                    ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105'
                                                     : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
-                                                }`}
+                                                    }`}
                                             >
                                                 <span className="material-symbols-outlined text-xl">{period.icon}</span>
                                                 <span className="text-xs font-bold uppercase">{period.label}</span>
@@ -796,14 +793,13 @@ const ClientAppointmentDetails: React.FC = () => {
                                 {/* Reason */}
                                 <div>
                                     <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Motivo <span className="text-primary">*</span></label>
-                                    <textarea 
+                                    <textarea
                                         value={rescheduleData.reason}
-                                        onChange={(e) => setRescheduleData({...rescheduleData, reason: e.target.value})}
-                                        className={`w-full bg-background-dark border rounded-lg p-3 text-white text-sm focus:outline-none placeholder-zinc-700 ${
-                                            showErrors && !rescheduleData.reason.trim()
+                                        onChange={(e) => setRescheduleData({ ...rescheduleData, reason: e.target.value })}
+                                        className={`w-full bg-background-dark border rounded-lg p-3 text-white text-sm focus:outline-none placeholder-zinc-700 ${showErrors && !rescheduleData.reason.trim()
                                             ? 'border-red-500 focus:border-red-500'
                                             : 'border-border-dark focus:border-primary'
-                                        }`}
+                                            }`}
                                         rows={3}
                                         placeholder="Ex: Tive um imprevisto no trabalho..."
                                     ></textarea>
@@ -842,12 +838,11 @@ const ClientAppointmentDetails: React.FC = () => {
                                             onClick={() => setRatingValue(star)}
                                             className="group p-1 transition-transform hover:scale-110 focus:outline-none"
                                         >
-                                            <span 
-                                                className={`material-symbols-outlined text-4xl transition-colors duration-200 ${
-                                                    star <= ratingValue ? 'text-amber-500' : 'text-zinc-600'
-                                                }`}
-                                                style={{ 
-                                                    fontVariationSettings: `'FILL' ${star <= ratingValue ? 1 : 0}, 'wght' 400, 'GRAD' 0, 'opsz' 24` 
+                                            <span
+                                                className={`material-symbols-outlined text-4xl transition-colors duration-200 ${star <= ratingValue ? 'text-amber-500' : 'text-zinc-600'
+                                                    }`}
+                                                style={{
+                                                    fontVariationSettings: `'FILL' ${star <= ratingValue ? 1 : 0}, 'wght' 400, 'GRAD' 0, 'opsz' 24`
                                                 }}
                                             >
                                                 star
@@ -855,7 +850,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                         </button>
                                     ))}
                                 </div>
-                                <textarea 
+                                <textarea
                                     className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-zinc-600 resize-none transition-all"
                                     rows={3}
                                     placeholder="Deixe um comentário (opcional)..."
@@ -885,7 +880,7 @@ const ClientAppointmentDetails: React.FC = () => {
                             </div>
                             <div className="p-6">
                                 <p className="text-text-muted text-sm mb-4">Descreva o problema ocorrido no atendimento.</p>
-                                
+
                                 <div className="space-y-4">
                                     <div>
                                         <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Motivo</label>
@@ -899,7 +894,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                     </div>
                                     <div>
                                         <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Descrição</label>
-                                        <textarea 
+                                        <textarea
                                             required
                                             className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-red-500 placeholder-zinc-700"
                                             rows={4}
