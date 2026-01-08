@@ -34,27 +34,21 @@ const Artists: React.FC = () => {
       portfolio: [
         {
           id: 101,
-          title: "Olhar Profundo",
-          description: "Estudo detalhado de olho humano com texturas de pele hiper-realistas em preto e cinza.",
-          imageUrl: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=600"
+          title: "Retrato Realista",
+          description: "Estudo detalhado com texturas de pele hiper-realistas em preto e cinza.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg"
         },
         {
           id: 102,
-          title: "Guerreiro Nórdico",
-          description: "Retrato de viking com armadura detalhada. Foco em contraste e iluminação dramática.",
-          imageUrl: "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=600"
+          title: "Realismo Detalhado",
+          description: "Retrato com armadura detalhada. Foco em contraste e iluminação dramática.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg"
         },
         {
           id: 103,
-          title: "Leão Majestoso",
-          description: "Realismo animal capturando a ferocidade e a textura da juba do leão. Fechamento de antebraço.",
-          imageUrl: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=600"
-        },
-        {
-          id: 104,
-          title: "Caveira Sombria",
-          description: "Composição Dark Realism misturando anatomia óssea com elementos de fumaça.",
-          imageUrl: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&q=80&w=600"
+          title: "Preto e Cinza",
+          description: "Realismo destacando reflexos metálicos e detalhes precisos.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooRealista3.jpg"
         }
       ]
     },
@@ -70,21 +64,21 @@ const Artists: React.FC = () => {
       portfolio: [
         {
           id: 201,
-          title: "Lady Rose",
-          description: "Rosto feminino estilizado com rosas vermelhas vibrantes. Linhas grossas e cores sólidas.",
-          imageUrl: "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=600"
+          title: "Old School Colorido",
+          description: "Estilo Neo Tradicional com cores vibrantes e linhas grossas.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg"
         },
         {
           id: 202,
-          title: "Adaga & Coração",
-          description: "Clássico Neo Tradicional. Adaga perfurando um coração sagrado com paleta de cores outonal.",
-          imageUrl: "https://images.unsplash.com/photo-1590246067035-7c08252254d7?auto=format&fit=crop&q=80&w=600"
+          title: "Neo Tradicional",
+          description: "Clássico Neo Tradicional com paleta de cores outonal.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg"
         },
         {
           id: 203,
-          title: "Coruja Mística",
-          description: "Coruja com adornos de joias e fundo ornamental. Cores saturadas e degrâdes suaves.",
-          imageUrl: "https://images.unsplash.com/photo-1578301978693-85ea9ec2a20c?auto=format&fit=crop&q=80&w=600"
+          title: "Flash Tradicional",
+          description: "Cores saturadas e degrâdes suaves no estilo tradicional.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld3.jpg"
         }
       ]
     },
@@ -100,21 +94,21 @@ const Artists: React.FC = () => {
       portfolio: [
         {
           id: 301,
-          title: "Dragão Ryu",
-          description: "Fechamento de costas completo com Dragão japonês tradicional e ondas (Great Wave).",
-          imageUrl: "https://images.unsplash.com/photo-1565507724810-75460290137d?auto=format&fit=crop&q=80&w=600"
+          title: "Dragão Japonês",
+          description: "Fechamento de costas completo com Dragão japonês tradicional.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOriental1.jpg"
         },
         {
           id: 302,
-          title: "Máscara Hannya",
-          description: "Máscara Hannya em meio a flores de cerejeira (Sakura). Simbolizando sabedoria e proteção.",
-          imageUrl: "https://images.unsplash.com/photo-1621112904891-2867e0ce5854?auto=format&fit=crop&q=80&w=600"
+          title: "Carpa Koi",
+          description: "Fechamento de perna com Carpa Koi subindo a cachoeira.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOriental2.jpg"
         },
         {
           id: 303,
-          title: "Carpa Koi",
-          description: "Fechamento de perna com Carpa Koi subindo a cachoeira, representando perseverança.",
-          imageUrl: "https://images.unsplash.com/photo-1614948592934-7772740a8570?auto=format&fit=crop&q=80&w=600"
+          title: "Hannya Mask",
+          description: "Máscara Hannya em meio a flores de cerejeira.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOriental3.jpg"
         }
       ]
     },
@@ -125,20 +119,26 @@ const Artists: React.FC = () => {
       bio: "Elena é especialista em tatuagens delicadas e minimalistas. Traços finos e precisos que capturam a essência da sutileza.",
       styles: ["Fine Line", "Minimalismo", "Aquarela"],
       img: "/src/assets/images/tatuadores/tatuador4.jpg",
-      rating: 4.8,
+      rating: 4.9,
       ratingCount: 1105,
       portfolio: [
         {
           id: 401,
-          title: "Borboleta Delicada",
-          description: "Borboleta minimalista com traços finos e pontos delicados. Pulso feminino.",
-          imageUrl: "https://images.unsplash.com/photo-1550537687-c91357422f5c?auto=format&fit=crop&q=80&w=600"
+          title: "Traço Fino Delicado",
+          description: "Borboleta minimalista com traços finos e pontos delicados.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooFine1.jpg"
         },
         {
           id: 402,
-          title: "Floral Geométrico",
-          description: "Composição floral com elementos geométricos sutis. Fine line em preto.",
-          imageUrl: "https://images.unsplash.com/photo-1578301978018-3af8e5e85c61?auto=format&fit=crop&q=80&w=600"
+          title: "Minimalismo",
+          description: "Composição floral com elementos geométricos sutis.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooFine2.jpg"
+        },
+        {
+          id: 403,
+          title: "Fine Line Floral",
+          description: "Geometria sagrada misturada com natureza.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooFine3.jpg"
         }
       ]
     },
@@ -154,15 +154,15 @@ const Artists: React.FC = () => {
       portfolio: [
         {
           id: 501,
-          title: "Mandala Solar",
+          title: "Mandala",
           description: "Mandala detalhada no antebraço usando técnica mista de blackwork e pontilhismo.",
-          imageUrl: "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?auto=format&fit=crop&q=80&w=600"
+          imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg"
         },
         {
           id: 502,
-          title: "Geometria Sagrada",
-          description: "Padrões geométricos interconectados formando um design de braço completo.",
-          imageUrl: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&q=80&w=600"
+          title: "Geométrico",
+          description: "Padrões geométricos interconectados formando um design de braço.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg"
         }
       ]
     },
@@ -178,15 +178,15 @@ const Artists: React.FC = () => {
       portfolio: [
         {
           id: 601,
-          title: "Beija-Flor Aquarela",
+          title: "Aquarela Vibrante",
           description: "Beija-flor em estilo aquarela com respingos de cor vibrantes.",
-          imageUrl: "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=600"
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg"
         },
         {
           id: 602,
-          title: "Explosão de Cores",
-          description: "Composição abstrata celebrando o poder das cores em movimento.",
-          imageUrl: "https://images.unsplash.com/photo-1578301978693-85ea9ec2a20c?auto=format&fit=crop&q=80&w=600"
+          title: "Cores Vibrantes",
+          description: "Composição abstrata celebrando o poder das cores.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg"
         }
       ]
     },
@@ -202,15 +202,21 @@ const Artists: React.FC = () => {
       portfolio: [
         {
           id: 701,
-          title: "Âncora Clássica",
+          title: "Tradicional Americano",
           description: "Âncora tradicional com banner e rosas. Cores primárias sólidas.",
-          imageUrl: "https://images.unsplash.com/photo-1590246067035-7c08252254d7?auto=format&fit=crop&q=80&w=600"
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg"
         },
         {
           id: 702,
-          title: "Sailor Jerry",
+          title: "Old School Clássico",
           description: "Homenagem ao estilo de Norman Collins com pin-up clássica.",
-          imageUrl: "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=600"
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg"
+        },
+        {
+          id: 703,
+          title: "Flash",
+          description: "Design flash tradicional americano.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooOld3.jpg"
         }
       ]
     },
@@ -227,14 +233,14 @@ const Artists: React.FC = () => {
         {
           id: 801,
           title: "Script Cursivo",
-          description: "Frase em caligrafia elegante com ornamentos florais delicados.",
-          imageUrl: "https://images.unsplash.com/photo-1565507724810-75460290137d?auto=format&fit=crop&q=80&w=600"
+          description: "Frase em caligrafia elegante com ornamentos delicados.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooFine1.jpg"
         },
         {
           id: 802,
           title: "Chicano Letters",
-          description: "Lettering no estilo Chicano com sombreamento detalhado e moldura ornamental.",
-          imageUrl: "https://images.unsplash.com/photo-1621112904891-2867e0ce5854?auto=format&fit=crop&q=80&w=600"
+          description: "Lettering no estilo Chicano com sombreamento detalhado.",
+          imageUrl: "/src/assets/images/tattooPiercing/tattooFine2.jpg"
         }
       ]
     }

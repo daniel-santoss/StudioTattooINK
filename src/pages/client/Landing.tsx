@@ -39,12 +39,12 @@ const Landing: React.FC = () => {
    };
 
    const galleryPreview = [
-      "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1560707303-4e980c5c855c?auto=format&fit=crop&q=80&w=800",
-      "https://images.unsplash.com/photo-1621112904891-2867e0ce5854?auto=format&fit=crop&q=80&w=800"
+      { id: 1, name: "Alex Rivera", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+      { id: 1, name: "Alex Rivera", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+      { id: 3, name: "Mika Chen", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
+      { id: 2, name: "Lucas Vane", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
+      { id: 4, name: "Elena Rosa", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
+      { id: 3, name: "Mika Chen", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" }
    ];
 
    return (
@@ -165,9 +165,28 @@ const Landing: React.FC = () => {
 
                {/* Imagens com altura aumentada (aspect-[3/5]) mantendo grid de 3 colunas para equilíbrio. Sem overlay e sem clique. */}
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {galleryPreview.map((src, i) => (
-                     <div key={i} className="aspect-[3/5] rounded-2xl overflow-hidden bg-surface-dark border border-white/5 relative shadow-lg">
-                        <img src={src} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-all duration-500 hover:scale-105" alt="Tattoo" />
+                  {galleryPreview.map((item, i) => (
+                     <div key={i} className="aspect-[3/5] rounded-2xl overflow-hidden bg-surface-dark border border-white/5 relative shadow-lg group">
+                        <img src={item.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-40 transition-all duration-500 group-hover:scale-105 filter group-hover:blur-[2px]" alt={`Tatuagem por ${item.name}`} />
+
+                        {/* Overlay com Informações do Artista */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-8">
+                           <p className="text-text-muted text-sm uppercase font-bold tracking-widest mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Arte por</p>
+                           <h3 className="text-4xl font-tattoo text-white mb-8 text-center leading-tight transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">{item.name}</h3>
+
+                           <button
+                              onClick={() => {
+                                 if (localStorage.getItem('ink_role')) {
+                                    navigate(`/artist-profile?id=${item.id}`);
+                                 } else {
+                                    navigate(`/login?redirect=${encodeURIComponent(`/artist-profile?id=${item.id}`)}`);
+                                 }
+                              }}
+                              className="text-white hover:text-primary font-bold uppercase text-sm tracking-widest transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-150 flex items-center gap-2"
+                           >
+                              Ver Perfil <span className="material-symbols-outlined text-base">arrow_forward</span>
+                           </button>
+                        </div>
                      </div>
                   ))}
                </div>

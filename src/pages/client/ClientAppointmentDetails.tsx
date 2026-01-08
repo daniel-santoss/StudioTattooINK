@@ -50,8 +50,8 @@ const appointmentsDB: AppointmentDetail[] = [
         location: "Ink Studio - Sala 02",
         description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
         referenceImages: [
-            "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=300",
-            "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=300"
+            "/src/assets/images/tattooPiercing/tattooRealista1.jpg",
+            "/src/assets/images/tattooPiercing/tattooRealista2.jpg"
         ]
     },
     {
@@ -72,7 +72,7 @@ const appointmentsDB: AppointmentDetail[] = [
         location: "Ink Studio - Sala 01",
         description: "Borboleta delicada no pulso com traços finos e pequenos detalhes pontilhados. Tamanho aprox. 5cm.",
         referenceImages: [
-            "https://images.unsplash.com/photo-1550537687-c91357422f5c?auto=format&fit=crop&q=80&w=300"
+            "/src/assets/images/tattooPiercing/tattooFine1.jpg"
         ]
     },
     {
@@ -118,7 +118,7 @@ const appointmentsDB: AppointmentDetail[] = [
         location: "Ink Studio - Sala 03",
         description: "Rosa clássica old school na mão direita. Cores sólidas: Vermelho, Verde e Amarelo.",
         referenceImages: [
-            "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=300"
+            "/src/assets/images/tattooPiercing/tattooOld1.jpg"
         ]
     },
     {

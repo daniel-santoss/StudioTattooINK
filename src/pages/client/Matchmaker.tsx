@@ -238,7 +238,7 @@ const Matchmaker: React.FC = () => {
                                 onClick={() => handleSelect('serviceType', 'Tatuagem')}
                                 className="group h-48 bg-surface-dark hover:bg-surface-light border border-border-dark hover:border-primary/50 rounded-2xl transition-all flex flex-col items-center justify-center gap-4 relative overflow-hidden"
                             >
-                                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=400')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                                <div className="absolute inset-0 bg-[url('/src/assets/images/tattooPiercing/tattooRealista1.jpg')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
                                 <span className="material-symbols-outlined text-5xl text-white relative z-10 drop-shadow-lg">ink_pen</span>
                                 <span className="text-2xl font-bold text-white uppercase tracking-widest relative z-10 group-hover:scale-105 transition-transform">Tatuagem</span>
                             </button>
