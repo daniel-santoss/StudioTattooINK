@@ -6,7 +6,7 @@ import { RatingDisplay } from '../Staff';
 const artists = [
     { id: 1, name: "Alex Rivera", role: "Especialista em Realismo", price: 150, rating: 4.7, ratingCount: 2899, img: "/src/assets/images/tatuadores/tatuador1.jpg" },
     { id: 2, name: "Lucas Vane", role: "Neo Tradicional", price: 130, rating: 5.0, ratingCount: 1450, img: "/src/assets/images/tatuadores/tatuador2.jpg" },
-    { id: 3, name: "Mika Chen", role: "Oriental", price: 180, rating: 4.2, ratingCount: 920, img: "/src/assets/images/tatuadores/tatuador3.jpg" },
+    { id: 3, name: "Mika Chen", role: "Oriental", price: 180, rating: 4.8, ratingCount: 920, img: "/src/assets/images/tatuadores/tatuador3.jpg" },
     { id: 4, name: "Elena Rosa", role: "Fine Line", price: 120, rating: 4.8, ratingCount: 1105, img: "/src/assets/images/tatuadores/tatuador4.jpg" },
     { id: 5, name: "Lucas Ferreira", role: "Blackwork", price: 140, rating: 4.5, ratingCount: 780, img: "/src/assets/images/tatuadores/tatuador5.jpg" },
     { id: 6, name: "André Costa", role: "Aquarela", price: 160, rating: 4.9, ratingCount: 1230, img: "/src/assets/images/tatuadores/tatuador6.jpg" },

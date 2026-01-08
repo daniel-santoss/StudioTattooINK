@@ -20,40 +20,40 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "https://instagram.com/alexrivera_ink",
             experience: "Mais de 10 anos",
             styles: ["Realismo", "Preto e Cinza", "Retratos"],
-            img: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&q=80&w=400",
+            img: "/src/assets/images/tatuadores/tatuador1.jpg",
             rating: 4.7,
             ratingCount: 2899,
             bio: "Especialista em realismo preto e cinza com mais de 10 anos de mercado. Busco sempre eternizar momentos e histórias na pele dos meus clientes com a máxima precisão.",
             portfolio: [
-                { title: "Olhar Profundo", desc: "Estudo detalhado de olho humano com texturas de pele hiper-realistas.", img: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=600" },
-                { title: "Guerreiro Nórdico", desc: "Retrato de viking com armadura. Foco em contraste e iluminação dramática.", img: "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=600" },
-                { title: "Moto Custom", desc: "Realismo mecânico, destacando reflexos metálicos e detalhes do motor.", img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=600" },
-                { title: "Leão", desc: "Fechamento de braço completo com tema de savana e leão majestoso.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600" }
+                { title: "Retrato Realista", desc: "Estudo detalhado com texturas de pele hiper-realistas.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+                { title: "Realismo Detalhado", desc: "Foco em contraste e iluminação dramática.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Preto e Cinza", desc: "Realismo destacando reflexos e detalhes.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
             ]
         },
         {
             id: 2,
             name: "Lucas Vane",
-            role: "Tatuadora & Piercer",
-            email: "sarah@inkstudio.com",
+            role: "Tatuador & Piercer",
+            email: "lucas@inkstudio.com",
             phone: "(11) 98888-0002",
-            portfolioLink: "https://instagram.com/sarah_arts",
+            portfolioLink: "https://instagram.com/lucasvane_ink",
             experience: "5 anos",
             styles: ["Neo Tradicional", "Colorido", "Botânico"],
-            img: "https://images.unsplash.com/photo-1596204368623-2895f543666f?auto=format&fit=crop&q=80&w=400",
+            img: "/src/assets/images/tatuadores/tatuador2.jpg",
             rating: 5.0,
             ratingCount: 1450,
-            bio: "Sarah traz cores vibrantes e linhas ousadas. Seu estilo Neo Tradicional combina o clássico com o moderno, criando peças únicas e cheias de vida.",
+            bio: "Lucas traz cores vibrantes e linhas ousadas. Seu estilo Neo Tradicional combina o clássico com o moderno, criando peças únicas e cheias de vida.",
             portfolio: [
-                { title: "Lady Rose", desc: "Rosto feminino estilizado com rosas vermelhas vibrantes.", img: "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=600" },
-                { title: "Adaga & Coração", desc: "Clássico Neo Tradicional com paleta de cores outonal.", img: "https://images.unsplash.com/photo-1590246067035-7c08252254d7?auto=format&fit=crop&q=80&w=600" }
+                { title: "Old School Colorido", desc: "Estilo Neo Tradicional com cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
+                { title: "Neo Tradicional", desc: "Clássico Neo Tradicional com paleta outonal.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" }
             ]
         },
-        // Adicione os outros artistas conforme necessário para o mock funcionar
-        { id: 3, name: "Mika Chen", role: "Tatuador", img: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&q=80&w=400", rating: 4.8, ratingCount: 920, styles: ["Oriental"], bio: "Mestre em arte oriental.", email: "mika@ink.com", phone: "11 9999-9999", portfolioLink: "instagram.com/mika", experience: "8 anos", portfolio: [] },
-        { id: 4, name: "Elena Rosa", role: "Tatuadora", img: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=400", rating: 4.9, ratingCount: 1105, styles: ["Fine Line"], bio: "Traços finos.", email: "elena@ink.com", phone: "11 9999-9999", portfolioLink: "instagram.com/elena", experience: "4 anos", portfolio: [] },
-        { id: 5, name: "Lucas Silva", role: "Tatuador", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400", rating: 4.7, ratingCount: 320, styles: ["Blackwork"], bio: "Geometria sagrada.", email: "lucas@ink.com", phone: "11 9999-9999", portfolioLink: "instagram.com/lucas", experience: "3 anos", portfolio: [] },
-        { id: 6, name: "Mariana Costa", role: "Tatuadora", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400", rating: 4.8, ratingCount: 580, styles: ["Aquarela"], bio: "Cores fluidas.", email: "mari@ink.com", phone: "11 9999-9999", portfolioLink: "instagram.com/mari", experience: "6 anos", portfolio: [] }
+        { id: 3, name: "Mika Chen", role: "Tatuadora", img: "/src/assets/images/tatuadores/tatuador3.jpg", rating: 4.8, ratingCount: 920, styles: ["Oriental", "Irezumi", "Dragões"], bio: "Mestre em arte oriental com foco em Irezumi tradicional japonês.", email: "mika@inkstudio.com", phone: "(11) 99999-0003", portfolioLink: "instagram.com/mikachen_ink", experience: "8 anos", portfolio: [{ title: "Dragão Japonês", desc: "Dragão tradicional japonês.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" }, { title: "Carpa Koi", desc: "Símbolo de perseverança.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" }, { title: "Hannya", desc: "Máscara tradicional.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" }] },
+        { id: 4, name: "Elena Rosa", role: "Tatuadora & Piercer", img: "/src/assets/images/tatuadores/tatuador4.jpg", rating: 4.9, ratingCount: 1105, styles: ["Fine Line", "Minimalismo", "Escrita"], bio: "Especialista em traços finos e delicados.", email: "elena@inkstudio.com", phone: "(11) 99999-0004", portfolioLink: "instagram.com/elenarosa_ink", experience: "4 anos", portfolio: [{ title: "Traço Fino", desc: "Delicadeza no traço.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" }, { title: "Minimalismo", desc: "Menos é mais.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" }, { title: "Fine Line Floral", desc: "Geometria e natureza.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }] },
+        { id: 5, name: "Lucas Ferreira", role: "Tatuador", img: "/src/assets/images/tatuadores/tatuador5.jpg", rating: 4.5, ratingCount: 780, styles: ["Blackwork", "Geométrico", "Pontilhismo"], bio: "Geometria sagrada e padrões complexos.", email: "lucasf@inkstudio.com", phone: "(11) 99999-0005", portfolioLink: "instagram.com/lucasferreira_ink", experience: "3 anos", portfolio: [{ title: "Mandala", desc: "Pontilhismo detalhado.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" }, { title: "Geométrico", desc: "Formas precisas.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" }] },
+        { id: 6, name: "André Costa", role: "Tatuador", img: "/src/assets/images/tatuadores/tatuador6.jpg", rating: 4.9, ratingCount: 1230, styles: ["Aquarela", "Colorido", "Sketch"], bio: "Cores fluidas e efeitos de pintura na pele.", email: "andre@inkstudio.com", phone: "(11) 99999-0006", portfolioLink: "instagram.com/andrecosta_ink", experience: "6 anos", portfolio: [{ title: "Aquarela", desc: "Cores fluidas.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }, { title: "Colorido", desc: "Cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" }] },
+        { id: 7, name: "Rafael Santos", role: "Tatuador", img: "/src/assets/images/tatuadores/tatuador7.jpg", rating: 4.4, ratingCount: 650, styles: ["Old School", "Tradicional", "Flash"], bio: "Estilo clássico americano com cores sólidas.", email: "rafael@inkstudio.com", phone: "(11) 99999-0007", portfolioLink: "instagram.com/rafaelsantos_ink", experience: "7 anos", portfolio: [{ title: "Tradicional", desc: "Âncora clássica.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }, { title: "Old School", desc: "Estilo americano.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" }, { title: "Flash", desc: "Pantera tradicional.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }] },
+        { id: 8, name: "Juliana Mendes", role: "Tatuadora", img: "/src/assets/images/tatuadores/tatuador8.jpg", rating: 4.6, ratingCount: 890, styles: ["Lettering", "Script", "Chicano"], bio: "Especialista em tipografia e caligrafia artística.", email: "juliana@inkstudio.com", phone: "(11) 99999-0008", portfolioLink: "instagram.com/julianamendes_ink", experience: "5 anos", portfolio: [{ title: "Script", desc: "Caligrafia elegante.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" }, { title: "Chicano", desc: "Lettering Chicano.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" }] }
     ];
 
     useEffect(() => {

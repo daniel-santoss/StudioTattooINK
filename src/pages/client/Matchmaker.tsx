@@ -21,84 +21,112 @@ const Matchmaker: React.FC = () => {
             id: 1,
             name: "Alex Rivera",
             styles: ["Realismo", "Preto e Cinza", "Retratos", "Tatuagem"],
-            img: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&q=80&w=400",
+            img: "/src/assets/images/tatuadores/tatuador1.jpg",
             rating: 4.7,
             ratingCount: 2899,
             summary: "Muitos clientes elogiaram a precisão cirúrgica nos retratos e a leveza da mão durante sessões longas.",
             portfolio: [
-                { title: "Olhar Profundo", desc: "Estudo detalhado de olho humano com texturas de pele hiper-realistas em preto e cinza.", img: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=600" },
-                { title: "Guerreiro Nórdico", desc: "Retrato de viking com armadura detalhada. Foco em contraste e iluminação dramática.", img: "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=600" },
-                { title: "Moto Custom", desc: "Realismo mecânico, destacando reflexos metálicos e detalhes do motor.", img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=600" }
+                { title: "Retrato Realista", desc: "Estudo detalhado com texturas de pele hiper-realistas em preto e cinza.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+                { title: "Realismo Detalhado", desc: "Retrato com armadura detalhada. Foco em contraste e iluminação dramática.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Preto e Cinza", desc: "Realismo mecânico, destacando reflexos metálicos e detalhes.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
             ]
         },
         {
             id: 2,
             name: "Lucas Vane",
             styles: ["Neo Tradicional", "Colorido", "Botânico", "Tatuagem", "Piercing"],
-            img: "https://images.unsplash.com/photo-1596204368623-2895f543666f?auto=format&fit=crop&q=80&w=400",
+            img: "/src/assets/images/tatuadores/tatuador2.jpg",
             rating: 5.0,
             ratingCount: 1450,
-            summary: "Avaliada positivamente pela saturação incrível das cores e também realiza perfurações básicas e avançadas.",
+            summary: "Avaliado positivamente pela saturação incrível das cores e também realiza perfurações básicas e avançadas.",
             portfolio: [
-                { title: "Lady Rose", desc: "Rosto feminino estilizado com rosas vermelhas vibrantes.", img: "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=600" },
-                { title: "Adaga & Coração", desc: "Clássico Neo Tradicional com paleta de cores outonal.", img: "https://images.unsplash.com/photo-1590246067035-7c08252254d7?auto=format&fit=crop&q=80&w=600" },
-                { title: "Piercing Helix", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "https://images.unsplash.com/photo-1606707764560-61d02bd93523?auto=format&fit=crop&q=80&w=600" }
+                { title: "Old School Colorido", desc: "Estilo neo tradicional com cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
+                { title: "Neo Tradicional", desc: "Clássico Neo Tradicional com paleta de cores outonal.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/src/assets/images/tattooPiercing/piercing.jpg" }
             ]
         },
         {
             id: 3,
             name: "Mika Chen",
             styles: ["Oriental", "Irezumi", "Dragões", "Tatuagem"],
-            img: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&q=80&w=400",
+            img: "/src/assets/images/tatuadores/tatuador3.jpg",
             rating: 4.8,
             ratingCount: 920,
             summary: "Clientes destacam o respeito às tradições orientais e a fluidez como os desenhos se encaixam no corpo.",
             portfolio: [
-                { title: "Dragão Ryu", desc: "Fechamento de costas completo com Dragão japonês.", img: "https://images.unsplash.com/photo-1565507724810-75460290137d?auto=format&fit=crop&q=80&w=600" },
-                { title: "Máscara Hannya", desc: "Máscara Hannya em meio a flores de cerejeira.", img: "https://images.unsplash.com/photo-1621112904891-2867e0ce5854?auto=format&fit=crop&q=80&w=600" },
-                { title: "Carpa Koi", desc: "Símbolo de perseverança, subindo a cachoeira.", img: "https://images.unsplash.com/photo-1614948592934-7772740a8570?auto=format&fit=crop&q=80&w=600" }
+                { title: "Dragão Japonês", desc: "Fechamento de costas completo com Dragão japonês.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
+                { title: "Carpa Koi", desc: "Símbolo de perseverança, subindo a cachoeira.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
+                { title: "Hannya Mask", desc: "Máscara Hannya em meio a flores de cerejeira.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" }
             ]
         },
         {
             id: 4,
             name: "Elena Rosa",
             styles: ["Fine Line", "Minimalismo", "Escrita", "Tatuagem", "Piercing"],
-            img: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=400&auto=format&fit=crop",
+            img: "/src/assets/images/tatuadores/tatuador4.jpg",
             rating: 4.9,
             ratingCount: 1105,
             summary: "Frequentemente citada pela delicadeza do traço fino e procedimentos de piercing delicados.",
             portfolio: [
-                { title: "Floral Delicado", desc: "Ramo de lavanda traço fino no antebraço.", img: "https://images.unsplash.com/photo-1560707303-4e980c5c855c?auto=format&fit=crop&q=80&w=600" },
-                { title: "Septo", desc: "Perfuração de septo com joia dourada minimalista.", img: "https://images.unsplash.com/photo-1574926054530-540288c8e678?auto=format&fit=crop&q=80&w=600" },
-                { title: "Borboleta", desc: "Geometria sagrada misturada com natureza.", img: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&q=80&w=600" }
+                { title: "Traço Fino Delicado", desc: "Ramo de lavanda traço fino no antebraço.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
+                { title: "Minimalismo", desc: "Perfuração de septo com joia dourada minimalista.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
+                { title: "Fine Line Floral", desc: "Geometria sagrada misturada com natureza.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }
             ]
         },
         {
             id: 5,
-            name: "Lucas Silva",
+            name: "Lucas Ferreira",
             styles: ["Blackwork", "Geométrico", "Pontilhismo", "Tatuagem"],
-            img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400",
-            rating: 4.7,
-            ratingCount: 320,
+            img: "/src/assets/images/tatuadores/tatuador5.jpg",
+            rating: 4.5,
+            ratingCount: 780,
             summary: "Elogiado pela solidez do preto e pela simetria perfeita nas formas geométricas complexas.",
             portfolio: [
-                { title: "Mandala", desc: "Pontilhismo detalhado no ombro.", img: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=600" },
-                { title: "Bracelete Geo", desc: "Linhas sólidas e formas geométricas.", img: "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=600" },
-                { title: "Blackout", desc: "Cobertura sólida em preto.", img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=600" }
+                { title: "Mandala", desc: "Pontilhismo detalhado no ombro.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+                { title: "Bracelete Geo", desc: "Linhas sólidas e formas geométricas.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Blackout", desc: "Cobertura sólida em preto.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
             ]
         },
         {
             id: 6,
-            name: "Mariana Costa",
+            name: "André Costa",
             styles: ["Aquarela", "Colorido", "Sketch", "Tatuagem"],
-            img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400",
-            rating: 4.8,
-            ratingCount: 580,
-            summary: "Clientes adoram a mistura de cores vibrantes e o efeito de pintura fluida que ela consegue criar na pele.",
+            img: "/src/assets/images/tatuadores/tatuador6.jpg",
+            rating: 4.9,
+            ratingCount: 1230,
+            summary: "Clientes adoram a mistura de cores vibrantes e o efeito de pintura fluida que ele consegue criar na pele.",
             portfolio: [
-                { title: "Raposa", desc: "Estilo sketch com manchas de aquarela.", img: "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=600" },
-                { title: "Universo", desc: "Galáxia colorida em formato de triângulo.", img: "https://images.unsplash.com/photo-1590246067035-7c08252254d7?auto=format&fit=crop&q=80&w=600" },
-                { title: "Beija-flor", desc: "Cores vibrantes e movimento.", img: "https://images.unsplash.com/photo-1578301978693-85ea9ec2a20c?auto=format&fit=crop&q=80&w=600" }
+                { title: "Colorido Vibrante", desc: "Estilo sketch com manchas de aquarela.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
+                { title: "Aquarela", desc: "Galáxia colorida em formato de triângulo.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Beija-flor", desc: "Cores vibrantes e movimento.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }
+            ]
+        },
+        {
+            id: 7,
+            name: "Rafael Santos",
+            styles: ["Old School", "Tradicional", "Flash", "Tatuagem"],
+            img: "/src/assets/images/tatuadores/tatuador7.jpg",
+            rating: 4.4,
+            ratingCount: 650,
+            summary: "Apaixonado pelo estilo clássico americano. Cores sólidas, linhas grossas e designs atemporais.",
+            portfolio: [
+                { title: "Tradicional Americano", desc: "Âncora tradicional com banner e rosas.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
+                { title: "Old School Clássico", desc: "Homenagem ao estilo de Norman Collins.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Flash Tradicional", desc: "Clássica pantera tradicional americana.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }
+            ]
+        },
+        {
+            id: 8,
+            name: "Juliana Mendes",
+            styles: ["Lettering", "Script", "Chicano", "Tatuagem"],
+            img: "/src/assets/images/tatuadores/tatuador8.jpg",
+            rating: 4.6,
+            ratingCount: 890,
+            summary: "Especialista em tipografia e caligrafia. Cada letra é uma obra de arte personalizada.",
+            portfolio: [
+                { title: "Script Cursivo", desc: "Frase em caligrafia elegante com ornamentos.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
+                { title: "Chicano Letters", desc: "Lettering no estilo Chicano com sombreamento.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
+                { title: "Nome Minimalista", desc: "Tipografia clean e moderna.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }
             ]
         }
     ];
@@ -219,7 +247,7 @@ const Matchmaker: React.FC = () => {
                                 onClick={() => handleSelect('serviceType', 'Piercing')}
                                 className="group h-48 bg-surface-dark hover:bg-surface-light border border-border-dark hover:border-blue-500/50 rounded-2xl transition-all flex flex-col items-center justify-center gap-4 relative overflow-hidden"
                             >
-                                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1574926054530-540288c8e678?auto=format&fit=crop&q=80&w=400')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                                <div className="absolute inset-0 bg-[url('/src/assets/images/tattooPiercing/piercing.jpg')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
                                 <span className="material-symbols-outlined text-5xl text-white relative z-10 drop-shadow-lg">diamond</span>
                                 <span className="text-2xl font-bold text-white uppercase tracking-widest relative z-10 group-hover:scale-105 transition-transform">Piercing</span>
                             </button>
@@ -321,8 +349,8 @@ const Matchmaker: React.FC = () => {
                             {recommendations.map((artist) => (
                                 <div key={artist.id} className="bg-[#121212] border border-border-dark rounded-2xl overflow-hidden hover:border-primary/50 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:shadow-primary/5">
                                     {/* Imagem e Nota Overlay */}
-                                    <div className="h-56 overflow-hidden relative">
-                                        <img src={artist.img} alt={artist.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                    <div className="h-72 overflow-hidden relative">
+                                        <img src={artist.img} alt={artist.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
 
                                         <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">

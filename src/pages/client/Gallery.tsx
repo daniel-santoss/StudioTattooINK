@@ -18,17 +18,24 @@ const Gallery: React.FC = () => {
 
     const categories = ["Todos", "Realismo", "Oriental", "Old School", "Fine Line"];
 
-    // Imagens atualizadas e testadas
+    // Imagens locais atualizadas
     const images: GalleryImage[] = [
-        { id: 1, category: "Realismo", src: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=800", artistName: "Alex Rivera", artistId: 1, title: "Olho Realista" },
-        { id: 2, category: "Oriental", src: "https://images.unsplash.com/photo-1565507724810-75460290137d?auto=format&fit=crop&q=80&w=800", artistName: "Mika Chen", artistId: 3, title: "Dragão Vermelho" },
-        { id: 3, category: "Old School", src: "https://images.unsplash.com/photo-1590246255075-e9b9c072b9a0?auto=format&fit=crop&q=80&w=800", artistName: "Lucas Vane", artistId: 2, title: "Lady Rose" },
-        { id: 4, category: "Realismo", src: "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=800", artistName: "Alex Rivera", artistId: 1, title: "Viking Warrior" },
-        { id: 5, category: "Fine Line", src: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?auto=format&fit=crop&q=80&w=800", artistName: "Elena Rosa", artistId: 4, title: "Borboleta Delicada" },
-        { id: 6, category: "Oriental", src: "https://images.unsplash.com/photo-1621112904891-2867e0ce5854?auto=format&fit=crop&q=80&w=800", artistName: "Mika Chen", artistId: 3, title: "Hannya Mask" },
-        { id: 7, category: "Fine Line", src: "https://images.unsplash.com/photo-1550537687-c91357422f5c?auto=format&fit=crop&q=80&w=800", artistName: "Elena Rosa", artistId: 4, title: "Geometria Sagrada" },
-        { id: 8, category: "Old School", src: "https://images.unsplash.com/photo-1590246067035-7c08252254d7?auto=format&fit=crop&q=80&w=800", artistName: "Lucas Vane", artistId: 2, title: "Adaga Sagrada" },
-        { id: 9, category: "Realismo", src: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=800", artistName: "Alex Rivera", artistId: 1, title: "Leão Sombreado" }
+        // Realismo
+        { id: 1, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Retrato Realista" },
+        { id: 2, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista2.jpg", artistName: "Alex Rivera", artistId: 1, title: "Realismo Preto e Cinza" },
+        { id: 3, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista3.jpg", artistName: "Alex Rivera", artistId: 1, title: "Realismo Detalhado" },
+        // Oriental
+        { id: 4, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental1.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Japonês" },
+        { id: 5, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental2.jpg", artistName: "Mika Chen", artistId: 3, title: "Carpa Koi" },
+        { id: 6, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental3.jpg", artistName: "Mika Chen", artistId: 3, title: "Hannya Mask" },
+        // Old School
+        { id: 7, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld1.jpg", artistName: "Rafael Santos", artistId: 7, title: "Tradicional Americano" },
+        { id: 8, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld2.jpg", artistName: "Rafael Santos", artistId: 7, title: "Old School Clássico" },
+        { id: 9, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Flash Tradicional" },
+        // Fine Line
+        { id: 10, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Traço Fino Delicado" },
+        { id: 11, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine2.jpg", artistName: "Elena Rosa", artistId: 4, title: "Minimalismo" },
+        { id: 12, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine3.jpg", artistName: "Elena Rosa", artistId: 4, title: "Fine Line Floral" }
     ];
 
     const filteredImages = filter === "Todos"
@@ -62,8 +69,8 @@ const Gallery: React.FC = () => {
                             key={cat}
                             onClick={() => setFilter(cat)}
                             className={`px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wide transition-all ${filter === cat
-                                    ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                                    : 'bg-surface-light text-text-muted hover:bg-white/10 hover:text-white'
+                                ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                                : 'bg-surface-light text-text-muted hover:bg-white/10 hover:text-white'
                                 }`}
                         >
                             {cat}

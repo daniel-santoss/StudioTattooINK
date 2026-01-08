@@ -64,10 +64,11 @@ const Profile: React.FC = () => {
                 specialties: ['Realismo', 'Preto e Cinza', 'Retratos'],
                 portfolioUrl: 'https://instagram.com/alexrivera_ink',
                 avatar: '/src/assets/images/tatuadores/tatuador1.jpg',
-                coverUrl: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=1200',
+                coverUrl: '/src/assets/images/tattooPiercing/tattooRealista1.jpg',
                 portfolio: [
-                    { id: 101, title: "Olhar Profundo", description: "Estudo de realismo ocular com foco em texturas de pele.", imageUrl: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80&w=600" },
-                    { id: 102, title: "Guerreiro", description: "Retrato histórico preto e cinza, cicatrização de 6 meses.", imageUrl: "https://images.unsplash.com/photo-1562962230-16bc46364924?auto=format&fit=crop&q=80&w=600" },
+                    { id: 101, title: "Retrato Realista", description: "Estudo de realismo com texturas de pele hiper-realistas.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+                    { id: 102, title: "Realismo Detalhado", description: "Retrato preto e cinza com foco em contraste.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+                    { id: 103, title: "Preto e Cinza", description: "Realismo destacando reflexos e detalhes.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" },
                 ]
             });
         } else if (userRole === 'client') {
@@ -445,8 +446,8 @@ const Profile: React.FC = () => {
                                                 key={style}
                                                 onClick={() => handleSpecialtyToggle(style)}
                                                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${profile.specialties?.includes(style)
-                                                        ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
-                                                        : 'bg-surface-light text-text-muted border-border-dark hover:border-white/30 hover:text-white'
+                                                    ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
+                                                    : 'bg-surface-light text-text-muted border-border-dark hover:border-white/30 hover:text-white'
                                                     }`}
                                             >
                                                 {style}

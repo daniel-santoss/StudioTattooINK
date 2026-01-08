@@ -95,7 +95,7 @@ const Artists: React.FC = () => {
       bio: "Especialista em grandes projetos e fechamentos corporais no estilo tradicional japonês.",
       styles: ["Oriental", "Irezumi", "Dragões"],
       img: "/src/assets/images/tatuadores/tatuador3.jpg",
-      rating: 4.2,
+      rating: 4.8,
       ratingCount: 920,
       portfolio: [
         {

@@ -50,7 +50,7 @@ const initialStaff: StaffMember[] = [
         email: "mike@inkstudio.com",
         phone: "(11) 99999-0003",
         avatar: "/src/assets/images/tatuadores/tatuador3.jpg",
-        performance: { revenue: "R$ 15.1k", rating: 4.2, ratingCount: 920 }
+        performance: { revenue: "R$ 15.1k", rating: 4.8, ratingCount: 920 }
     }
 ];
 
