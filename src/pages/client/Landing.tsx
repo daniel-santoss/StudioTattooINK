@@ -1,6 +1,13 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+
+interface GalleryPreviewItem {
+   id: number;
+   name: string;
+   category: string;
+   img: string;
+}
 
 const Landing: React.FC = () => {
    const navigate = useNavigate();
@@ -38,13 +45,33 @@ const Landing: React.FC = () => {
       }
    };
 
+   const [selectedImage, setSelectedImage] = useState<GalleryPreviewItem | null>(null);
+
+   const handleOpenDetails = (item: GalleryPreviewItem) => {
+      setSelectedImage(item);
+   };
+
+   const handleCloseDetails = () => {
+      setSelectedImage(null);
+   };
+
+   const handleNavigateToArtist = () => {
+      if (selectedImage) {
+         if (localStorage.getItem('ink_role')) {
+            navigate(`/artist-profile?id=${selectedImage.id}`);
+         } else {
+            navigate(`/login?redirect=${encodeURIComponent(`/artist-profile?id=${selectedImage.id}`)}`);
+         }
+      }
+   };
+
    const galleryPreview = [
-      { id: 1, name: "Alex Rivera", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-      { id: 1, name: "Alex Rivera", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-      { id: 3, name: "Mika Chen", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-      { id: 2, name: "Lucas Vane", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-      { id: 4, name: "Elena Rosa", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-      { id: 3, name: "Mika Chen", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" }
+      { id: 1, name: "Alex Rivera", category: "Realismo", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+      { id: 3, name: "Mika Chen", category: "Oriental", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
+      { id: 4, name: "Elena Rosa", category: "Fine Line", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
+      { id: 13, name: "Mika Chen", category: "Oriental", img: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" },
+      { id: 22, name: "André Costa", category: "Anime", img: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
+      { id: 30, name: "Elena Rosa", category: "Piercing", img: "/src/assets/images/tattooPiercing/piecing5.jpg" }
    ];
 
    return (
@@ -167,24 +194,16 @@ const Landing: React.FC = () => {
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {galleryPreview.map((item, i) => (
                      <div key={i} className="aspect-[3/5] rounded-2xl overflow-hidden bg-surface-dark border border-white/5 relative shadow-lg group">
-                        <img src={item.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-40 transition-all duration-500 group-hover:scale-105 filter group-hover:blur-[2px]" alt={`Tatuagem por ${item.name}`} />
+                        <img src={item.img} className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" alt={`Tatuagem por ${item.name}`} />
 
-                        {/* Overlay com Informações do Artista */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-8">
-                           <p className="text-text-muted text-sm uppercase font-bold tracking-widest mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Arte por</p>
-                           <h3 className="text-4xl font-tattoo text-white mb-8 text-center leading-tight transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">{item.name}</h3>
-
+                        {/* Overlay com Categoria e Botão - Mesmo estilo da Gallery.tsx */}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4 backdrop-blur-sm">
+                           <span className="text-white font-bold text-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Feito por {item.name}</span>
                            <button
-                              onClick={() => {
-                                 if (localStorage.getItem('ink_role')) {
-                                    navigate(`/artist-profile?id=${item.id}`);
-                                 } else {
-                                    navigate(`/login?redirect=${encodeURIComponent(`/artist-profile?id=${item.id}`)}`);
-                                 }
-                              }}
-                              className="text-white hover:text-primary font-bold uppercase text-sm tracking-widest transition-colors transform translate-y-4 group-hover:translate-y-0 duration-300 delay-150 flex items-center gap-2"
+                              onClick={() => handleOpenDetails(item)}
+                              className="px-6 py-2 border-2 border-white bg-white text-black font-bold uppercase tracking-widest hover:bg-transparent hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"
                            >
-                              Ver Perfil <span className="material-symbols-outlined text-base">arrow_forward</span>
+                              Ver Detalhes
                            </button>
                         </div>
                      </div>
@@ -226,6 +245,72 @@ const Landing: React.FC = () => {
                </div>
             </div>
          </section>
+
+         {/* Modal de Detalhes (Reutilizado da Gallery.tsx) */}
+         {selectedImage && (
+            <div
+               className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in"
+               onClick={handleCloseDetails}
+            >
+               <div
+                  className="bg-[#121212] border border-zinc-800 w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative"
+                  onClick={(e) => e.stopPropagation()}
+               >
+                  {/* Botão Fechar */}
+                  <button
+                     onClick={handleCloseDetails}
+                     className="absolute top-4 right-4 z-10 size-10 rounded-full bg-black/50 text-white hover:bg-white hover:text-black transition-colors flex items-center justify-center backdrop-blur-sm border border-white/10"
+                  >
+                     <span className="material-symbols-outlined">close</span>
+                  </button>
+
+                  {/* Imagem (Esquerda/Topo) */}
+                  <div className="w-full md:w-1/2 bg-black flex items-center justify-center relative">
+                     <img
+                        src={selectedImage.img}
+                        alt="Detalhe"
+                        className="w-full h-full object-cover max-h-[60vh] md:max-h-[80vh]"
+                     />
+                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                        <span className="inline-block px-3 py-1 rounded-full border border-white/20 bg-black/40 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                           {selectedImage.category}
+                        </span>
+                     </div>
+                  </div>
+
+                  {/* Informações (Direita/Baixo) */}
+                  <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-[#121212]">
+                     <div className="mb-auto">
+                        <h3 className="text-zinc-500 font-bold uppercase tracking-widest text-xs mb-2">Autoria da Obra</h3>
+                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-6 leading-tight">
+                           Esse trabalho foi feito por <span className="text-primary block mt-1">{selectedImage.name}</span>
+                        </h2>
+                        <div className="w-16 h-1 bg-zinc-800 rounded-full mb-6"></div>
+                        <p className="text-zinc-400 text-sm leading-relaxed">
+                           Gostou do estilo? Visualize mais trabalhos como este, conheça a trajetória do artista e agende sua sessão diretamente pelo perfil.
+                        </p>
+                     </div>
+
+                     <div className="mt-8 md:mt-12 space-y-3">
+                        <button
+                           onClick={handleNavigateToArtist}
+                           className="w-full py-4 bg-primary hover:bg-primary-hover text-white rounded-xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(212,17,50,0.3)] hover:shadow-[0_0_30px_rgba(212,17,50,0.5)] flex items-center justify-center gap-3 group"
+                        >
+                           Conferir Portfólio Completo
+                           <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </button>
+
+                        <button
+                           onClick={handleCloseDetails}
+                           className="w-full py-3 text-zinc-500 hover:text-white font-bold text-xs uppercase tracking-widest transition-colors"
+                        >
+                           Voltar para Galeria
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         )}
       </div>
    );
 };

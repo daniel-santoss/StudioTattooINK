@@ -25,9 +25,9 @@ const ArtistProfile: React.FC = () => {
             ratingCount: 2899,
             bio: "Especialista em realismo preto e cinza com mais de 10 anos de mercado. Busco sempre eternizar momentos e histórias na pele dos meus clientes com a máxima precisão.",
             portfolio: [
-                { title: "Retrato Realista", desc: "Estudo detalhado com texturas de pele hiper-realistas.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-                { title: "Realismo Detalhado", desc: "Foco em contraste e iluminação dramática.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-                { title: "Preto e Cinza", desc: "Realismo destacando reflexos e detalhes.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
+                { title: "Olho e Bússola Realista", desc: "Composição com olho realista, bússola e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+                { title: "Pantera Negra com Lótus", desc: "Pantera negra em preto e cinza com flor de lótus.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/src/assets/images/tattooPiercing/tattooTime1.jpg" }
             ]
         },
         {
@@ -44,16 +44,129 @@ const ArtistProfile: React.FC = () => {
             ratingCount: 1450,
             bio: "Lucas traz cores vibrantes e linhas ousadas. Seu estilo Neo Tradicional combina o clássico com o moderno, criando peças únicas e cheias de vida.",
             portfolio: [
-                { title: "Old School Colorido", desc: "Estilo Neo Tradicional com cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-                { title: "Neo Tradicional", desc: "Clássico Neo Tradicional com paleta outonal.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" }
+                { title: "Aku Aku Crash Bandicoot", desc: "Máscara Aku Aku do Crash Bandicoot em cores vibrantes estilo Neo Tradicional.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }
             ]
         },
-        { id: 3, name: "Mika Chen", role: "Tatuadora", img: "/src/assets/images/tatuadores/tatuador3.jpg", rating: 4.8, ratingCount: 920, styles: ["Oriental", "Irezumi", "Dragões"], bio: "Mestre em arte oriental com foco em Irezumi tradicional japonês.", email: "mika@inkstudio.com", phone: "(11) 99999-0003", portfolioLink: "instagram.com/mikachen_ink", experience: "8 anos", portfolio: [{ title: "Dragão Japonês", desc: "Dragão tradicional japonês.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" }, { title: "Carpa Koi", desc: "Símbolo de perseverança.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" }, { title: "Hannya", desc: "Máscara tradicional.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" }] },
-        { id: 4, name: "Elena Rosa", role: "Tatuadora & Piercer", img: "/src/assets/images/tatuadores/tatuador4.jpg", rating: 4.9, ratingCount: 1105, styles: ["Fine Line", "Minimalismo", "Escrita"], bio: "Especialista em traços finos e delicados.", email: "elena@inkstudio.com", phone: "(11) 99999-0004", portfolioLink: "instagram.com/elenarosa_ink", experience: "4 anos", portfolio: [{ title: "Traço Fino", desc: "Delicadeza no traço.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" }, { title: "Minimalismo", desc: "Menos é mais.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" }, { title: "Fine Line Floral", desc: "Geometria e natureza.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }] },
-        { id: 5, name: "Lucas Ferreira", role: "Tatuador", img: "/src/assets/images/tatuadores/tatuador5.jpg", rating: 4.5, ratingCount: 780, styles: ["Blackwork", "Geométrico", "Pontilhismo"], bio: "Geometria sagrada e padrões complexos.", email: "lucasf@inkstudio.com", phone: "(11) 99999-0005", portfolioLink: "instagram.com/lucasferreira_ink", experience: "3 anos", portfolio: [{ title: "Mandala", desc: "Pontilhismo detalhado.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" }, { title: "Geométrico", desc: "Formas precisas.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" }] },
-        { id: 6, name: "André Costa", role: "Tatuador", img: "/src/assets/images/tatuadores/tatuador6.jpg", rating: 4.9, ratingCount: 1230, styles: ["Aquarela", "Colorido", "Sketch"], bio: "Cores fluidas e efeitos de pintura na pele.", email: "andre@inkstudio.com", phone: "(11) 99999-0006", portfolioLink: "instagram.com/andrecosta_ink", experience: "6 anos", portfolio: [{ title: "Aquarela", desc: "Cores fluidas.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }, { title: "Colorido", desc: "Cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" }] },
-        { id: 7, name: "Rafael Santos", role: "Tatuador", img: "/src/assets/images/tatuadores/tatuador7.jpg", rating: 4.4, ratingCount: 650, styles: ["Old School", "Tradicional", "Flash"], bio: "Estilo clássico americano com cores sólidas.", email: "rafael@inkstudio.com", phone: "(11) 99999-0007", portfolioLink: "instagram.com/rafaelsantos_ink", experience: "7 anos", portfolio: [{ title: "Tradicional", desc: "Âncora clássica.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }, { title: "Old School", desc: "Estilo americano.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" }, { title: "Flash", desc: "Pantera tradicional.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }] },
-        { id: 8, name: "Juliana Mendes", role: "Tatuadora", img: "/src/assets/images/tatuadores/tatuador8.jpg", rating: 4.6, ratingCount: 890, styles: ["Lettering", "Script", "Chicano"], bio: "Especialista em tipografia e caligrafia artística.", email: "juliana@inkstudio.com", phone: "(11) 99999-0008", portfolioLink: "instagram.com/julianamendes_ink", experience: "5 anos", portfolio: [{ title: "Script", desc: "Caligrafia elegante.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" }, { title: "Chicano", desc: "Lettering Chicano.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" }] }
+        {
+            id: 3,
+            name: "Mika Chen",
+            role: "Tatuadora",
+            img: "/src/assets/images/tatuadores/tatuador3.jpg",
+            rating: 4.8,
+            ratingCount: 920,
+            styles: ["Oriental", "Irezumi", "Dragões"],
+            bio: "Mestre em arte oriental com foco em Irezumi tradicional japonês.",
+            email: "mika@inkstudio.com",
+            phone: "(11) 99999-0003",
+            portfolioLink: "instagram.com/mikachen_ink",
+            experience: "8 anos",
+            portfolio: [
+                { title: "Irezumi Fechamento de Braços", desc: "Fechamento completo de braços e ombros estilo Irezumi com ondas e flores de sakura.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
+                { title: "Geisha com Sakura", desc: "Geisha com guarda-sol vermelho e flores de cerejeira.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
+                { title: "Dragão Japonês", desc: "Dragão japonês nas costas com flores.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" },
+                { title: "Dragão Yin Yang", desc: "Dragão estilo oriental em preto e cinza envolvendo símbolo Yin Yang.", img: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" }
+            ]
+        },
+        {
+            id: 4,
+            name: "Elena Rosa",
+            role: "Tatuadora & Piercer",
+            img: "/src/assets/images/tatuadores/tatuador4.jpg",
+            rating: 4.9,
+            ratingCount: 1105,
+            styles: ["Fine Line", "Minimalismo", "Escrita"],
+            bio: "Especialista em traços finos e delicados.",
+            email: "elena@inkstudio.com",
+            phone: "(11) 99999-0004",
+            portfolioLink: "instagram.com/elenarosa_ink",
+            experience: "4 anos",
+            portfolio: [
+                { title: "Carpas Koi e Flores nas Costas", desc: "Fechamento de costas com carpas koi, peônias e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
+                { title: "Rosto Feminino Interstellar", desc: "Rosto feminino abstrato com tema espacial.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" },
+                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/src/assets/images/tattooPiercing/piercing.jpg" },
+                { title: "Polvo Fine Line", desc: "Polvo detalhado em traços finos e delicados.", img: "/src/assets/images/tattooPiercing/tattooOutras1.jpg" },
+                { title: "Septo e Nostril", desc: "Combinação delicada de piercing no septo e nostril com joias douradas.", img: "/src/assets/images/tattooPiercing/piecing2.jpg" },
+                { title: "Sobrancelha Coração", desc: "Joia em formato de coração aplicada na sobrancelha.", img: "/src/assets/images/tattooPiercing/piecing4.jpg" },
+                { title: "Mix Orelha Prata", desc: "Composição completa na orelha com joias prateadas e correntes.", img: "/src/assets/images/tattooPiercing/piecing5.jpg" }
+            ]
+        },
+        {
+            id: 5,
+            name: "Lucas Ferreira",
+            role: "Tatuador",
+            img: "/src/assets/images/tatuadores/tatuador5.jpg",
+            rating: 4.5,
+            ratingCount: 780,
+            styles: ["Blackwork", "Geométrico", "Pontilhismo"],
+            bio: "Geometria sagrada e padrões complexos.",
+            email: "lucasf@inkstudio.com",
+            phone: "(11) 99999-0005",
+            portfolioLink: "instagram.com/lucasferreira_ink",
+            experience: "3 anos",
+            portfolio: [
+                { title: "Cérebro, DNA e Coração", desc: "Composição fine line com cérebro, hélice de DNA e coração anatômico.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
+                { title: "Flamengo Geométrico", desc: "Homenagem ao Flamengo com elementos geométricos e coração anatômico.", img: "/src/assets/images/tattooPiercing/tattooTime2.jpg" },
+                { title: "Água-viva Pontilhismo", desc: "Água-viva detalhada feita em pontilhismo.", img: "/src/assets/images/tattooPiercing/tattooOutras2.jpg" }
+            ]
+        },
+        {
+            id: 6,
+            name: "André Costa",
+            role: "Tatuador",
+            img: "/src/assets/images/tatuadores/tatuador6.jpg",
+            rating: 4.9,
+            ratingCount: 1230,
+            styles: ["Aquarela", "Colorido", "Sketch"],
+            bio: "Cores fluidas e efeitos de pintura na pele.",
+            email: "andre@inkstudio.com",
+            phone: "(11) 99999-0006",
+            portfolioLink: "instagram.com/andrecosta_ink",
+            experience: "6 anos",
+            portfolio: [
+                { title: "Medusa Blackwork Braço", desc: "Medusa mitológica em blackwork com pontilhismo e serpentes detalhadas.", img: "/src/assets/images/tattooPiercing/tattooOutras3.jpg" },
+                { title: "Zoro e Luffy One Piece", desc: "Roronoa Zoro e Monkey D. Luffy do anime One Piece em estilo sketch preto e cinza.", img: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
+                { title: "Medusa Blackwork Mão", desc: "Medusa em blackwork cobrindo dorso da mão com serpentes que se estendem pelos dedos.", img: "/src/assets/images/tattooPiercing/tattooOutras4.jpg" },
+                { title: "Choso JJK Blackwork", desc: "Choso de JJK em estilo blackwork detalhado.", img: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" }
+            ]
+        },
+        {
+            id: 7,
+            name: "Rafael Santos",
+            role: "Tatuador",
+            img: "/src/assets/images/tatuadores/tatuador7.jpg",
+            rating: 4.4,
+            ratingCount: 650,
+            styles: ["Old School", "Tradicional", "Flash"],
+            bio: "Estilo clássico americano com cores sólidas.",
+            email: "rafael@inkstudio.com",
+            phone: "(11) 99999-0007",
+            portfolioLink: "instagram.com/rafaelsantos_ink",
+            experience: "7 anos",
+            portfolio: [
+                { title: "The Lovers - Carta de Tarô", desc: "Carta de tarô com mulher, caveira e dados.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Coração Sagrado com Adaga", desc: "Coração sagrado atravessado por adaga com chamas.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" },
+                { title: "Galo Atlético Mineiro", desc: "Escudo e mascote do Atlético Mineiro em estilo Old School/Realismo.", img: "/src/assets/images/tattooPiercing/tattooTime3.jpg" }
+            ]
+        },
+        {
+            id: 8,
+            name: "Juliana Mendes",
+            role: "Tatuadora",
+            img: "/src/assets/images/tatuadores/tatuador8.jpg",
+            rating: 4.6,
+            ratingCount: 890,
+            styles: ["Lettering", "Script", "Chicano"],
+            bio: "Especialista em tipografia e caligrafia artística.",
+            email: "juliana@inkstudio.com",
+            phone: "(11) 99999-0008",
+            portfolioLink: "instagram.com/julianamendes_ink",
+            experience: "5 anos",
+            portfolio: [
+                { title: "Blessed Lettering", desc: "Caligrafia 'Blessed' no pescoço.", img: "/src/assets/images/tattooPiercing/tattooCaligrafia1.jpg" },
+                { title: "Escrita nas Costas", desc: "Texto longo em caligrafia fina nas costas.", img: "/src/assets/images/tattooPiercing/tattooCaligrafia2.jpg" },
+                { title: "Frase no Braço", desc: "Frase motivacional com fonte cursiva no braço.", img: "/src/assets/images/tattooPiercing/tattooCaligrafia3.jpg" }
+            ]
+        }
     ];
 
     useEffect(() => {

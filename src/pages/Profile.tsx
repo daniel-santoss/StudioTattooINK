@@ -66,9 +66,8 @@ const Profile: React.FC = () => {
                 avatar: '/src/assets/images/tatuadores/tatuador1.jpg',
                 coverUrl: '/src/assets/images/tattooPiercing/tattooRealista1.jpg',
                 portfolio: [
-                    { id: 101, title: "Retrato Realista", description: "Estudo de realismo com texturas de pele hiper-realistas.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-                    { id: 102, title: "Realismo Detalhado", description: "Retrato preto e cinza com foco em contraste.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-                    { id: 103, title: "Preto e Cinza", description: "Realismo destacando reflexos e detalhes.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" },
+                    { id: 101, title: "Olho e Bússola Realista", description: "Composição com olho realista, bússola e fases da lua.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+                    { id: 102, title: "Pantera Negra com Lótus", description: "Pantera negra em preto e cinza com flor de lótus.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" }
                 ]
             });
         } else if (userRole === 'client') {

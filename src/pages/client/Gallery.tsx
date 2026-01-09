@@ -16,31 +16,71 @@ const Gallery: React.FC = () => {
     const [filter, setFilter] = useState("Todos");
     const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
-    const categories = ["Todos", "Realismo", "Oriental", "Old School", "Fine Line"];
+    const categories = ["Todos", "Realismo", "Oriental", "Old School", "Fine Line", "Lettering", "Piercing", "Outros"];
 
     // Imagens locais atualizadas
     const images: GalleryImage[] = [
         // Realismo
-        { id: 1, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Retrato Realista" },
-        { id: 2, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista2.jpg", artistName: "Alex Rivera", artistId: 1, title: "Realismo Preto e Cinza" },
-        { id: 3, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista3.jpg", artistName: "Alex Rivera", artistId: 1, title: "Realismo Detalhado" },
+        { id: 1, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Olho e Bússola Realista" },
+        { id: 2, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista2.jpg", artistName: "Alex Rivera", artistId: 1, title: "Pantera Negra com Lótus" },
+        { id: 3, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista4.jpg", artistName: "André Costa", artistId: 6, title: "Tattoo Realista" },
         // Oriental
-        { id: 4, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental1.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Japonês" },
-        { id: 5, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental2.jpg", artistName: "Mika Chen", artistId: 3, title: "Carpa Koi" },
-        { id: 6, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental3.jpg", artistName: "Mika Chen", artistId: 3, title: "Hannya Mask" },
+        { id: 4, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental1.jpg", artistName: "Mika Chen", artistId: 3, title: "Irezumi Fechamento de Braços" },
+        { id: 5, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental2.jpg", artistName: "Mika Chen", artistId: 3, title: "Geisha com Sakura" },
+        { id: 6, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental3.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Japonês" },
         // Old School
-        { id: 7, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld1.jpg", artistName: "Rafael Santos", artistId: 7, title: "Tradicional Americano" },
-        { id: 8, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld2.jpg", artistName: "Rafael Santos", artistId: 7, title: "Old School Clássico" },
-        { id: 9, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Flash Tradicional" },
+        { id: 7, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld1.jpg", artistName: "Lucas Vane", artistId: 2, title: "Aku Aku Crash Bandicoot" },
+        { id: 8, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld2.jpg", artistName: "Rafael Santos", artistId: 7, title: "The Lovers - Carta de Tarô" },
+        { id: 9, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Coração Sagrado com Adaga" },
         // Fine Line
-        { id: 10, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Traço Fino Delicado" },
-        { id: 11, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine2.jpg", artistName: "Elena Rosa", artistId: 4, title: "Minimalismo" },
-        { id: 12, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine3.jpg", artistName: "Elena Rosa", artistId: 4, title: "Fine Line Floral" }
+        { id: 10, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Carpas Koi e Flores nas Costas" },
+        { id: 11, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Cérebro, DNA e Coração" },
+        { id: 12, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine3.jpg", artistName: "Elena Rosa", artistId: 4, title: "Rosto Feminino Interstellar" },
+        // Oriental Extra
+        { id: 13, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental4.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Yin Yang" },
+        { id: 14, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental5.jpg", artistName: "Mika Chen", artistId: 3, title: "Oriental Tradicional" },
+        // Times
+        { id: 15, category: "Times", src: "/src/assets/images/tattooPiercing/tattooTime1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Águia e Símbolo Corinthians" },
+        { id: 16, category: "Times", src: "/src/assets/images/tattooPiercing/tattooTime2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Flamengo Geométrico" },
+        { id: 17, category: "Times", src: "/src/assets/images/tattooPiercing/tattooTime3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Galo Atlético Mineiro" },
+        // Outros
+        { id: 18, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooOutras1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Polvo Fine Line" },
+        { id: 19, category: "Pontilhismo", src: "/src/assets/images/tattooPiercing/tattooOutras2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Água-viva Pontilhismo" },
+        { id: 20, category: "Outros", src: "/src/assets/images/tattooPiercing/tattooOutras3.jpg", artistName: "André Costa", artistId: 6, title: "Medusa Blackwork Braço" },
+        { id: 21, category: "Outros", src: "/src/assets/images/tattooPiercing/tattooOutras4.jpg", artistName: "André Costa", artistId: 6, title: "Medusa Blackwork Mão" },
+        // Anime
+        { id: 22, category: "Anime", src: "/src/assets/images/tattooPiercing/tattooAnime1.jpg", artistName: "André Costa", artistId: 6, title: "Zoro e Luffy One Piece" },
+        { id: 23, category: "Anime", src: "/src/assets/images/tattooPiercing/tattooAnime3.jpg", artistName: "André Costa", artistId: 6, title: "Choso JJK Blackwork" },
+        // Lettering
+        { id: 24, category: "Lettering", src: "/src/assets/images/tattooPiercing/tattooCaligrafia1.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Blessed Lettering" },
+        { id: 25, category: "Lettering", src: "/src/assets/images/tattooPiercing/tattooCaligrafia2.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Escrita nas Costas" },
+        { id: 26, category: "Lettering", src: "/src/assets/images/tattooPiercing/tattooCaligrafia3.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Frase no Braço" },
+        // Piercing
+        { id: 27, category: "Piercing", src: "/src/assets/images/tattooPiercing/piercing.jpg", artistName: "Elena Rosa", artistId: 4, title: "Aplicação de Piercing" },
+        { id: 28, category: "Piercing", src: "/src/assets/images/tattooPiercing/piecing2.jpg", artistName: "Elena Rosa", artistId: 4, title: "Septo e Nostril" },
+        { id: 29, category: "Piercing", src: "/src/assets/images/tattooPiercing/piecing4.jpg", artistName: "Elena Rosa", artistId: 4, title: "Sobrancelha Coração" },
+        { id: 30, category: "Piercing", src: "/src/assets/images/tattooPiercing/piecing5.jpg", artistName: "Elena Rosa", artistId: 4, title: "Mix Orelha Prata" }
     ];
 
-    const filteredImages = filter === "Todos"
-        ? images
-        : images.filter(img => img.category === filter);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const normalizeText = (text: string) => {
+        return text.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    };
+
+    const filteredImages = images.filter(img => {
+        const normalizedSearch = normalizeText(searchTerm);
+        const matchesSearch = normalizeText(img.title || "").includes(normalizedSearch) ||
+            normalizeText(img.artistName).includes(normalizedSearch);
+
+        const matchesCategory = filter === "Todos"
+            ? true
+            : filter === "Outros"
+                ? !["Realismo", "Oriental", "Old School", "Fine Line", "Lettering", "Piercing"].includes(img.category)
+                : img.category === filter;
+
+        return matchesSearch && matchesCategory;
+    });
 
     const handleOpenDetails = (img: GalleryImage) => {
         setSelectedImage(img);
@@ -63,19 +103,42 @@ const Gallery: React.FC = () => {
                 <p className="text-text-muted mb-8">Inspiração para sua próxima obra de arte.</p>
 
                 {/* Filters */}
-                <div className="flex flex-wrap justify-center gap-2">
-                    {categories.map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setFilter(cat)}
-                            className={`px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wide transition-all ${filter === cat
-                                ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                                : 'bg-surface-light text-text-muted hover:bg-white/10 hover:text-white'
-                                }`}
+                {/* Search and Filters Bar */}
+                <div className="flex flex-col md:flex-row items-center justify-center gap-4 max-w-2xl mx-auto bg-surface p-2 rounded-2xl border border-white/5">
+                    {/* Search Input */}
+                    <div className="relative w-full md:w-1/2">
+                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                            <span className="material-symbols-outlined text-zinc-500">search</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Buscar tatuagem ou artista..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full bg-black/20 text-white text-sm rounded-xl pl-10 pr-4 py-3 border border-zinc-800 focus:border-primary focus:ring-0 focus:outline-none focus:bg-black/40 transition-all placeholder:text-zinc-600 shadow-sm"
+                        />
+                    </div>
+
+                    {/* Category Dropdown */}
+                    <div className="relative w-full md:w-1/2">
+                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                            <span className="material-symbols-outlined text-zinc-500">filter_list</span>
+                        </div>
+                        <select
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
+                            className="w-full bg-black/20 text-white text-sm rounded-xl pl-10 pr-10 py-3 border border-zinc-800 focus:border-primary focus:ring-0 focus:outline-none focus:bg-black/40 transition-all appearance-none cursor-pointer shadow-sm"
                         >
-                            {cat}
-                        </button>
-                    ))}
+                            {categories.map(cat => (
+                                <option key={cat} value={cat} className="bg-zinc-900 text-white">
+                                    {cat}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                            <span className="material-symbols-outlined text-zinc-500 text-sm">expand_more</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -87,7 +150,7 @@ const Gallery: React.FC = () => {
 
                         {/* Hover Overlay */}
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3 backdrop-blur-sm">
-                            <span className="text-white font-bold text-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">{img.category}</span>
+                            <span className="text-white font-bold text-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Feito por {img.artistName}</span>
                             <button
                                 onClick={() => handleOpenDetails(img)}
                                 className="px-6 py-2 border-2 border-white text-white font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"

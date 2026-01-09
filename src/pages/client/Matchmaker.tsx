@@ -26,9 +26,9 @@ const Matchmaker: React.FC = () => {
             ratingCount: 2899,
             summary: "Muitos clientes elogiaram a precisão cirúrgica nos retratos e a leveza da mão durante sessões longas.",
             portfolio: [
-                { title: "Retrato Realista", desc: "Estudo detalhado com texturas de pele hiper-realistas em preto e cinza.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-                { title: "Realismo Detalhado", desc: "Retrato com armadura detalhada. Foco em contraste e iluminação dramática.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-                { title: "Preto e Cinza", desc: "Realismo mecânico, destacando reflexos metálicos e detalhes.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
+                { title: "Olho e Bússola Realista", desc: "Composição com olho realista, bússola e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+                { title: "Pantera Negra com Lótus", desc: "Pantera negra em preto e cinza com flor de lótus.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/src/assets/images/tattooPiercing/tattooTime1.jpg" }
             ]
         },
         {
@@ -40,9 +40,7 @@ const Matchmaker: React.FC = () => {
             ratingCount: 1450,
             summary: "Avaliado positivamente pela saturação incrível das cores e também realiza perfurações básicas e avançadas.",
             portfolio: [
-                { title: "Old School Colorido", desc: "Estilo neo tradicional com cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-                { title: "Neo Tradicional", desc: "Clássico Neo Tradicional com paleta de cores outonal.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/src/assets/images/tattooPiercing/piercing.jpg" }
+                { title: "Aku Aku Neo Tradicional", desc: "Máscara Aku Aku do Crash Bandicoot em cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }
             ]
         },
         {
@@ -54,9 +52,10 @@ const Matchmaker: React.FC = () => {
             ratingCount: 920,
             summary: "Clientes destacam o respeito às tradições orientais e a fluidez como os desenhos se encaixam no corpo.",
             portfolio: [
-                { title: "Dragão Japonês", desc: "Fechamento de costas completo com Dragão japonês.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-                { title: "Carpa Koi", desc: "Símbolo de perseverança, subindo a cachoeira.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
-                { title: "Hannya Mask", desc: "Máscara Hannya em meio a flores de cerejeira.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" }
+                { title: "Sakura e Ondas Japonesas", desc: "Fechamento de braços com flores de sakura e ondas tradicionais.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
+                { title: "Geisha com Sakura", desc: "Geisha com guarda-sol vermelho e flores de cerejeira.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
+                { title: "Dragão Japonês", desc: "Dragão japonês nas costas com flores.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" },
+                { title: "Dragão Yin Yang", desc: "Dragão estilo oriental em preto e cinza.", img: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" }
             ]
         },
         {
@@ -68,9 +67,11 @@ const Matchmaker: React.FC = () => {
             ratingCount: 1105,
             summary: "Frequentemente citada pela delicadeza do traço fino e procedimentos de piercing delicados.",
             portfolio: [
-                { title: "Traço Fino Delicado", desc: "Ramo de lavanda traço fino no antebraço.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-                { title: "Minimalismo", desc: "Perfuração de septo com joia dourada minimalista.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
-                { title: "Fine Line Floral", desc: "Geometria sagrada misturada com natureza.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }
+                { title: "Carpas Koi e Flores nas Costas", desc: "Fechamento de costas com carpas koi, peônias e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
+                { title: "Rosto Feminino Interstellar", desc: "Rosto feminino abstrato com tema espacial.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" },
+                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/src/assets/images/tattooPiercing/piercing.jpg" },
+                { title: "Polvo Fine Line", desc: "Polvo detalhado em traços finos.", img: "/src/assets/images/tattooPiercing/tattooOutras1.jpg" },
+                { title: "Sobrancelha Coração", desc: "Piercing de sobrancelha diferenciado.", img: "/src/assets/images/tattooPiercing/piecing4.jpg" }
             ]
         },
         {
@@ -82,8 +83,9 @@ const Matchmaker: React.FC = () => {
             ratingCount: 780,
             summary: "Elogiado pela solidez do preto e pela simetria perfeita nas formas geométricas complexas.",
             portfolio: [
-                { title: "Mandala", desc: "Pontilhismo detalhado no ombro.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-                { title: "Bracelete Geo", desc: "Linhas sólidas e formas geométricas.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Cérebro, DNA e Coração", desc: "Composição fine line com cérebro, hélice de DNA e coração anatômico.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
+                { title: "Flamengo Geométrico", desc: "Homenagem ao Flamengo com geometria.", img: "/src/assets/images/tattooPiercing/tattooTime2.jpg" },
+                { title: "Água-viva Pontilhismo", desc: "Água-viva detalhada em pontilhismo.", img: "/src/assets/images/tattooPiercing/tattooOutras2.jpg" },
                 { title: "Blackout", desc: "Cobertura sólida em preto.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
             ]
         },
@@ -96,8 +98,9 @@ const Matchmaker: React.FC = () => {
             ratingCount: 1230,
             summary: "Clientes adoram a mistura de cores vibrantes e o efeito de pintura fluida que ele consegue criar na pele.",
             portfolio: [
-                { title: "Colorido Vibrante", desc: "Estilo sketch com manchas de aquarela.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-                { title: "Aquarela", desc: "Galáxia colorida em formato de triângulo.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Caveira Mexicana Colorida", desc: "Sugar skull colorida em estilo bordado tradicional.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" },
+                { title: "Zoro One Piece", desc: "Sketch do Zoro de One Piece.", img: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
+                { title: "Choso JJK Blackwork", desc: "Choso detalhado.", img: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" },
                 { title: "Beija-flor", desc: "Cores vibrantes e movimento.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }
             ]
         },
@@ -110,9 +113,9 @@ const Matchmaker: React.FC = () => {
             ratingCount: 650,
             summary: "Apaixonado pelo estilo clássico americano. Cores sólidas, linhas grossas e designs atemporais.",
             portfolio: [
-                { title: "Tradicional Americano", desc: "Âncora tradicional com banner e rosas.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-                { title: "Old School Clássico", desc: "Homenagem ao estilo de Norman Collins.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-                { title: "Flash Tradicional", desc: "Clássica pantera tradicional americana.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }
+                { title: "The Lovers - Carta de Tarô", desc: "Carta de tarô com mulher, caveira e dados.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Coração Sagrado com Adaga", desc: "Coração sagrado atravessado por adaga com chamas.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" },
+                { title: "Galo Atlético Mineiro", desc: "Mascote do Galo estilo Old School.", img: "/src/assets/images/tattooPiercing/tattooTime3.jpg" }
             ]
         },
         {
@@ -124,8 +127,6 @@ const Matchmaker: React.FC = () => {
             ratingCount: 890,
             summary: "Especialista em tipografia e caligrafia. Cada letra é uma obra de arte personalizada.",
             portfolio: [
-                { title: "Script Cursivo", desc: "Frase em caligrafia elegante com ornamentos.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-                { title: "Chicano Letters", desc: "Lettering no estilo Chicano com sombreamento.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
                 { title: "Nome Minimalista", desc: "Tipografia clean e moderna.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }
             ]
         }

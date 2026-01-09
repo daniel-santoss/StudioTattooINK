@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { RatingDisplay } from '../Staff';
@@ -6,55 +5,60 @@ import { RatingDisplay } from '../Staff';
 const artists = [
     {
         id: 1, name: "Alex Rivera", role: "Especialista em Realismo", price: 150, rating: 4.7, ratingCount: 2899, img: "/src/assets/images/tatuadores/tatuador1.jpg", portfolio: [
-            { id: 101, title: "Retrato Realista", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-            { id: 102, title: "Realismo Detalhado", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-            { id: 103, title: "Preto e Cinza", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
+            { id: 101, title: "Olho e Bússola", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
+            { id: 102, title: "Pantera Negra", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
+            { id: 103, title: "Águia Corinthians", imageUrl: "/src/assets/images/tattooPiercing/tattooTime1.jpg" }
         ]
     },
     {
         id: 2, name: "Lucas Vane", role: "Neo Tradicional", price: 130, rating: 5.0, ratingCount: 1450, img: "/src/assets/images/tatuadores/tatuador2.jpg", portfolio: [
-            { id: 201, title: "Old School Colorido", imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-            { id: 202, title: "Neo Tradicional", imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-            { id: 203, title: "Flash Tradicional", imageUrl: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }
+            { id: 201, title: "Aku Aku Neo Tradicional", imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }
         ]
     },
     {
         id: 3, name: "Mika Chen", role: "Oriental", price: 180, rating: 4.8, ratingCount: 920, img: "/src/assets/images/tatuadores/tatuador3.jpg", portfolio: [
-            { id: 301, title: "Dragão Japonês", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-            { id: 302, title: "Carpa Koi", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
-            { id: 303, title: "Hannya Mask", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" }
+            { id: 301, title: "Sakura e Ondas", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
+            { id: 302, title: "Geisha", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
+            { id: 303, title: "Dragão Colorido", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" },
+            { id: 304, title: "Dragão Yin Yang", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" }
         ]
     },
     {
         id: 4, name: "Elena Rosa", role: "Fine Line", price: 120, rating: 4.9, ratingCount: 1105, img: "/src/assets/images/tatuadores/tatuador4.jpg", portfolio: [
-            { id: 401, title: "Traço Fino Delicado", imageUrl: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-            { id: 402, title: "Minimalismo", imageUrl: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
-            { id: 403, title: "Fine Line Floral", imageUrl: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }
+            { id: 401, title: "Carpas e Flores", imageUrl: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
+            { id: 402, title: "Rosto Espacial", imageUrl: "/src/assets/images/tattooPiercing/tattooFine3.jpg" },
+            { id: 403, title: "Piercing", imageUrl: "/src/assets/images/tattooPiercing/piercing.jpg" },
+            { id: 404, title: "Polvo Fine Line", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras1.jpg" },
+            { id: 405, title: "Septo e Nostril", imageUrl: "/src/assets/images/tattooPiercing/piecing2.jpg" },
+            { id: 406, title: "Mix Orelha", imageUrl: "/src/assets/images/tattooPiercing/piecing5.jpg" }
         ]
     },
     {
         id: 5, name: "Lucas Ferreira", role: "Blackwork", price: 140, rating: 4.5, ratingCount: 780, img: "/src/assets/images/tatuadores/tatuador5.jpg", portfolio: [
-            { id: 501, title: "Mandala", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-            { id: 502, title: "Geométrico", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" }
+            { id: 501, title: "Cérebro e DNA", imageUrl: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
+            { id: 502, title: "Flamengo Geo", imageUrl: "/src/assets/images/tattooPiercing/tattooTime2.jpg" },
+            { id: 503, title: "Água-viva Pontilhismo", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras2.jpg" }
         ]
     },
     {
         id: 6, name: "André Costa", role: "Aquarela", price: 160, rating: 4.9, ratingCount: 1230, img: "/src/assets/images/tatuadores/tatuador6.jpg", portfolio: [
-            { id: 601, title: "Aquarela Vibrante", imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-            { id: 602, title: "Cores Vibrantes", imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg" }
+            { id: 601, title: "Caveira Mexicana", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" },
+            { id: 602, title: "Zoro One Piece", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
+            { id: 603, title: "Choso JJK", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime2.jpg" }
         ]
     },
     {
         id: 7, name: "Rafael Santos", role: "Old School", price: 125, rating: 4.4, ratingCount: 650, img: "/src/assets/images/tatuadores/tatuador7.jpg", portfolio: [
-            { id: 701, title: "Tradicional Americano", imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg" },
-            { id: 702, title: "Old School Clássico", imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-            { id: 703, title: "Flash", imageUrl: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }
+            { id: 701, title: "Carta de Tarô", imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
+            { id: 702, title: "Coração Sagrado", imageUrl: "/src/assets/images/tattooPiercing/tattooOld3.jpg" },
+            { id: 703, title: "Galo Atlético Mineiro", imageUrl: "/src/assets/images/tattooPiercing/tattooTime3.jpg" }
         ]
     },
     {
         id: 8, name: "Juliana Mendes", role: "Lettering", price: 110, rating: 4.6, ratingCount: 890, img: "/src/assets/images/tatuadores/tatuador8.jpg", portfolio: [
-            { id: 801, title: "Script Cursivo", imageUrl: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-            { id: 802, title: "Chicano Letters", imageUrl: "/src/assets/images/tattooPiercing/tattooFine2.jpg" }
+            { id: 801, title: "Blessed Lettering", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia1.jpg" },
+            { id: 802, title: "Escrita Costas", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia2.jpg" },
+            { id: 803, title: "Frase Braço", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia3.jpg" }
         ]
     }
 ];
@@ -159,17 +163,17 @@ const Booking: React.FC = () => {
                                                 : completed
                                                     ? 'bg-primary border-primary text-white'
                                                     : 'bg-[#1a1a1a] border-zinc-700 text-zinc-500'
-                                                }`}>
+                                                } `}>
                                                 {completed ? (
                                                     <span className="material-symbols-outlined text-lg">check</span>
                                                 ) : s}
                                             </div>
-                                            <span className={`text-[10px] font-black uppercase tracking-wider hidden sm:block ${active ? 'text-white' : completed ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                                            <span className={`text-[10px] font-black uppercase tracking-wider hidden sm:block ${active ? 'text-white' : completed ? 'text-zinc-400' : 'text-zinc-600'} `}>
                                                 {label}
                                             </span>
                                         </div>
                                         {idx < 3 && (
-                                            <div className={`flex-1 h-[2px] mx-2 transition-colors duration-300 ${completed ? 'bg-primary' : 'bg-zinc-800'}`} />
+                                            <div className={`flex-1 h-[2px] mx-2 transition-colors duration-300 ${completed ? 'bg-primary' : 'bg-zinc-800'} `} />
                                         )}
                                     </React.Fragment>
                                 )
@@ -201,7 +205,7 @@ const Booking: React.FC = () => {
                                                 className={`relative p-4 rounded-2xl border cursor-pointer transition-all duration-300 group ${selectedArtist === artist.id
                                                     ? 'bg-[#121212] border-primary shadow-[0_0_25px_rgba(212,17,50,0.15)]'
                                                     : 'bg-[#121212] border-zinc-800 hover:border-zinc-600'
-                                                    }`}
+                                                    } `}
                                             >
                                                 {/* Checkbox de seleção */}
                                                 {selectedArtist === artist.id && (
@@ -285,7 +289,7 @@ const Booking: React.FC = () => {
                                                 <div className="grid grid-cols-7 gap-2">
                                                     {/* Empty slots for start of month */}
                                                     {Array.from({ length: getFirstDayOfMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => (
-                                                        <div key={`empty-${i}`} />
+                                                        <div key={`empty - ${i} `} />
                                                     ))}
 
                                                     {/* Days */}
@@ -300,14 +304,14 @@ const Booking: React.FC = () => {
                                                                 disabled={disabled}
                                                                 onClick={() => handleDateSelect(day)}
                                                                 className={`
-                                                                size-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all duration-300
+size-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all duration-300
                                                                 ${selected
                                                                         ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105'
                                                                         : disabled
                                                                             ? 'text-zinc-700 cursor-not-allowed'
                                                                             : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
                                                                     }
-                                                            `}
+`}
                                                             >
                                                                 {day}
                                                             </button>
@@ -318,7 +322,7 @@ const Booking: React.FC = () => {
                                         </div>
 
                                         {/* Coluna Direita: Períodos */}
-                                        <div className={`flex flex-col transition-all duration-500 ${selectedDate ? 'opacity-100' : 'opacity-30 pointer-events-none'}`}>
+                                        <div className={`flex flex-col transition-all duration-500 ${selectedDate ? 'opacity-100' : 'opacity-30 pointer-events-none'} `}>
                                             <h3 className="text-2xl font-display font-bold text-white mb-1">Período</h3>
                                             <p className="text-zinc-500 mb-6 text-sm">Escolha seu turno de preferência.</p>
 
@@ -330,15 +334,15 @@ const Booking: React.FC = () => {
                                                         className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 group ${selectedPeriod === period.id
                                                             ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)]'
                                                             : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
-                                                            }`}
+                                                            } `}
                                                     >
                                                         <div className="flex items-center gap-4">
-                                                            <span className={`material-symbols-outlined text-3xl ${selectedPeriod === period.id ? 'text-primary' : 'text-zinc-600 group-hover:text-primary'}`}>
+                                                            <span className={`material-symbols-outlined text-3xl ${selectedPeriod === period.id ? 'text-primary' : 'text-zinc-600 group-hover:text-primary'} `}>
                                                                 {period.icon}
                                                             </span>
                                                             <div className="text-left">
                                                                 <span className="block font-black text-base uppercase tracking-wide">{period.label}</span>
-                                                                <span className={`text-xs font-bold ${selectedPeriod === period.id ? 'text-zinc-300' : 'text-zinc-600'}`}>{period.range}</span>
+                                                                <span className={`text-xs font-bold ${selectedPeriod === period.id ? 'text-zinc-300' : 'text-zinc-600'} `}>{period.range}</span>
                                                             </div>
                                                         </div>
                                                         {selectedPeriod === period.id && (
@@ -396,8 +400,8 @@ const Booking: React.FC = () => {
                                     </div>
                                     <h3 className="font-tattoo text-4xl md:text-5xl text-white mb-4">Solicitação Enviada!</h3>
                                     <p className="text-zinc-400 max-w-md mx-auto text-sm leading-relaxed mb-10">
-                                        Seu pedido foi encaminhado para <strong className="text-white">{artists.find(a => a.id === selectedArtist)?.name}</strong>.
-                                        <br />Você receberá uma confirmação via WhatsApp e E-mail em breve com o orçamento e horário definido.
+                                        Seu orçamento foi encaminhado para <strong className="text-white">{artists.find(a => a.id === selectedArtist)?.name}</strong>.
+                                        <br />Caso o artista aprova-lo, será enviada uma notificação via e-mail com a confirmação do orçamento e horário definido.
                                     </p>
                                     <button
                                         onClick={() => navigate('/my-appointments')}
@@ -422,7 +426,7 @@ const Booking: React.FC = () => {
                                 <button
                                     onClick={handleNext}
                                     disabled={step === 1 && !selectedArtist || step === 2 && (!selectedDate || !selectedPeriod)}
-                                    className={`px-8 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center gap-2 bg-primary hover:bg-primary-hover text-white shadow-[0_0_25px_rgba(212,17,50,0.4)] hover:shadow-[0_0_35px_rgba(212,17,50,0.6)] disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none`}
+                                    className="px-8 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center gap-2 bg-primary hover:bg-primary-hover text-white shadow-[0_0_25px_rgba(212,17,50,0.4)] hover:shadow-[0_0_35px_rgba(212,17,50,0.6)] disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none"
                                 >
                                     {step === 3 ? 'ENVIAR SOLICITAÇÃO' : 'CONTINUAR'}
                                     {step !== 3 && <span className="material-symbols-outlined text-base">arrow_forward</span>}
@@ -443,11 +447,8 @@ const Booking: React.FC = () => {
                                 <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-black mb-1">Resumo</p>
                                 <p className="text-white font-bold truncate">{artists.find(a => a.id === selectedArtist)?.name}</p>
                                 <p className="text-sm text-zinc-400 truncate">
-                                    {selectedDate ? `${selectedDate} • ${selectedPeriod || 'Turno a definir'}` : 'Data a definir'}
+                                    {selectedDate ? `${selectedDate} • ${selectedPeriod || 'Turno a definir'} ` : 'Data a definir'}
                                 </p>
-                            </div>
-                            <div className="text-right shrink-0">
-                                <p className="text-primary font-black text-lg">R$ {artists.find(a => a.id === selectedArtist)?.price}/h</p>
                             </div>
                         </div>
                     )}
@@ -499,7 +500,7 @@ const Booking: React.FC = () => {
                                         onClick={() => {
                                             const id = previewArtist.id;
                                             setPreviewArtist(null);
-                                            navigate(`/artist-profile?id=${id}`);
+                                            navigate(`/ artist - profile ? id = ${id} `);
                                         }}
                                         className="px-6 py-3 border border-zinc-700 hover:bg-zinc-800 text-white rounded-xl font-black text-xs uppercase tracking-wider transition-all"
                                     >
