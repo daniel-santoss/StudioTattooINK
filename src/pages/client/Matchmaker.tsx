@@ -382,7 +382,7 @@ const Matchmaker: React.FC = () => {
                                             </p>
                                         </div>
 
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 items-stretch">
                                             <button
                                                 onClick={() => navigate(`/book?artistId=${artist.id}`)}
                                                 className="flex-1 bg-white text-black hover:bg-gray-200 py-3.5 rounded-xl font-bold text-sm uppercase tracking-wide transition-all flex items-center justify-center gap-2 group-hover:bg-primary group-hover:text-white group-hover:shadow-lg group-hover:shadow-primary/20"
@@ -392,7 +392,7 @@ const Matchmaker: React.FC = () => {
                                             </button>
                                             <button
                                                 onClick={() => setSelectedArtist(artist)}
-                                                className="size-[48px] flex items-center justify-center rounded-xl border border-white/10 hover:bg-white/10 text-white transition-all bg-surface-light/50 group/eye"
+                                                className="w-12 flex items-center justify-center rounded-xl border border-white/10 hover:bg-white/10 text-white transition-all bg-surface-light/50 group/eye"
                                                 title="Ver Portfólio"
                                             >
                                                 <span className="material-symbols-outlined text-lg group-hover/eye:scale-110 transition-transform">visibility</span>

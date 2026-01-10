@@ -34,7 +34,8 @@ const Artists: React.FC = () => {
       portfolio: [
         { id: 101, title: "Olho e Bússola Realista", description: "Composição com olho realista, bússola e fases da lua.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
         { id: 102, title: "Pantera Negra com Lótus", description: "Pantera negra em preto e cinza com flor de lótus.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-        { id: 103, title: "Águia Realista Corinthians", description: "Realismo preto e cinza com escudo do Corinthians.", imageUrl: "/src/assets/images/tattooPiercing/tattooTime1.jpg" }
+        { id: 103, title: "Águia Realista Corinthians", description: "Realismo preto e cinza com escudo do Corinthians.", imageUrl: "/src/assets/images/tattooPiercing/tattooTime1.jpg" },
+        { id: 104, title: "Yoshi Bordado", description: "Tatuagem realista do Yoshi com efeito de bordado.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista4.jpg" }
       ]
     },
     {
@@ -116,7 +117,8 @@ const Artists: React.FC = () => {
       portfolio: [
         { id: 601, title: "Medusa Blackwork Braço", description: "Medusa mitológica em blackwork com pontilhismo e serpentes detalhadas.", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras3.jpg" },
         { id: 602, title: "Zoro e Luffy One Piece", description: "Roronoa Zoro e Monkey D. Luffy do anime One Piece em estilo sketch.", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
-        { id: 603, title: "Medusa Blackwork Mão", description: "Medusa em blackwork cobrindo dorso da mão com serpentes nos dedos.", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras4.jpg" }
+        { id: 603, title: "Medusa Blackwork Mão", description: "Medusa em blackwork cobrindo dorso da mão com serpentes nos dedos.", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras4.jpg" },
+        { id: 604, title: "Choso JJK Blackwork", description: "Choso de JJK em estilo blackwork detalhado.", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" }
       ]
     },
     {

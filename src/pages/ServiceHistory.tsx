@@ -178,7 +178,7 @@ const ServiceHistory: React.FC = () => {
                         placeholder="Buscar por cliente ou serviço..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-surface-dark border border-border-dark rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-text-muted focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        className="w-full bg-surface-dark border border-border-dark rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-text-muted focus:border-primary transition-all"
                     />
                 </div>
             </div>
@@ -207,7 +207,7 @@ const ServiceHistory: React.FC = () => {
                                 <span className="text-xs text-text-muted font-bold uppercase tracking-wider mb-2">{item.month}</span>
                                 <span className="text-[10px] text-text-muted font-bold opacity-60 mb-2">{item.year}</span>
                                 <div className={`size-8 rounded-full flex items-center justify-center ${item.type === 'tattoo' ? 'bg-purple-500/20 text-purple-500' :
-                                        item.type === 'piercing' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-orange-500/20 text-orange-500'
+                                    item.type === 'piercing' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-orange-500/20 text-orange-500'
                                     }`}>
                                     <span className="material-symbols-outlined text-sm">{getTypeIcon(item.type)}</span>
                                 </div>
@@ -322,7 +322,7 @@ const ServiceHistory: React.FC = () => {
                                 <textarea
                                     value={ratingComment}
                                     onChange={(e) => setRatingComment(e.target.value)}
-                                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-zinc-600 resize-none transition-all"
+                                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-primary placeholder-zinc-600 resize-none transition-all"
                                     rows={3}
                                     placeholder="Deixe um comentário (opcional)..."
                                 ></textarea>

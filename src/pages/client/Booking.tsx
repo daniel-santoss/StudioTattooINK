@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { RatingDisplay } from '../Staff';
 
@@ -7,7 +7,8 @@ const artists = [
         id: 1, name: "Alex Rivera", role: "Especialista em Realismo", price: 150, rating: 4.7, ratingCount: 2899, img: "/src/assets/images/tatuadores/tatuador1.jpg", portfolio: [
             { id: 101, title: "Olho e Bússola", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
             { id: 102, title: "Pantera Negra", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-            { id: 103, title: "Águia Corinthians", imageUrl: "/src/assets/images/tattooPiercing/tattooTime1.jpg" }
+            { id: 103, title: "Águia Corinthians", imageUrl: "/src/assets/images/tattooPiercing/tattooTime1.jpg" },
+            { id: 104, title: "Yoshi Bordado", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista4.jpg" }
         ]
     },
     {
@@ -42,9 +43,10 @@ const artists = [
     },
     {
         id: 6, name: "André Costa", role: "Aquarela", price: 160, rating: 4.9, ratingCount: 1230, img: "/src/assets/images/tatuadores/tatuador6.jpg", portfolio: [
-            { id: 601, title: "Caveira Mexicana", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" },
-            { id: 602, title: "Zoro One Piece", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
-            { id: 603, title: "Choso JJK", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime2.jpg" }
+            { id: 601, title: "Medusa Blackwork Braço", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras3.jpg" },
+            { id: 602, title: "Zoro e Luffy One Piece", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
+            { id: 603, title: "Medusa Blackwork Mão", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras4.jpg" },
+            { id: 604, title: "Choso JJK Blackwork", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" }
         ]
     },
     {
@@ -81,6 +83,10 @@ const Booking: React.FC = () => {
     const [viewDate, setViewDate] = useState(new Date()); // Controls the calendar month view
 
     const [selectedPeriod, setSelectedPeriod] = useState<string>("");
+
+    // Reference Images State
+    const [referenceImages, setReferenceImages] = useState<{ file: File, preview: string }[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const artistParam = searchParams.get('artistId');
@@ -134,6 +140,35 @@ const Booking: React.FC = () => {
         const checkDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
         const checkStr = checkDate.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
         return selectedDate === checkStr;
+    };
+
+    // Handle file selection for reference images
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files) return;
+
+        const newImages = Array.from(files).map((file: File) => ({
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+
+        setReferenceImages(prev => [...prev, ...newImages]);
+
+        // Reset input to allow selecting same file again
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
+    // Remove a reference image
+    const handleRemoveImage = (index: number) => {
+        setReferenceImages(prev => {
+            const newImages = [...prev];
+            // Revoke URL to free memory
+            URL.revokeObjectURL(newImages[index].preview);
+            newImages.splice(index, 1);
+            return newImages;
+        });
     };
 
     return (
@@ -366,18 +401,68 @@ size-10 rounded-lg flex items-center justify-center text-sm font-bold transition
                                             <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">DESCRIÇÃO DO PROJETO</label>
                                             <textarea
                                                 rows={5}
-                                                className="w-full bg-[#121212] border border-zinc-800 rounded-2xl p-5 text-white focus:border-primary focus:ring-1 focus:ring-primary placeholder-zinc-700 transition-all resize-none text-sm leading-relaxed"
+                                                className="w-full bg-[#121212] border border-zinc-800 rounded-2xl p-5 text-white focus:border-primary placeholder-zinc-700 transition-all resize-none text-sm leading-relaxed"
                                                 placeholder="Descreva o local do corpo, tamanho aproximado em cm e a ideia da arte..."
                                             />
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <div className="space-y-3">
-                                                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">REFERÊNCIAS</label>
-                                                <button className="w-full h-32 border border-dashed border-zinc-700 rounded-2xl flex flex-col items-center justify-center text-zinc-500 hover:text-white hover:border-primary hover:bg-white/5 transition-all gap-2">
-                                                    <span className="material-symbols-outlined text-2xl">add_photo_alternate</span>
-                                                    <span className="text-xs font-bold uppercase tracking-wide">Adicionar Fotos</span>
-                                                </button>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="material-symbols-outlined text-primary text-lg">add_photo_alternate</span>
+                                                    <label className="text-sm font-bold text-white">Referências</label>
+                                                </div>
+
+                                                {/* Hidden file input */}
+                                                <input
+                                                    type="file"
+                                                    ref={fileInputRef}
+                                                    onChange={handleFileSelect}
+                                                    accept="image/*"
+                                                    multiple
+                                                    className="hidden"
+                                                />
+
+                                                {referenceImages.length === 0 ? (
+                                                    /* Empty state - big upload button */
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => fileInputRef.current?.click()}
+                                                        className="w-full h-32 border border-dashed border-zinc-700 rounded-2xl flex flex-col items-center justify-center text-zinc-500 hover:text-white hover:border-primary hover:bg-white/5 transition-all gap-2"
+                                                    >
+                                                        <span className="material-symbols-outlined text-2xl">add_photo_alternate</span>
+                                                        <span className="text-xs font-bold uppercase tracking-wide">Adicionar Fotos</span>
+                                                    </button>
+                                                ) : (
+                                                    /* With images - show grid */
+                                                    <div className="flex items-start gap-3 flex-wrap">
+                                                        {referenceImages.map((img, index) => (
+                                                            <div key={index} className="relative size-24 rounded-xl overflow-hidden group">
+                                                                <img
+                                                                    src={img.preview}
+                                                                    alt={`Referência ${index + 1}`}
+                                                                    className="w-full h-full object-cover"
+                                                                />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleRemoveImage(index)}
+                                                                    className="absolute top-1 right-1 size-5 bg-black/70 hover:bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                                                >
+                                                                    <span className="material-symbols-outlined text-white text-xs">close</span>
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                        {/* Add Photo Button */}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => fileInputRef.current?.click()}
+                                                            className="size-24 border border-dashed border-zinc-700 rounded-xl flex flex-col items-center justify-center text-zinc-500 hover:text-white hover:border-primary hover:bg-white/5 transition-all gap-1"
+                                                        >
+                                                            <span className="material-symbols-outlined text-xl">add_a_photo</span>
+                                                            <span className="text-[9px] font-bold uppercase tracking-wide">Add Foto</span>
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="p-5 rounded-2xl bg-[#121212] border border-zinc-800 flex flex-col justify-center gap-3">
                                                 <div className="flex items-center gap-2 text-primary">
@@ -500,7 +585,7 @@ size-10 rounded-lg flex items-center justify-center text-sm font-bold transition
                                         onClick={() => {
                                             const id = previewArtist.id;
                                             setPreviewArtist(null);
-                                            navigate(`/ artist - profile ? id = ${id} `);
+                                            navigate(`/artist-profile?id=${id}`);
                                         }}
                                         className="px-6 py-3 border border-zinc-700 hover:bg-zinc-800 text-white rounded-xl font-black text-xs uppercase tracking-wider transition-all"
                                     >

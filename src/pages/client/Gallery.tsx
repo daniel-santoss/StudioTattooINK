@@ -23,7 +23,7 @@ const Gallery: React.FC = () => {
         // Realismo
         { id: 1, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Olho e Bússola Realista" },
         { id: 2, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista2.jpg", artistName: "Alex Rivera", artistId: 1, title: "Pantera Negra com Lótus" },
-        { id: 3, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista4.jpg", artistName: "André Costa", artistId: 6, title: "Tattoo Realista" },
+        { id: 3, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista4.jpg", artistName: "Alex Rivera", artistId: 1, title: "Yoshi Bordado" },
         // Oriental
         { id: 4, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental1.jpg", artistName: "Mika Chen", artistId: 3, title: "Irezumi Fechamento de Braços" },
         { id: 5, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental2.jpg", artistName: "Mika Chen", artistId: 3, title: "Geisha com Sakura" },
@@ -115,7 +115,7 @@ const Gallery: React.FC = () => {
                             placeholder="Buscar tatuagem ou artista..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-black/20 text-white text-sm rounded-xl pl-10 pr-4 py-3 border border-zinc-800 focus:border-primary focus:ring-0 focus:outline-none focus:bg-black/40 transition-all placeholder:text-zinc-600 shadow-sm"
+                            className="w-full bg-black/20 text-white text-sm rounded-xl pl-10 pr-4 py-3 border border-zinc-800 focus:border-primary focus:outline-none focus:bg-black/40 transition-all placeholder:text-zinc-600 shadow-sm"
                         />
                     </div>
 
@@ -127,7 +127,7 @@ const Gallery: React.FC = () => {
                         <select
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
-                            className="w-full bg-black/20 text-white text-sm rounded-xl pl-10 pr-10 py-3 border border-zinc-800 focus:border-primary focus:ring-0 focus:outline-none focus:bg-black/40 transition-all appearance-none cursor-pointer shadow-sm"
+                            className="w-full bg-black/20 text-white text-sm rounded-xl pl-10 pr-10 py-3 border border-zinc-800 focus:border-primary focus:outline-none focus:bg-black/40 transition-all appearance-none cursor-pointer shadow-sm"
                         >
                             {categories.map(cat => (
                                 <option key={cat} value={cat} className="bg-zinc-900 text-white">

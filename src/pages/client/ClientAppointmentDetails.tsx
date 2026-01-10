@@ -488,19 +488,18 @@ const ClientAppointmentDetails: React.FC = () => {
                                 <div>
                                     <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                                         <span className="material-symbols-outlined text-primary">image</span>
-                                        Referências
+                                        Referências Enviadas
                                     </h3>
                                     <div className="flex gap-4 overflow-x-auto pb-2">
-                                        {appointment.referenceImages.map((img, idx) => (
-                                            <div key={idx} className="relative size-24 rounded-lg overflow-hidden border border-border-dark group shrink-0">
-                                                <img src={img} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Referência" />
-                                            </div>
-                                        ))}
-                                        {/* Botão Adicionar Foto */}
-                                        <button className="size-24 rounded-lg border border-dashed border-zinc-700 hover:border-white hover:bg-white/5 flex flex-col items-center justify-center text-text-muted hover:text-white transition-all shrink-0">
-                                            <span className="material-symbols-outlined text-2xl mb-1">add_a_photo</span>
-                                            <span className="text-[10px] font-bold uppercase">Add Foto</span>
-                                        </button>
+                                        {appointment.referenceImages.length > 0 ? (
+                                            appointment.referenceImages.map((img, idx) => (
+                                                <div key={idx} className="relative size-24 rounded-lg overflow-hidden border border-border-dark group shrink-0">
+                                                    <img src={img} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Referência" />
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className="text-text-muted text-sm">Nenhuma referência enviada.</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -851,7 +850,7 @@ const ClientAppointmentDetails: React.FC = () => {
                                     ))}
                                 </div>
                                 <textarea
-                                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-zinc-600 resize-none transition-all"
+                                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-primary placeholder-zinc-600 resize-none transition-all"
                                     rows={3}
                                     placeholder="Deixe um comentário (opcional)..."
                                 ></textarea>

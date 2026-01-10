@@ -77,7 +77,7 @@ const Login: React.FC = () => {
                 type="email"
                 required
                 defaultValue={role === 'client' ? 'cliente@email.com' : (role === 'artist' ? 'artista@inkstudio.com' : 'admin@inkstudio.com')}
-                className="w-full bg-background-dark border border-border-dark rounded-lg py-2.5 pl-10 text-white placeholder-zinc-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                className="w-full bg-background-dark border border-border-dark rounded-lg py-2.5 pl-10 text-white placeholder-zinc-700 focus:border-primary transition-all"
               />
             </div>
           </div>
@@ -90,14 +90,14 @@ const Login: React.FC = () => {
                 type="password"
                 required
                 placeholder="••••••••"
-                className="w-full bg-background-dark border border-border-dark rounded-lg py-2.5 pl-10 text-white placeholder-zinc-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                className="w-full bg-background-dark border border-border-dark rounded-lg py-2.5 pl-10 text-white placeholder-zinc-700 focus:border-primary transition-all"
               />
             </div>
           </div>
 
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" className="rounded border-border-dark bg-background-dark text-primary focus:ring-offset-background-dark focus:ring-primary" />
+              <input type="checkbox" className="rounded border-border-dark bg-background-dark text-primary" />
               <span className="text-text-muted">Lembrar-me</span>
             </label>
             <a href="#" className="text-primary hover:text-white transition-colors font-medium">Esqueceu a senha?</a>

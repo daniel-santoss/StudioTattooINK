@@ -27,7 +27,8 @@ const ArtistProfile: React.FC = () => {
             portfolio: [
                 { title: "Olho e Bússola Realista", desc: "Composição com olho realista, bússola e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
                 { title: "Pantera Negra com Lótus", desc: "Pantera negra em preto e cinza com flor de lótus.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/src/assets/images/tattooPiercing/tattooTime1.jpg" }
+                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/src/assets/images/tattooPiercing/tattooTime1.jpg" },
+                { title: "Yoshi Bordado", desc: "Tatuagem realista do Yoshi com efeito de bordado.", img: "/src/assets/images/tattooPiercing/tattooRealista4.jpg" }
             ]
         },
         {

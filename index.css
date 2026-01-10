@@ -1,0 +1,52 @@
+/* Global Input Focus Styles */
+/* Standardize all input focus states to use red/primary border only, no blue ring */
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #d41132 !important;
+  border-width: 2px !important;
+}
+
+/* Remove the default focus ring from Tailwind Forms plugin */
+[type='text']:focus,
+[type='email']:focus,
+[type='url']:focus,
+[type='password']:focus,
+[type='number']:focus,
+[type='date']:focus,
+[type='datetime-local']:focus,
+[type='month']:focus,
+[type='search']:focus,
+[type='tel']:focus,
+[type='time']:focus,
+[type='week']:focus,
+[multiple]:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  outline-offset: 0 !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: none !important;
+  box-shadow: none !important;
+  border-color: #d41132 !important;
+  border-width: 2px !important;
+}
+
+/* Checkbox and Radio focus styles */
+[type='checkbox']:focus,
+[type='radio']:focus {
+  outline: none !important;
+  --tw-ring-color: #d41132 !important;
+  --tw-ring-offset-color: #0a0a0a !important;
+  box-shadow: 0 0 0 2px #0a0a0a, 0 0 0 4px #d41132 !important;
+}
+
+/* Animation for smooth transitions */
+input,
+textarea,
+select {
+  transition: border-color 0.2s ease-in-out, border-width 0.1s ease-in-out;
+}

@@ -365,9 +365,9 @@ const ArtistAppointmentDetails: React.FC = () => {
 
                     {/* Status Strip */}
                     <div className={`h-2 w-full ${appointment.status === 'em-andamento' ? 'bg-purple-500 animate-pulse' :
-                            appointment.status === 'concluido' ? 'bg-emerald-500' :
-                                appointment.status === 'cancelado' || appointment.status === 'noshow' ? 'bg-red-500' :
-                                    appointment.status === 'rescheduling' ? 'bg-yellow-500' : 'bg-blue-500'
+                        appointment.status === 'concluido' ? 'bg-emerald-500' :
+                            appointment.status === 'cancelado' || appointment.status === 'noshow' ? 'bg-red-500' :
+                                appointment.status === 'rescheduling' ? 'bg-yellow-500' : 'bg-blue-500'
                         }`}></div>
 
                     <div className="p-8 md:p-10">
@@ -465,7 +465,7 @@ const ArtistAppointmentDetails: React.FC = () => {
                                 <div className="bg-surface-light/20 rounded-2xl p-6 border border-white/5 flex flex-col sm:flex-row items-center sm:items-start gap-6 relative overflow-hidden">
                                     {/* Client Label */}
                                     <div className={`absolute top-0 right-0 px-3 py-1 rounded-bl-xl text-[10px] font-bold uppercase tracking-widest ${appointment.clientType === 'VIP' ? 'bg-amber-500 text-black' :
-                                            appointment.clientType === 'Novo Cliente' ? 'bg-blue-500 text-white' : 'bg-surface-light text-text-muted'
+                                        appointment.clientType === 'Novo Cliente' ? 'bg-blue-500 text-white' : 'bg-surface-light text-text-muted'
                                         }`}>
                                         {appointment.clientType}
                                     </div>
@@ -500,8 +500,8 @@ const ArtistAppointmentDetails: React.FC = () => {
 
                                 {/* Medical Alert (Critical for Artists) */}
                                 <div className={`rounded-2xl p-6 border ${appointment.medicalInfo.allergies !== "Nenhuma"
-                                        ? 'bg-red-500/10 border-red-500/30'
-                                        : 'bg-surface-light/10 border-white/5'
+                                    ? 'bg-red-500/10 border-red-500/30'
+                                    : 'bg-surface-light/10 border-white/5'
                                     }`}>
                                     <h3 className={`text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${appointment.medicalInfo.allergies !== "Nenhuma" ? 'text-red-500' : 'text-text-muted'
                                         }`}>
@@ -612,7 +612,7 @@ const ArtistAppointmentDetails: React.FC = () => {
                                                     inputMode="numeric"
                                                     value={financeData.deposit}
                                                     onChange={handleDepositChange}
-                                                    className="w-full bg-background-dark border border-border-dark rounded-lg p-2 text-white font-bold focus:border-primary focus:ring-1 focus:ring-primary"
+                                                    className="w-full bg-background-dark border border-border-dark rounded-lg p-2 text-white font-bold focus:border-primary"
                                                     placeholder="0,00"
                                                 />
                                             </div>

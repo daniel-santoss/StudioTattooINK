@@ -403,8 +403,8 @@ const Schedule: React.FC = () => {
                             key={artist}
                             onClick={() => setFilterArtist(artist)}
                             className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide border transition-all whitespace-nowrap ${filterArtist === artist
-                                    ? 'bg-white text-black border-white'
-                                    : 'bg-surface-dark text-text-muted border-border-dark hover:border-white/30'
+                                ? 'bg-white text-black border-white'
+                                : 'bg-surface-dark text-text-muted border-border-dark hover:border-white/30'
                                 }`}
                         >
                             {artist}
@@ -436,7 +436,7 @@ const Schedule: React.FC = () => {
                                 <span className="text-2xl font-display font-bold text-white">{item.time}</span>
                                 <span className="text-xs text-text-muted font-bold uppercase tracking-wider mb-2">até {item.endTime}</span>
                                 <div className={`size-8 rounded-full flex items-center justify-center ${item.type === 'tattoo' ? 'bg-purple-500/20 text-purple-500' :
-                                        item.type === 'piercing' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-orange-500/20 text-orange-500'
+                                    item.type === 'piercing' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-orange-500/20 text-orange-500'
                                     }`}>
                                     <span className="material-symbols-outlined text-sm">{getTypeIcon(item.type)}</span>
                                 </div>
@@ -560,7 +560,7 @@ const Schedule: React.FC = () => {
                                         <select
                                             value={cancellationData.reason}
                                             onChange={(e) => setCancellationData({ ...cancellationData, reason: e.target.value })}
-                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white text-sm focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white text-sm focus:border-red-500"
                                         >
                                             {cancellationReasons.map(r => <option key={r} value={r}>{r}</option>)}
                                         </select>
@@ -571,7 +571,7 @@ const Schedule: React.FC = () => {
                                             required
                                             value={cancellationData.note}
                                             onChange={(e) => setCancellationData({ ...cancellationData, note: e.target.value })}
-                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-red-500 placeholder-zinc-700 focus:ring-1 focus:ring-red-500"
+                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-red-500 placeholder-zinc-700"
                                             rows={4}
                                             placeholder="Ex: Cliente informou imprevisto de saúde..."
                                         ></textarea>
@@ -619,8 +619,8 @@ const Schedule: React.FC = () => {
                                             placeholder="DD/MM/AAAA"
                                             maxLength={10}
                                             className={`w-full bg-background-dark border rounded-lg p-3 text-sm text-white placeholder-text-muted focus:outline-none transition-all ${isCalendarOpen
-                                                    ? 'border-primary ring-1 ring-primary'
-                                                    : 'border-border-dark hover:border-white/30'
+                                                ? 'border-primary'
+                                                : 'border-border-dark hover:border-white/30'
                                                 }`}
                                         />
                                         <button
@@ -700,8 +700,8 @@ const Schedule: React.FC = () => {
                                                 type="button"
                                                 onClick={() => setRescheduleData({ ...rescheduleData, newPeriod: period.id })}
                                                 className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300 gap-1 ${rescheduleData.newPeriod === period.id
-                                                        ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105'
-                                                        : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
+                                                    ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105'
+                                                    : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
                                                     }`}
                                             >
                                                 <span className="material-symbols-outlined text-xl">{period.icon}</span>

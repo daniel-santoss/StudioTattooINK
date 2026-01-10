@@ -58,6 +58,7 @@ const Profile: React.FC = () => {
                 name: 'Alex Rivera',
                 email: 'alex@inkstudio.com',
                 phone: '(11) 99999-0001',
+                dob: '1990-03-15',
                 artistRole: 'Tatuador',
                 bio: 'Especialista em realismo preto e cinza com mais de 10 anos de mercado.',
                 experience: '5+',
@@ -72,7 +73,7 @@ const Profile: React.FC = () => {
             });
         } else if (userRole === 'client') {
             setProfile({
-                name: 'Cliente Exemplo',
+                name: 'Daniel Vincius',
                 email: 'cliente@email.com',
                 phone: '(11) 98888-8888',
                 dob: '1995-05-20',
@@ -86,6 +87,7 @@ const Profile: React.FC = () => {
                 name: 'Admin Manager',
                 email: 'admin@inkstudio.com',
                 phone: '(11) 90000-0000',
+                dob: '1985-08-22',
                 bio: 'Gerente Geral',
                 experience: '',
                 specialties: [],
@@ -192,6 +194,45 @@ const Profile: React.FC = () => {
             '5+': 'Mais de 5 anos'
         };
         return map[exp] || exp;
+    };
+
+    // Format date from ISO (YYYY-MM-DD) to Brazilian format (DD/MM/AAAA)
+    const formatDateToBrazilian = (isoDate: string | undefined): string => {
+        if (!isoDate) return '';
+        const parts = isoDate.split('-');
+        if (parts.length !== 3) return isoDate;
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    };
+
+    // Convert Brazilian format (DD/MM/AAAA) to ISO (YYYY-MM-DD)
+    const formatDateToISO = (brazilianDate: string): string => {
+        const parts = brazilianDate.replace(/\D/g, '');
+        if (parts.length !== 8) return brazilianDate;
+        const day = parts.substring(0, 2);
+        const month = parts.substring(2, 4);
+        const year = parts.substring(4, 8);
+        return `${year}-${month}-${day}`;
+    };
+
+    // Handle date change with mask
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 8) value = value.substring(0, 8);
+
+        // Apply mask DD/MM/AAAA
+        let formatted = '';
+        if (value.length > 0) formatted += value.substring(0, 2);
+        if (value.length > 2) formatted += '/' + value.substring(2, 4);
+        if (value.length > 4) formatted += '/' + value.substring(4, 8);
+
+        // If complete, save as ISO
+        if (value.length === 8) {
+            const isoDate = formatDateToISO(formatted);
+            setProfile({ ...profile, dob: isoDate });
+        } else {
+            // Store as-is during editing (will be formatted on blur)
+            setProfile({ ...profile, dob: formatted });
+        }
     };
 
     return (
@@ -307,17 +348,19 @@ const Profile: React.FC = () => {
                         />
                     </div>
 
-                    {role === 'client' && (
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Data de Nascimento</label>
-                            <input
-                                type="text"
-                                disabled
-                                value={profile.dob}
-                                className="w-full bg-transparent border-transparent px-0 text-white rounded-lg p-2.5"
-                            />
-                        </div>
-                    )}
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Data de Nascimento</label>
+                        <input
+                            type="text"
+                            name="dob"
+                            disabled={!isEditing}
+                            value={isEditing ? (profile.dob?.includes('/') ? profile.dob : formatDateToBrazilian(profile.dob)) : formatDateToBrazilian(profile.dob)}
+                            onChange={handleDateChange}
+                            placeholder="DD/MM/AAAA"
+                            maxLength={10}
+                            className={`w-full rounded-lg p-2.5 text-white border transition-all ${isEditing ? 'bg-background-dark border-border-dark focus:border-primary' : 'bg-transparent border-transparent px-0'}`}
+                        />
+                    </div>
                 </div>
 
                 <div className="h-px bg-border-dark my-8 w-full"></div>
@@ -392,7 +435,7 @@ const Profile: React.FC = () => {
                                             ...profile,
                                             artistRole: e.target.checked ? 'Tatuador & Piercer' : 'Tatuador'
                                         })}
-                                        className="rounded border-border-dark bg-surface-light text-primary focus:ring-primary"
+                                        className="rounded border-border-dark bg-surface-light text-primary"
                                     />
                                     <span className="text-xs font-bold text-white select-none">Também faz Piercer?</span>
                                 </label>

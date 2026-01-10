@@ -93,7 +93,7 @@ const Clients: React.FC = () => {
                         <input
                             type="text"
                             placeholder="Buscar clientes..."
-                            className="w-full bg-surface-dark border border-border-dark rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-text-muted focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                            className="w-full bg-surface-dark border border-border-dark rounded-lg py-2.5 pl-10 pr-4 text-white placeholder-text-muted focus:border-primary transition-all"
                         />
                     </div>
                     <button
@@ -139,7 +139,7 @@ const Clients: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${client.status === 'Ativo' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                                                'bg-red-500/10 text-red-500 border-red-500/20'
+                                            'bg-red-500/10 text-red-500 border-red-500/20'
                                             }`}>
                                             {client.status}
                                         </span>
