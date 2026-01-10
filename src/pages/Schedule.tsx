@@ -378,7 +378,7 @@ const Schedule: React.FC = () => {
                 </div>
 
                 <div className="flex gap-3 w-full md:w-auto">
-                    <div className="flex items-center gap-2 bg-surface-dark border border-border-dark rounded-lg p-1 mr-2">
+                    <div className="flex items-center gap-2 bg-surface-dark border border-border-dark rounded-lg p-1">
                         <button className="p-2 hover:bg-white/10 rounded text-text-muted hover:text-white transition-colors">
                             <span className="material-symbols-outlined text-lg">chevron_left</span>
                         </button>
@@ -387,11 +387,6 @@ const Schedule: React.FC = () => {
                             <span className="material-symbols-outlined text-lg">chevron_right</span>
                         </button>
                     </div>
-
-                    <button className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2 whitespace-nowrap">
-                        <span className="material-symbols-outlined text-lg">add</span>
-                        <span className="hidden sm:inline">Novo Agendamento</span>
-                    </button>
                 </div>
             </div>
 

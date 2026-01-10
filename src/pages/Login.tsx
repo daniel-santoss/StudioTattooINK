@@ -100,7 +100,7 @@ const Login: React.FC = () => {
               <input type="checkbox" className="rounded border-border-dark bg-background-dark text-primary" />
               <span className="text-text-muted">Lembrar-me</span>
             </label>
-            <a href="#" className="text-primary hover:text-white transition-colors font-medium">Esqueceu a senha?</a>
+            <button onClick={() => navigate('/forgot-password')} className="text-primary hover:text-white transition-colors font-medium">Esqueceu a senha?</button>
           </div>
 
           <button

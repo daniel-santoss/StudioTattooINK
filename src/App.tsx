@@ -5,6 +5,7 @@ import Layout from './components/Layout'; // Admin/Sidebar Layout
 import ClientLayout from './components/ClientLayout'; // Public Topbar Layout
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
 
 // Admin Pages
 import Dashboard from './pages/Dashboard';
@@ -30,15 +31,15 @@ import Matchmaker from './pages/client/Matchmaker';
 
 // Component to protect routes that require client login
 const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
-    const userRole = localStorage.getItem('ink_role');
-    const location = useLocation();
+  const userRole = localStorage.getItem('ink_role');
+  const location = useLocation();
 
-    if (!userRole) {
-        // Redirect to login but save the attempted location
-        return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
-    }
+  if (!userRole) {
+    // Redirect to login but save the attempted location
+    return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
+  }
 
-    return <>{children}</>;
+  return <>{children}</>;
 };
 
 const App: React.FC = () => {
@@ -51,77 +52,78 @@ const App: React.FC = () => {
           <Route path="/match" element={<Matchmaker />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/artist-profile" element={<ArtistProfile />} />
-          
-          <Route 
-            path="/profile" 
+
+          <Route
+            path="/profile"
             element={
               <RequireAuth>
                 <Profile />
               </RequireAuth>
-            } 
+            }
           />
         </Route>
-        
+
         {/* Authenticated Routes (Clients & Admin) - Uses Sidebar Layout */}
         <Route element={<Layout />}>
-            {/* Client Protected Routes */}
-            <Route 
-                path="/my-appointments" 
-                element={
-                <RequireAuth>
-                    <ClientDashboard />
-                </RequireAuth>
-                } 
-            />
-            {/* Rota para Detalhes (Cliente) */}
-            <Route 
-                path="/my-appointments/:id" 
-                element={
-                <RequireAuth>
-                    <ClientAppointmentDetails />
-                </RequireAuth>
-                } 
-            />
-            <Route 
-                path="/book" 
-                element={
-                <RequireAuth>
-                    <Booking />
-                </RequireAuth>
-                } 
-            />
-            {/* Gallery is now Protected */}
-            <Route 
-                path="/gallery" 
-                element={
-                <RequireAuth>
-                    <Gallery />
-                </RequireAuth>
-                } 
-            />
+          {/* Client Protected Routes */}
+          <Route
+            path="/my-appointments"
+            element={
+              <RequireAuth>
+                <ClientDashboard />
+              </RequireAuth>
+            }
+          />
+          {/* Rota para Detalhes (Cliente) */}
+          <Route
+            path="/my-appointments/:id"
+            element={
+              <RequireAuth>
+                <ClientAppointmentDetails />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/book"
+            element={
+              <RequireAuth>
+                <Booking />
+              </RequireAuth>
+            }
+          />
+          {/* Gallery is now Protected */}
+          <Route
+            path="/gallery"
+            element={
+              <RequireAuth>
+                <Gallery />
+              </RequireAuth>
+            }
+          />
 
-            {/* Shared Pages with Sidebar context for logged in users */}
-            <Route path="/artists" element={<Artists />} />
+          {/* Shared Pages with Sidebar context for logged in users */}
+          <Route path="/artists" element={<Artists />} />
 
 
-            {/* Admin Routes */}
-            <Route path="/admin">
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="booking-requests" element={<BookingRequests />} />
-                <Route path="schedule" element={<Schedule />} />
-                
-                {/* Rota Detalhes Agendamento (Artista) */}
-                <Route path="appointment/:id" element={<ArtistAppointmentDetails />} />
+          {/* Admin Routes */}
+          <Route path="/admin">
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="booking-requests" element={<BookingRequests />} />
+            <Route path="schedule" element={<Schedule />} />
 
-                <Route path="clients" element={<Clients />} />
-                <Route path="staff" element={<Staff />} />
-                <Route path="requests" element={<Requests />} />
-                <Route path="history" element={<ServiceHistory />} />
-                <Route path="reports" element={<Reports />} />
-                <Route path="profile" element={<Profile />} />
-                <Route index element={<Navigate to="dashboard" replace />} />
-            </Route>
+            {/* Rota Detalhes Agendamento (Artista) */}
+            <Route path="appointment/:id" element={<ArtistAppointmentDetails />} />
+
+            <Route path="clients" element={<Clients />} />
+            <Route path="staff" element={<Staff />} />
+            <Route path="requests" element={<Requests />} />
+            <Route path="history" element={<ServiceHistory />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="profile" element={<Profile />} />
+            <Route index element={<Navigate to="dashboard" replace />} />
+          </Route>
         </Route>
 
         {/* Catch all */}
