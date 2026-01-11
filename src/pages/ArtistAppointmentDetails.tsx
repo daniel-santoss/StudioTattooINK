@@ -54,8 +54,8 @@ const artistAppointmentsDB: ArtistAppointmentView[] = [
         paymentStatus: "Sinal Pago",
         description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
         referenceImages: [
-            "/src/assets/images/tattooPiercing/tattooRealista1.jpg",
-            "/src/assets/images/tattooPiercing/tattooRealista2.jpg"
+            "/images/tattooPiercing/tattooRealista1.jpg",
+            "/images/tattooPiercing/tattooRealista2.jpg"
         ],
         medicalInfo: {
             allergies: "Nenhuma",

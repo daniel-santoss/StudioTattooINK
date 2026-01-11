@@ -64,11 +64,11 @@ const Profile: React.FC = () => {
                 experience: '5+',
                 specialties: ['Realismo', 'Preto e Cinza', 'Retratos'],
                 portfolioUrl: 'https://instagram.com/alexrivera_ink',
-                avatar: '/src/assets/images/tatuadores/tatuador1.jpg',
-                coverUrl: '/src/assets/images/tattooPiercing/tattooRealista1.jpg',
+                avatar: '/images/tatuadores/tatuador1.jpg',
+                coverUrl: '/images/tattooPiercing/tattooRealista1.jpg',
                 portfolio: [
-                    { id: 101, title: "Olho e Bússola Realista", description: "Composição com olho realista, bússola e fases da lua.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-                    { id: 102, title: "Pantera Negra com Lótus", description: "Pantera negra em preto e cinza com flor de lótus.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" }
+                    { id: 101, title: "Olho e Bússola Realista", description: "Composição com olho realista, bússola e fases da lua.", imageUrl: "/images/tattooPiercing/tattooRealista1.jpg" },
+                    { id: 102, title: "Pantera Negra com Lótus", description: "Pantera negra em preto e cinza com flor de lótus.", imageUrl: "/images/tattooPiercing/tattooRealista2.jpg" }
                 ]
             });
         } else if (userRole === 'client') {

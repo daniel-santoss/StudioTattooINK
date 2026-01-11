@@ -34,7 +34,7 @@ const Login: React.FC = () => {
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
-        <div className="absolute inset-0 bg-[url('/src/assets/images/tattooPiercing/tattooRealista1.jpg')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-[url('/images/tattooPiercing/tattooRealista1.jpg')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
       </div>
 
       <div className="w-full max-w-md bg-surface-dark border border-border-dark rounded-2xl p-8 shadow-2xl relative z-10 backdrop-blur-sm">

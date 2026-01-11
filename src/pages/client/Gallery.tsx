@@ -21,45 +21,45 @@ const Gallery: React.FC = () => {
     // Imagens locais atualizadas
     const images: GalleryImage[] = [
         // Realismo
-        { id: 1, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Olho e Bússola Realista" },
-        { id: 2, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista2.jpg", artistName: "Alex Rivera", artistId: 1, title: "Pantera Negra com Lótus" },
-        { id: 3, category: "Realismo", src: "/src/assets/images/tattooPiercing/tattooRealista4.jpg", artistName: "Alex Rivera", artistId: 1, title: "Yoshi Bordado" },
+        { id: 1, category: "Realismo", src: "/images/tattooPiercing/tattooRealista1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Olho e Bússola Realista" },
+        { id: 2, category: "Realismo", src: "/images/tattooPiercing/tattooRealista2.jpg", artistName: "Alex Rivera", artistId: 1, title: "Pantera Negra com Lótus" },
+        { id: 3, category: "Realismo", src: "/images/tattooPiercing/tattooRealista4.jpg", artistName: "Alex Rivera", artistId: 1, title: "Yoshi Bordado" },
         // Oriental
-        { id: 4, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental1.jpg", artistName: "Mika Chen", artistId: 3, title: "Irezumi Fechamento de Braços" },
-        { id: 5, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental2.jpg", artistName: "Mika Chen", artistId: 3, title: "Geisha com Sakura" },
-        { id: 6, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental3.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Japonês" },
+        { id: 4, category: "Oriental", src: "/images/tattooPiercing/tattooOriental1.jpg", artistName: "Mika Chen", artistId: 3, title: "Irezumi Fechamento de Braços" },
+        { id: 5, category: "Oriental", src: "/images/tattooPiercing/tattooOriental2.jpg", artistName: "Mika Chen", artistId: 3, title: "Geisha com Sakura" },
+        { id: 6, category: "Oriental", src: "/images/tattooPiercing/tattooOriental3.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Japonês" },
         // Old School
-        { id: 7, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld1.jpg", artistName: "Lucas Vane", artistId: 2, title: "Aku Aku Crash Bandicoot" },
-        { id: 8, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld2.jpg", artistName: "Rafael Santos", artistId: 7, title: "The Lovers - Carta de Tarô" },
-        { id: 9, category: "Old School", src: "/src/assets/images/tattooPiercing/tattooOld3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Coração Sagrado com Adaga" },
+        { id: 7, category: "Old School", src: "/images/tattooPiercing/tattooOld1.jpg", artistName: "Lucas Vane", artistId: 2, title: "Aku Aku Crash Bandicoot" },
+        { id: 8, category: "Old School", src: "/images/tattooPiercing/tattooOld2.jpg", artistName: "Rafael Santos", artistId: 7, title: "The Lovers - Carta de Tarô" },
+        { id: 9, category: "Old School", src: "/images/tattooPiercing/tattooOld3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Coração Sagrado com Adaga" },
         // Fine Line
-        { id: 10, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Carpas Koi e Flores nas Costas" },
-        { id: 11, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Cérebro, DNA e Coração" },
-        { id: 12, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooFine3.jpg", artistName: "Elena Rosa", artistId: 4, title: "Rosto Feminino Interstellar" },
+        { id: 10, category: "Fine Line", src: "/images/tattooPiercing/tattooFine1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Carpas Koi e Flores nas Costas" },
+        { id: 11, category: "Fine Line", src: "/images/tattooPiercing/tattooFine2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Cérebro, DNA e Coração" },
+        { id: 12, category: "Fine Line", src: "/images/tattooPiercing/tattooFine3.jpg", artistName: "Elena Rosa", artistId: 4, title: "Rosto Feminino Interstellar" },
         // Oriental Extra
-        { id: 13, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental4.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Yin Yang" },
-        { id: 14, category: "Oriental", src: "/src/assets/images/tattooPiercing/tattooOriental5.jpg", artistName: "Mika Chen", artistId: 3, title: "Oriental Tradicional" },
+        { id: 13, category: "Oriental", src: "/images/tattooPiercing/tattooOriental4.jpg", artistName: "Mika Chen", artistId: 3, title: "Dragão Yin Yang" },
+        { id: 14, category: "Oriental", src: "/images/tattooPiercing/tattooOriental5.jpg", artistName: "Mika Chen", artistId: 3, title: "Oriental Tradicional" },
         // Times
-        { id: 15, category: "Times", src: "/src/assets/images/tattooPiercing/tattooTime1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Águia e Símbolo Corinthians" },
-        { id: 16, category: "Times", src: "/src/assets/images/tattooPiercing/tattooTime2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Flamengo Geométrico" },
-        { id: 17, category: "Times", src: "/src/assets/images/tattooPiercing/tattooTime3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Galo Atlético Mineiro" },
+        { id: 15, category: "Times", src: "/images/tattooPiercing/tattooTime1.jpg", artistName: "Alex Rivera", artistId: 1, title: "Águia e Símbolo Corinthians" },
+        { id: 16, category: "Times", src: "/images/tattooPiercing/tattooTime2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Flamengo Geométrico" },
+        { id: 17, category: "Times", src: "/images/tattooPiercing/tattooTime3.jpg", artistName: "Rafael Santos", artistId: 7, title: "Galo Atlético Mineiro" },
         // Outros
-        { id: 18, category: "Fine Line", src: "/src/assets/images/tattooPiercing/tattooOutras1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Polvo Fine Line" },
-        { id: 19, category: "Pontilhismo", src: "/src/assets/images/tattooPiercing/tattooOutras2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Água-viva Pontilhismo" },
-        { id: 20, category: "Outros", src: "/src/assets/images/tattooPiercing/tattooOutras3.jpg", artistName: "André Costa", artistId: 6, title: "Medusa Blackwork Braço" },
-        { id: 21, category: "Outros", src: "/src/assets/images/tattooPiercing/tattooOutras4.jpg", artistName: "André Costa", artistId: 6, title: "Medusa Blackwork Mão" },
+        { id: 18, category: "Fine Line", src: "/images/tattooPiercing/tattooOutras1.jpg", artistName: "Elena Rosa", artistId: 4, title: "Polvo Fine Line" },
+        { id: 19, category: "Pontilhismo", src: "/images/tattooPiercing/tattooOutras2.jpg", artistName: "Lucas Ferreira", artistId: 5, title: "Água-viva Pontilhismo" },
+        { id: 20, category: "Outros", src: "/images/tattooPiercing/tattooOutras3.jpg", artistName: "André Costa", artistId: 6, title: "Medusa Blackwork Braço" },
+        { id: 21, category: "Outros", src: "/images/tattooPiercing/tattooOutras4.jpg", artistName: "André Costa", artistId: 6, title: "Medusa Blackwork Mão" },
         // Anime
-        { id: 22, category: "Anime", src: "/src/assets/images/tattooPiercing/tattooAnime1.jpg", artistName: "André Costa", artistId: 6, title: "Zoro e Luffy One Piece" },
-        { id: 23, category: "Anime", src: "/src/assets/images/tattooPiercing/tattooAnime3.jpg", artistName: "André Costa", artistId: 6, title: "Choso JJK Blackwork" },
+        { id: 22, category: "Anime", src: "/images/tattooPiercing/tattooAnime1.jpg", artistName: "André Costa", artistId: 6, title: "Zoro e Luffy One Piece" },
+        { id: 23, category: "Anime", src: "/images/tattooPiercing/tattooAnime3.jpg", artistName: "André Costa", artistId: 6, title: "Choso JJK Blackwork" },
         // Lettering
-        { id: 24, category: "Lettering", src: "/src/assets/images/tattooPiercing/tattooCaligrafia1.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Blessed Lettering" },
-        { id: 25, category: "Lettering", src: "/src/assets/images/tattooPiercing/tattooCaligrafia2.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Escrita nas Costas" },
-        { id: 26, category: "Lettering", src: "/src/assets/images/tattooPiercing/tattooCaligrafia3.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Frase no Braço" },
+        { id: 24, category: "Lettering", src: "/images/tattooPiercing/tattooCaligrafia1.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Blessed Lettering" },
+        { id: 25, category: "Lettering", src: "/images/tattooPiercing/tattooCaligrafia2.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Escrita nas Costas" },
+        { id: 26, category: "Lettering", src: "/images/tattooPiercing/tattooCaligrafia3.jpg", artistName: "Juliana Mendes", artistId: 8, title: "Frase no Braço" },
         // Piercing
-        { id: 27, category: "Piercing", src: "/src/assets/images/tattooPiercing/piercing.jpg", artistName: "Elena Rosa", artistId: 4, title: "Aplicação de Piercing" },
-        { id: 28, category: "Piercing", src: "/src/assets/images/tattooPiercing/piecing2.jpg", artistName: "Elena Rosa", artistId: 4, title: "Septo e Nostril" },
-        { id: 29, category: "Piercing", src: "/src/assets/images/tattooPiercing/piecing4.jpg", artistName: "Elena Rosa", artistId: 4, title: "Sobrancelha Coração" },
-        { id: 30, category: "Piercing", src: "/src/assets/images/tattooPiercing/piecing5.jpg", artistName: "Elena Rosa", artistId: 4, title: "Mix Orelha Prata" }
+        { id: 27, category: "Piercing", src: "/images/tattooPiercing/piercing.jpg", artistName: "Elena Rosa", artistId: 4, title: "Aplicação de Piercing" },
+        { id: 28, category: "Piercing", src: "/images/tattooPiercing/piecing2.jpg", artistName: "Elena Rosa", artistId: 4, title: "Septo e Nostril" },
+        { id: 29, category: "Piercing", src: "/images/tattooPiercing/piecing4.jpg", artistName: "Elena Rosa", artistId: 4, title: "Sobrancelha Coração" },
+        { id: 30, category: "Piercing", src: "/images/tattooPiercing/piecing5.jpg", artistName: "Elena Rosa", artistId: 4, title: "Mix Orelha Prata" }
     ];
 
     const [searchTerm, setSearchTerm] = useState("");

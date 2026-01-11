@@ -36,7 +36,7 @@ const appointmentsDB: AppointmentDetail[] = [
         id: 1,
         artist: "Alex Rivera",
         artistRole: "Realismo Preto e Cinza",
-        artistAvatar: "/src/assets/images/tatuadores/tatuador1.jpg",
+        artistAvatar: "/images/tatuadores/tatuador1.jpg",
         service: "Fechamento de Braço - Sessão 2",
         date: "15 Nov, 2024",
         fullDate: "Sexta-feira, 15 de Novembro de 2024",
@@ -50,15 +50,15 @@ const appointmentsDB: AppointmentDetail[] = [
         location: "Ink Studio - Sala 02",
         description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
         referenceImages: [
-            "/src/assets/images/tattooPiercing/tattooRealista1.jpg",
-            "/src/assets/images/tattooPiercing/tattooRealista2.jpg"
+            "/images/tattooPiercing/tattooRealista1.jpg",
+            "/images/tattooPiercing/tattooRealista2.jpg"
         ]
     },
     {
         id: 4,
         artist: "Elena Rosa",
         artistRole: "Fine Line",
-        artistAvatar: "/src/assets/images/tatuadores/tatuador4.jpg",
+        artistAvatar: "/images/tatuadores/tatuador4.jpg",
         service: "Fine Line Minimalista",
         date: "20 Dez, 2024",
         fullDate: "Sexta-feira, 20 de Dezembro de 2024",
@@ -72,14 +72,14 @@ const appointmentsDB: AppointmentDetail[] = [
         location: "Ink Studio - Sala 01",
         description: "Borboleta delicada no pulso com traços finos e pequenos detalhes pontilhados. Tamanho aprox. 5cm.",
         referenceImages: [
-            "/src/assets/images/tattooPiercing/tattooFine1.jpg"
+            "/images/tattooPiercing/tattooFine1.jpg"
         ]
     },
     {
         id: 5,
         artist: "Alex Rivera",
         artistRole: "Realismo",
-        artistAvatar: "/src/assets/images/tatuadores/tatuador1.jpg",
+        artistAvatar: "/images/tatuadores/tatuador1.jpg",
         service: "Retoque Realismo",
         date: "25 Nov, 2024",
         fullDate: "Segunda-feira, 25 de Novembro de 2024",
@@ -104,7 +104,7 @@ const appointmentsDB: AppointmentDetail[] = [
         id: 2,
         artist: "Lucas Vane",
         artistRole: "Neo Traditional",
-        artistAvatar: "/src/assets/images/tatuadores/tatuador2.jpg",
+        artistAvatar: "/images/tatuadores/tatuador2.jpg",
         service: "Rosa Old School",
         date: "10 Out, 2024",
         fullDate: "Quinta-feira, 10 de Outubro de 2024",
@@ -118,14 +118,14 @@ const appointmentsDB: AppointmentDetail[] = [
         location: "Ink Studio - Sala 03",
         description: "Rosa clássica old school na mão direita. Cores sólidas: Vermelho, Verde e Amarelo.",
         referenceImages: [
-            "/src/assets/images/tattooPiercing/tattooOld1.jpg"
+            "/images/tattooPiercing/tattooOld1.jpg"
         ]
     },
     {
         id: 3,
         artist: "Mika Chen",
         artistRole: "Oriental",
-        artistAvatar: "/src/assets/images/tatuadores/tatuador3.jpg",
+        artistAvatar: "/images/tatuadores/tatuador3.jpg",
         service: "Dragão Oriental",
         date: "05 Out, 2024",
         fullDate: "Sábado, 05 de Outubro de 2024",

@@ -28,14 +28,14 @@ const Artists: React.FC = () => {
       role: "Especialista em Realismo",
       bio: "Com mais de 10 anos de experiência, Alex domina a arte do realismo preto e cinza, criando retratos que parecem ganhar vida na pele.",
       styles: ["Realismo", "Preto e Cinza", "Retratos"],
-      img: "/src/assets/images/tatuadores/tatuador1.jpg",
+      img: "/images/tatuadores/tatuador1.jpg",
       rating: 4.7,
       ratingCount: 2899,
       portfolio: [
-        { id: 101, title: "Olho e Bússola Realista", description: "Composição com olho realista, bússola e fases da lua.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-        { id: 102, title: "Pantera Negra com Lótus", description: "Pantera negra em preto e cinza com flor de lótus.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-        { id: 103, title: "Águia Realista Corinthians", description: "Realismo preto e cinza com escudo do Corinthians.", imageUrl: "/src/assets/images/tattooPiercing/tattooTime1.jpg" },
-        { id: 104, title: "Yoshi Bordado", description: "Tatuagem realista do Yoshi com efeito de bordado.", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista4.jpg" }
+        { id: 101, title: "Olho e Bússola Realista", description: "Composição com olho realista, bússola e fases da lua.", imageUrl: "/images/tattooPiercing/tattooRealista1.jpg" },
+        { id: 102, title: "Pantera Negra com Lótus", description: "Pantera negra em preto e cinza com flor de lótus.", imageUrl: "/images/tattooPiercing/tattooRealista2.jpg" },
+        { id: 103, title: "Águia Realista Corinthians", description: "Realismo preto e cinza com escudo do Corinthians.", imageUrl: "/images/tattooPiercing/tattooTime1.jpg" },
+        { id: 104, title: "Yoshi Bordado", description: "Tatuagem realista do Yoshi com efeito de bordado.", imageUrl: "/images/tattooPiercing/tattooRealista4.jpg" }
       ]
     },
     {
@@ -44,7 +44,7 @@ const Artists: React.FC = () => {
       role: "Neo Tradicional",
       bio: "Lucas traz cores vibrantes e linhas ousadas. Seu estilo Neo Tradicional combina o clássico com o moderno.",
       styles: ["Neo Tradicional", "Colorido", "Botânico"],
-      img: "/src/assets/images/tatuadores/tatuador2.jpg",
+      img: "/images/tatuadores/tatuador2.jpg",
       rating: 5.0,
       ratingCount: 1450,
       portfolio: [
@@ -52,7 +52,7 @@ const Artists: React.FC = () => {
           id: 201,
           title: "Aku Aku Crash Bandicoot",
           description: "Máscara Aku Aku do Crash Bandicoot em cores vibrantes estilo Neo Tradicional.",
-          imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg"
+          imageUrl: "/images/tattooPiercing/tattooOld1.jpg"
         }
       ]
     },
@@ -62,14 +62,14 @@ const Artists: React.FC = () => {
       role: "Oriental / Irezumi",
       bio: "Especialista em grandes projetos e fechamentos corporais no estilo tradicional japonês.",
       styles: ["Oriental", "Irezumi", "Dragões"],
-      img: "/src/assets/images/tatuadores/tatuador3.jpg",
+      img: "/images/tatuadores/tatuador3.jpg",
       rating: 4.8,
       ratingCount: 920,
       portfolio: [
-        { id: 301, title: "Irezumi Fechamento de Braços", description: "Fechamento completo de braços e ombros estilo Irezumi com ondas e flores de sakura.", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-        { id: 302, title: "Geisha com Sakura", description: "Geisha com guarda-sol vermelho e flores de cerejeira.", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
-        { id: 303, title: "Dragão Japonês", description: "Dragão japonês nas costas com flores.", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" },
-        { id: 304, title: "Dragão Yin Yang", description: "Dragão estilo oriental em preto e cinza.", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" }
+        { id: 301, title: "Irezumi Fechamento de Braços", description: "Fechamento completo de braços e ombros estilo Irezumi com ondas e flores de sakura.", imageUrl: "/images/tattooPiercing/tattooOriental1.jpg" },
+        { id: 302, title: "Geisha com Sakura", description: "Geisha com guarda-sol vermelho e flores de cerejeira.", imageUrl: "/images/tattooPiercing/tattooOriental2.jpg" },
+        { id: 303, title: "Dragão Japonês", description: "Dragão japonês nas costas com flores.", imageUrl: "/images/tattooPiercing/tattooOriental3.jpg" },
+        { id: 304, title: "Dragão Yin Yang", description: "Dragão estilo oriental em preto e cinza.", imageUrl: "/images/tattooPiercing/tattooOriental4.jpg" }
       ]
     },
     {
@@ -78,16 +78,16 @@ const Artists: React.FC = () => {
       role: "Fine Line",
       bio: "Elena é especialista em tatuagens delicadas e minimalistas. Traços finos e precisos que capturam a essência da sutileza.",
       styles: ["Fine Line", "Minimalismo", "Aquarela"],
-      img: "/src/assets/images/tatuadores/tatuador4.jpg",
+      img: "/images/tatuadores/tatuador4.jpg",
       rating: 4.9,
       ratingCount: 1105,
       portfolio: [
-        { id: 401, title: "Carpas Koi e Flores nas Costas", description: "Fechamento de costas com carpas koi, peônias e fases da lua.", imageUrl: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-        { id: 402, title: "Rosto Feminino Interstellar", description: "Rosto feminino abstrato com tema espacial.", imageUrl: "/src/assets/images/tattooPiercing/tattooFine3.jpg" },
-        { id: 403, title: "Piercing", description: "Aplicação de joia em titânio com pedras swarovski.", imageUrl: "/src/assets/images/tattooPiercing/piercing.jpg" },
-        { id: 404, title: "Polvo Fine Line", description: "Polvo detalhado em traços finos.", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras1.jpg" },
-        { id: 405, title: "Septo e Nostril", description: "Piercings faciais delicados.", imageUrl: "/src/assets/images/tattooPiercing/piecing2.jpg" },
-        { id: 406, title: "Mix Orelha", description: "Composição de orelha completa.", imageUrl: "/src/assets/images/tattooPiercing/piecing5.jpg" }
+        { id: 401, title: "Carpas Koi e Flores nas Costas", description: "Fechamento de costas com carpas koi, peônias e fases da lua.", imageUrl: "/images/tattooPiercing/tattooFine1.jpg" },
+        { id: 402, title: "Rosto Feminino Interstellar", description: "Rosto feminino abstrato com tema espacial.", imageUrl: "/images/tattooPiercing/tattooFine3.jpg" },
+        { id: 403, title: "Piercing", description: "Aplicação de joia em titânio com pedras swarovski.", imageUrl: "/images/tattooPiercing/piercing.jpg" },
+        { id: 404, title: "Polvo Fine Line", description: "Polvo detalhado em traços finos.", imageUrl: "/images/tattooPiercing/tattooOutras1.jpg" },
+        { id: 405, title: "Septo e Nostril", description: "Piercings faciais delicados.", imageUrl: "/images/tattooPiercing/piecing2.jpg" },
+        { id: 406, title: "Mix Orelha", description: "Composição de orelha completa.", imageUrl: "/images/tattooPiercing/piecing5.jpg" }
       ]
     },
     {
@@ -96,13 +96,13 @@ const Artists: React.FC = () => {
       role: "Blackwork & Pontilhismo",
       bio: "Mestre em trabalhos de blackwork sólido e pontilhismo detalhado. Cria padrões hipnóticos e mandalas complexas.",
       styles: ["Blackwork", "Pontilhismo", "Mandalas"],
-      img: "/src/assets/images/tatuadores/tatuador5.jpg",
+      img: "/images/tatuadores/tatuador5.jpg",
       rating: 4.5,
       ratingCount: 780,
       portfolio: [
-        { id: 501, title: "Cérebro, DNA e Coração", description: "Composição fine line com cérebro e coração.", imageUrl: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
-        { id: 502, title: "Flamengo Geométrico", description: "Homenagem ao Flamengo com geometria.", imageUrl: "/src/assets/images/tattooPiercing/tattooTime2.jpg" },
-        { id: 503, title: "Água-viva Pontilhismo", description: "Água-viva detalhada em pontilhismo.", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras2.jpg" }
+        { id: 501, title: "Cérebro, DNA e Coração", description: "Composição fine line com cérebro e coração.", imageUrl: "/images/tattooPiercing/tattooFine2.jpg" },
+        { id: 502, title: "Flamengo Geométrico", description: "Homenagem ao Flamengo com geometria.", imageUrl: "/images/tattooPiercing/tattooTime2.jpg" },
+        { id: 503, title: "Água-viva Pontilhismo", description: "Água-viva detalhada em pontilhismo.", imageUrl: "/images/tattooPiercing/tattooOutras2.jpg" }
       ]
     },
     {
@@ -111,14 +111,14 @@ const Artists: React.FC = () => {
       role: "Aquarela & Colorido",
       bio: "Especializado em tatuagens coloridas que parecem pinturas. Seu estilo aquarela é único e vibrante.",
       styles: ["Aquarela", "Colorido", "Abstrato"],
-      img: "/src/assets/images/tatuadores/tatuador6.jpg",
+      img: "/images/tatuadores/tatuador6.jpg",
       rating: 4.9,
       ratingCount: 1230,
       portfolio: [
-        { id: 601, title: "Medusa Blackwork Braço", description: "Medusa mitológica em blackwork com pontilhismo e serpentes detalhadas.", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras3.jpg" },
-        { id: 602, title: "Zoro e Luffy One Piece", description: "Roronoa Zoro e Monkey D. Luffy do anime One Piece em estilo sketch.", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
-        { id: 603, title: "Medusa Blackwork Mão", description: "Medusa em blackwork cobrindo dorso da mão com serpentes nos dedos.", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras4.jpg" },
-        { id: 604, title: "Choso JJK Blackwork", description: "Choso de JJK em estilo blackwork detalhado.", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" }
+        { id: 601, title: "Medusa Blackwork Braço", description: "Medusa mitológica em blackwork com pontilhismo e serpentes detalhadas.", imageUrl: "/images/tattooPiercing/tattooOutras3.jpg" },
+        { id: 602, title: "Zoro e Luffy One Piece", description: "Roronoa Zoro e Monkey D. Luffy do anime One Piece em estilo sketch.", imageUrl: "/images/tattooPiercing/tattooAnime1.jpg" },
+        { id: 603, title: "Medusa Blackwork Mão", description: "Medusa em blackwork cobrindo dorso da mão com serpentes nos dedos.", imageUrl: "/images/tattooPiercing/tattooOutras4.jpg" },
+        { id: 604, title: "Choso JJK Blackwork", description: "Choso de JJK em estilo blackwork detalhado.", imageUrl: "/images/tattooPiercing/tattooAnime3.jpg" }
       ]
     },
     {
@@ -127,13 +127,13 @@ const Artists: React.FC = () => {
       role: "Old School",
       bio: "Apaixonado pelo estilo clássico americano. Cores sólidas, linhas grossas e designs atemporais.",
       styles: ["Old School", "Tradicional", "Flash"],
-      img: "/src/assets/images/tatuadores/tatuador7.jpg",
+      img: "/images/tatuadores/tatuador7.jpg",
       rating: 4.4,
       ratingCount: 650,
       portfolio: [
-        { id: 701, title: "The Lovers - Carta de Tarô", description: "Carta de tarô com mulher, caveira e dados.", imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-        { id: 702, title: "Coração Sagrado com Adaga", description: "Coração sagrado atravessado por adaga.", imageUrl: "/src/assets/images/tattooPiercing/tattooOld3.jpg" },
-        { id: 703, title: "Galo Atlético Mineiro", description: "Mascote do Galo estilo Old School.", imageUrl: "/src/assets/images/tattooPiercing/tattooTime3.jpg" }
+        { id: 701, title: "The Lovers - Carta de Tarô", description: "Carta de tarô com mulher, caveira e dados.", imageUrl: "/images/tattooPiercing/tattooOld2.jpg" },
+        { id: 702, title: "Coração Sagrado com Adaga", description: "Coração sagrado atravessado por adaga.", imageUrl: "/images/tattooPiercing/tattooOld3.jpg" },
+        { id: 703, title: "Galo Atlético Mineiro", description: "Mascote do Galo estilo Old School.", imageUrl: "/images/tattooPiercing/tattooTime3.jpg" }
       ]
     },
     {
@@ -142,13 +142,13 @@ const Artists: React.FC = () => {
       role: "Lettering & Script",
       bio: "Artista especializada em tipografia e caligrafia. Cada letra é uma obra de arte personalizada.",
       styles: ["Lettering", "Script", "Chicano"],
-      img: "/src/assets/images/tatuadores/tatuador8.jpg",
+      img: "/images/tatuadores/tatuador8.jpg",
       rating: 4.6,
       ratingCount: 890,
       portfolio: [
-        { id: 801, title: "Blessed Lettering", description: "Caligrafia 'Blessed' no pescoço.", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia1.jpg" },
-        { id: 802, title: "Escrita nas Costas", description: "Texto longo em caligrafia fina.", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia2.jpg" },
-        { id: 803, title: "Frase no Braço", description: "Frase motivacional cursiva.", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia3.jpg" }
+        { id: 801, title: "Blessed Lettering", description: "Caligrafia 'Blessed' no pescoço.", imageUrl: "/images/tattooPiercing/tattooCaligrafia1.jpg" },
+        { id: 802, title: "Escrita nas Costas", description: "Texto longo em caligrafia fina.", imageUrl: "/images/tattooPiercing/tattooCaligrafia2.jpg" },
+        { id: 803, title: "Frase no Braço", description: "Frase motivacional cursiva.", imageUrl: "/images/tattooPiercing/tattooCaligrafia3.jpg" }
       ]
     }
   ];

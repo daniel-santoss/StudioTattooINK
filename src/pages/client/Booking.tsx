@@ -4,63 +4,63 @@ import { RatingDisplay } from '../Staff';
 
 const artists = [
     {
-        id: 1, name: "Alex Rivera", role: "Especialista em Realismo", price: 150, rating: 4.7, ratingCount: 2899, img: "/src/assets/images/tatuadores/tatuador1.jpg", portfolio: [
-            { id: 101, title: "Olho e Bússola", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-            { id: 102, title: "Pantera Negra", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-            { id: 103, title: "Águia Corinthians", imageUrl: "/src/assets/images/tattooPiercing/tattooTime1.jpg" },
-            { id: 104, title: "Yoshi Bordado", imageUrl: "/src/assets/images/tattooPiercing/tattooRealista4.jpg" }
+        id: 1, name: "Alex Rivera", role: "Especialista em Realismo", price: 150, rating: 4.7, ratingCount: 2899, img: "/images/tatuadores/tatuador1.jpg", portfolio: [
+            { id: 101, title: "Olho e Bússola", imageUrl: "/images/tattooPiercing/tattooRealista1.jpg" },
+            { id: 102, title: "Pantera Negra", imageUrl: "/images/tattooPiercing/tattooRealista2.jpg" },
+            { id: 103, title: "Águia Corinthians", imageUrl: "/images/tattooPiercing/tattooTime1.jpg" },
+            { id: 104, title: "Yoshi Bordado", imageUrl: "/images/tattooPiercing/tattooRealista4.jpg" }
         ]
     },
     {
-        id: 2, name: "Lucas Vane", role: "Neo Tradicional", price: 130, rating: 5.0, ratingCount: 1450, img: "/src/assets/images/tatuadores/tatuador2.jpg", portfolio: [
-            { id: 201, title: "Aku Aku Neo Tradicional", imageUrl: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }
+        id: 2, name: "Lucas Vane", role: "Neo Tradicional", price: 130, rating: 5.0, ratingCount: 1450, img: "/images/tatuadores/tatuador2.jpg", portfolio: [
+            { id: 201, title: "Aku Aku Neo Tradicional", imageUrl: "/images/tattooPiercing/tattooOld1.jpg" }
         ]
     },
     {
-        id: 3, name: "Mika Chen", role: "Oriental", price: 180, rating: 4.8, ratingCount: 920, img: "/src/assets/images/tatuadores/tatuador3.jpg", portfolio: [
-            { id: 301, title: "Sakura e Ondas", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-            { id: 302, title: "Geisha", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
-            { id: 303, title: "Dragão Colorido", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" },
-            { id: 304, title: "Dragão Yin Yang", imageUrl: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" }
+        id: 3, name: "Mika Chen", role: "Oriental", price: 180, rating: 4.8, ratingCount: 920, img: "/images/tatuadores/tatuador3.jpg", portfolio: [
+            { id: 301, title: "Sakura e Ondas", imageUrl: "/images/tattooPiercing/tattooOriental1.jpg" },
+            { id: 302, title: "Geisha", imageUrl: "/images/tattooPiercing/tattooOriental2.jpg" },
+            { id: 303, title: "Dragão Colorido", imageUrl: "/images/tattooPiercing/tattooOriental3.jpg" },
+            { id: 304, title: "Dragão Yin Yang", imageUrl: "/images/tattooPiercing/tattooOriental4.jpg" }
         ]
     },
     {
-        id: 4, name: "Elena Rosa", role: "Fine Line", price: 120, rating: 4.9, ratingCount: 1105, img: "/src/assets/images/tatuadores/tatuador4.jpg", portfolio: [
-            { id: 401, title: "Carpas e Flores", imageUrl: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-            { id: 402, title: "Rosto Espacial", imageUrl: "/src/assets/images/tattooPiercing/tattooFine3.jpg" },
-            { id: 403, title: "Piercing", imageUrl: "/src/assets/images/tattooPiercing/piercing.jpg" },
-            { id: 404, title: "Polvo Fine Line", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras1.jpg" },
-            { id: 405, title: "Septo e Nostril", imageUrl: "/src/assets/images/tattooPiercing/piecing2.jpg" },
-            { id: 406, title: "Mix Orelha", imageUrl: "/src/assets/images/tattooPiercing/piecing5.jpg" }
+        id: 4, name: "Elena Rosa", role: "Fine Line", price: 120, rating: 4.9, ratingCount: 1105, img: "/images/tatuadores/tatuador4.jpg", portfolio: [
+            { id: 401, title: "Carpas e Flores", imageUrl: "/images/tattooPiercing/tattooFine1.jpg" },
+            { id: 402, title: "Rosto Espacial", imageUrl: "/images/tattooPiercing/tattooFine3.jpg" },
+            { id: 403, title: "Piercing", imageUrl: "/images/tattooPiercing/piercing.jpg" },
+            { id: 404, title: "Polvo Fine Line", imageUrl: "/images/tattooPiercing/tattooOutras1.jpg" },
+            { id: 405, title: "Septo e Nostril", imageUrl: "/images/tattooPiercing/piecing2.jpg" },
+            { id: 406, title: "Mix Orelha", imageUrl: "/images/tattooPiercing/piecing5.jpg" }
         ]
     },
     {
-        id: 5, name: "Lucas Ferreira", role: "Blackwork", price: 140, rating: 4.5, ratingCount: 780, img: "/src/assets/images/tatuadores/tatuador5.jpg", portfolio: [
-            { id: 501, title: "Cérebro e DNA", imageUrl: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
-            { id: 502, title: "Flamengo Geo", imageUrl: "/src/assets/images/tattooPiercing/tattooTime2.jpg" },
-            { id: 503, title: "Água-viva Pontilhismo", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras2.jpg" }
+        id: 5, name: "Lucas Ferreira", role: "Blackwork", price: 140, rating: 4.5, ratingCount: 780, img: "/images/tatuadores/tatuador5.jpg", portfolio: [
+            { id: 501, title: "Cérebro e DNA", imageUrl: "/images/tattooPiercing/tattooFine2.jpg" },
+            { id: 502, title: "Flamengo Geo", imageUrl: "/images/tattooPiercing/tattooTime2.jpg" },
+            { id: 503, title: "Água-viva Pontilhismo", imageUrl: "/images/tattooPiercing/tattooOutras2.jpg" }
         ]
     },
     {
-        id: 6, name: "André Costa", role: "Aquarela", price: 160, rating: 4.9, ratingCount: 1230, img: "/src/assets/images/tatuadores/tatuador6.jpg", portfolio: [
-            { id: 601, title: "Medusa Blackwork Braço", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras3.jpg" },
-            { id: 602, title: "Zoro e Luffy One Piece", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
-            { id: 603, title: "Medusa Blackwork Mão", imageUrl: "/src/assets/images/tattooPiercing/tattooOutras4.jpg" },
-            { id: 604, title: "Choso JJK Blackwork", imageUrl: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" }
+        id: 6, name: "André Costa", role: "Aquarela", price: 160, rating: 4.9, ratingCount: 1230, img: "/images/tatuadores/tatuador6.jpg", portfolio: [
+            { id: 601, title: "Medusa Blackwork Braço", imageUrl: "/images/tattooPiercing/tattooOutras3.jpg" },
+            { id: 602, title: "Zoro e Luffy One Piece", imageUrl: "/images/tattooPiercing/tattooAnime1.jpg" },
+            { id: 603, title: "Medusa Blackwork Mão", imageUrl: "/images/tattooPiercing/tattooOutras4.jpg" },
+            { id: 604, title: "Choso JJK Blackwork", imageUrl: "/images/tattooPiercing/tattooAnime3.jpg" }
         ]
     },
     {
-        id: 7, name: "Rafael Santos", role: "Old School", price: 125, rating: 4.4, ratingCount: 650, img: "/src/assets/images/tatuadores/tatuador7.jpg", portfolio: [
-            { id: 701, title: "Carta de Tarô", imageUrl: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-            { id: 702, title: "Coração Sagrado", imageUrl: "/src/assets/images/tattooPiercing/tattooOld3.jpg" },
-            { id: 703, title: "Galo Atlético Mineiro", imageUrl: "/src/assets/images/tattooPiercing/tattooTime3.jpg" }
+        id: 7, name: "Rafael Santos", role: "Old School", price: 125, rating: 4.4, ratingCount: 650, img: "/images/tatuadores/tatuador7.jpg", portfolio: [
+            { id: 701, title: "Carta de Tarô", imageUrl: "/images/tattooPiercing/tattooOld2.jpg" },
+            { id: 702, title: "Coração Sagrado", imageUrl: "/images/tattooPiercing/tattooOld3.jpg" },
+            { id: 703, title: "Galo Atlético Mineiro", imageUrl: "/images/tattooPiercing/tattooTime3.jpg" }
         ]
     },
     {
-        id: 8, name: "Juliana Mendes", role: "Lettering", price: 110, rating: 4.6, ratingCount: 890, img: "/src/assets/images/tatuadores/tatuador8.jpg", portfolio: [
-            { id: 801, title: "Blessed Lettering", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia1.jpg" },
-            { id: 802, title: "Escrita Costas", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia2.jpg" },
-            { id: 803, title: "Frase Braço", imageUrl: "/src/assets/images/tattooPiercing/tattooCaligrafia3.jpg" }
+        id: 8, name: "Juliana Mendes", role: "Lettering", price: 110, rating: 4.6, ratingCount: 890, img: "/images/tatuadores/tatuador8.jpg", portfolio: [
+            { id: 801, title: "Blessed Lettering", imageUrl: "/images/tattooPiercing/tattooCaligrafia1.jpg" },
+            { id: 802, title: "Escrita Costas", imageUrl: "/images/tattooPiercing/tattooCaligrafia2.jpg" },
+            { id: 803, title: "Frase Braço", imageUrl: "/images/tattooPiercing/tattooCaligrafia3.jpg" }
         ]
     }
 ];

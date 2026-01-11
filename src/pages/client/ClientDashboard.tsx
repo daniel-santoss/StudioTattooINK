@@ -22,7 +22,7 @@ const initialAppointments: Appointment[] = [
         time: "14:00",
         status: "upcoming",
         price: "R$ 1.200",
-        image: "/src/assets/images/tatuadores/tatuador1.jpg",
+        image: "/images/tatuadores/tatuador1.jpg",
     },
     {
         id: 4,
@@ -32,7 +32,7 @@ const initialAppointments: Appointment[] = [
         time: "11:00",
         status: "pending",
         price: "A confirmar",
-        image: "/src/assets/images/tatuadores/tatuador4.jpg"
+        image: "/images/tatuadores/tatuador4.jpg"
     },
     {
         id: 5,
@@ -42,7 +42,7 @@ const initialAppointments: Appointment[] = [
         time: "09:00",
         status: "rescheduling",
         price: "R$ 0",
-        image: "/src/assets/images/tatuadores/tatuador1.jpg",
+        image: "/images/tatuadores/tatuador1.jpg",
     },
     {
         id: 2,
@@ -52,7 +52,7 @@ const initialAppointments: Appointment[] = [
         time: "10:00",
         status: "completed",
         price: "R$ 450",
-        image: "/src/assets/images/tatuadores/tatuador2.jpg",
+        image: "/images/tatuadores/tatuador2.jpg",
     },
     {
         id: 3,
@@ -62,7 +62,7 @@ const initialAppointments: Appointment[] = [
         time: "16:00",
         status: "cancelled",
         price: "R$ 0",
-        image: "/src/assets/images/tatuadores/tatuador3.jpg",
+        image: "/images/tatuadores/tatuador3.jpg",
     }
 ];
 

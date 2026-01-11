@@ -66,12 +66,12 @@ const Landing: React.FC = () => {
    };
 
    const galleryPreview = [
-      { id: 1, name: "Alex Rivera", category: "Realismo", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-      { id: 3, name: "Mika Chen", category: "Oriental", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-      { id: 4, name: "Elena Rosa", category: "Fine Line", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-      { id: 13, name: "Mika Chen", category: "Oriental", img: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" },
-      { id: 22, name: "André Costa", category: "Anime", img: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
-      { id: 30, name: "Elena Rosa", category: "Piercing", img: "/src/assets/images/tattooPiercing/piecing5.jpg" }
+      { id: 1, name: "Alex Rivera", category: "Realismo", img: "/images/tattooPiercing/tattooRealista1.jpg" },
+      { id: 3, name: "Mika Chen", category: "Oriental", img: "/images/tattooPiercing/tattooOriental1.jpg" },
+      { id: 4, name: "Elena Rosa", category: "Fine Line", img: "/images/tattooPiercing/tattooFine1.jpg" },
+      { id: 13, name: "Mika Chen", category: "Oriental", img: "/images/tattooPiercing/tattooOriental4.jpg" },
+      { id: 22, name: "André Costa", category: "Anime", img: "/images/tattooPiercing/tattooAnime1.jpg" },
+      { id: 30, name: "Elena Rosa", category: "Piercing", img: "/images/tattooPiercing/piecing5.jpg" }
    ];
 
    return (
@@ -147,9 +147,9 @@ const Landing: React.FC = () => {
 
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {[
-                     { name: "Alex Rivera", style: "Realismo Preto e Cinza", img: "/src/assets/images/tatuadores/tatuador1.jpg" },
-                     { name: "Lucas Vane", style: "Neo Tradicional", img: "/src/assets/images/tatuadores/tatuador2.jpg" },
-                     { name: "Mika Chen", style: "Oriental / Irezumi", img: "/src/assets/images/tatuadores/tatuador3.jpg" }
+                     { name: "Alex Rivera", style: "Realismo Preto e Cinza", img: "/images/tatuadores/tatuador1.jpg" },
+                     { name: "Lucas Vane", style: "Neo Tradicional", img: "/images/tatuadores/tatuador2.jpg" },
+                     { name: "Mika Chen", style: "Oriental / Irezumi", img: "/images/tatuadores/tatuador3.jpg" }
                   ].map((artist, i) => (
                      <div key={i} className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-surface-dark cursor-pointer" onClick={() => navigate('/book')}>
                         {/* Removido grayscale e group-hover:grayscale-0 */}

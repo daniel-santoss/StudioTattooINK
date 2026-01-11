@@ -21,113 +21,113 @@ const Matchmaker: React.FC = () => {
             id: 1,
             name: "Alex Rivera",
             styles: ["Realismo", "Preto e Cinza", "Retratos", "Tatuagem"],
-            img: "/src/assets/images/tatuadores/tatuador1.jpg",
+            img: "/images/tatuadores/tatuador1.jpg",
             rating: 4.7,
             ratingCount: 2899,
             summary: "Muitos clientes elogiaram a precisão cirúrgica nos retratos e a leveza da mão durante sessões longas.",
             portfolio: [
-                { title: "Olho e Bússola Realista", desc: "Composição com olho realista, bússola e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-                { title: "Pantera Negra com Lótus", desc: "Pantera negra em preto e cinza com flor de lótus.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/src/assets/images/tattooPiercing/tattooTime1.jpg" }
+                { title: "Olho e Bússola Realista", desc: "Composição com olho realista, bússola e fases da lua.", img: "/images/tattooPiercing/tattooRealista1.jpg" },
+                { title: "Pantera Negra com Lótus", desc: "Pantera negra em preto e cinza com flor de lótus.", img: "/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/images/tattooPiercing/tattooTime1.jpg" }
             ]
         },
         {
             id: 2,
             name: "Lucas Vane",
             styles: ["Neo Tradicional", "Colorido", "Botânico", "Tatuagem", "Piercing"],
-            img: "/src/assets/images/tatuadores/tatuador2.jpg",
+            img: "/images/tatuadores/tatuador2.jpg",
             rating: 5.0,
             ratingCount: 1450,
             summary: "Avaliado positivamente pela saturação incrível das cores e também realiza perfurações básicas e avançadas.",
             portfolio: [
-                { title: "Aku Aku Neo Tradicional", desc: "Máscara Aku Aku do Crash Bandicoot em cores vibrantes.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }
+                { title: "Aku Aku Neo Tradicional", desc: "Máscara Aku Aku do Crash Bandicoot em cores vibrantes.", img: "/images/tattooPiercing/tattooOld1.jpg" }
             ]
         },
         {
             id: 3,
             name: "Mika Chen",
             styles: ["Oriental", "Irezumi", "Dragões", "Tatuagem"],
-            img: "/src/assets/images/tatuadores/tatuador3.jpg",
+            img: "/images/tatuadores/tatuador3.jpg",
             rating: 4.8,
             ratingCount: 920,
             summary: "Clientes destacam o respeito às tradições orientais e a fluidez como os desenhos se encaixam no corpo.",
             portfolio: [
-                { title: "Sakura e Ondas Japonesas", desc: "Fechamento de braços com flores de sakura e ondas tradicionais.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-                { title: "Geisha com Sakura", desc: "Geisha com guarda-sol vermelho e flores de cerejeira.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
-                { title: "Dragão Japonês", desc: "Dragão japonês nas costas com flores.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" },
-                { title: "Dragão Yin Yang", desc: "Dragão estilo oriental em preto e cinza.", img: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" }
+                { title: "Sakura e Ondas Japonesas", desc: "Fechamento de braços com flores de sakura e ondas tradicionais.", img: "/images/tattooPiercing/tattooOriental1.jpg" },
+                { title: "Geisha com Sakura", desc: "Geisha com guarda-sol vermelho e flores de cerejeira.", img: "/images/tattooPiercing/tattooOriental2.jpg" },
+                { title: "Dragão Japonês", desc: "Dragão japonês nas costas com flores.", img: "/images/tattooPiercing/tattooOriental3.jpg" },
+                { title: "Dragão Yin Yang", desc: "Dragão estilo oriental em preto e cinza.", img: "/images/tattooPiercing/tattooOriental4.jpg" }
             ]
         },
         {
             id: 4,
             name: "Elena Rosa",
             styles: ["Fine Line", "Minimalismo", "Escrita", "Tatuagem", "Piercing"],
-            img: "/src/assets/images/tatuadores/tatuador4.jpg",
+            img: "/images/tatuadores/tatuador4.jpg",
             rating: 4.9,
             ratingCount: 1105,
             summary: "Frequentemente citada pela delicadeza do traço fino e procedimentos de piercing delicados.",
             portfolio: [
-                { title: "Carpas Koi e Flores nas Costas", desc: "Fechamento de costas com carpas koi, peônias e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-                { title: "Rosto Feminino Interstellar", desc: "Rosto feminino abstrato com tema espacial.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" },
-                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/src/assets/images/tattooPiercing/piercing.jpg" },
-                { title: "Polvo Fine Line", desc: "Polvo detalhado em traços finos.", img: "/src/assets/images/tattooPiercing/tattooOutras1.jpg" },
-                { title: "Sobrancelha Coração", desc: "Piercing de sobrancelha diferenciado.", img: "/src/assets/images/tattooPiercing/piecing4.jpg" }
+                { title: "Carpas Koi e Flores nas Costas", desc: "Fechamento de costas com carpas koi, peônias e fases da lua.", img: "/images/tattooPiercing/tattooFine1.jpg" },
+                { title: "Rosto Feminino Interstellar", desc: "Rosto feminino abstrato com tema espacial.", img: "/images/tattooPiercing/tattooFine3.jpg" },
+                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/images/tattooPiercing/piercing.jpg" },
+                { title: "Polvo Fine Line", desc: "Polvo detalhado em traços finos.", img: "/images/tattooPiercing/tattooOutras1.jpg" },
+                { title: "Sobrancelha Coração", desc: "Piercing de sobrancelha diferenciado.", img: "/images/tattooPiercing/piecing4.jpg" }
             ]
         },
         {
             id: 5,
             name: "Lucas Ferreira",
             styles: ["Blackwork", "Geométrico", "Pontilhismo", "Tatuagem"],
-            img: "/src/assets/images/tatuadores/tatuador5.jpg",
+            img: "/images/tatuadores/tatuador5.jpg",
             rating: 4.5,
             ratingCount: 780,
             summary: "Elogiado pela solidez do preto e pela simetria perfeita nas formas geométricas complexas.",
             portfolio: [
-                { title: "Cérebro, DNA e Coração", desc: "Composição fine line com cérebro, hélice de DNA e coração anatômico.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
-                { title: "Flamengo Geométrico", desc: "Homenagem ao Flamengo com geometria.", img: "/src/assets/images/tattooPiercing/tattooTime2.jpg" },
-                { title: "Água-viva Pontilhismo", desc: "Água-viva detalhada em pontilhismo.", img: "/src/assets/images/tattooPiercing/tattooOutras2.jpg" },
-                { title: "Blackout", desc: "Cobertura sólida em preto.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" }
+                { title: "Cérebro, DNA e Coração", desc: "Composição fine line com cérebro, hélice de DNA e coração anatômico.", img: "/images/tattooPiercing/tattooFine2.jpg" },
+                { title: "Flamengo Geométrico", desc: "Homenagem ao Flamengo com geometria.", img: "/images/tattooPiercing/tattooTime2.jpg" },
+                { title: "Água-viva Pontilhismo", desc: "Água-viva detalhada em pontilhismo.", img: "/images/tattooPiercing/tattooOutras2.jpg" },
+                { title: "Blackout", desc: "Cobertura sólida em preto.", img: "/images/tattooPiercing/tattooRealista3.jpg" }
             ]
         },
         {
             id: 6,
             name: "André Costa",
             styles: ["Aquarela", "Colorido", "Sketch", "Tatuagem"],
-            img: "/src/assets/images/tatuadores/tatuador6.jpg",
+            img: "/images/tatuadores/tatuador6.jpg",
             rating: 4.9,
             ratingCount: 1230,
             summary: "Clientes adoram a mistura de cores vibrantes e o efeito de pintura fluida que ele consegue criar na pele.",
             portfolio: [
-                { title: "Caveira Mexicana Colorida", desc: "Sugar skull colorida em estilo bordado tradicional.", img: "/src/assets/images/tattooPiercing/tattooRealista3.jpg" },
-                { title: "Zoro One Piece", desc: "Sketch do Zoro de One Piece.", img: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
-                { title: "Choso JJK Blackwork", desc: "Choso detalhado.", img: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" },
-                { title: "Beija-flor", desc: "Cores vibrantes e movimento.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" }
+                { title: "Caveira Mexicana Colorida", desc: "Sugar skull colorida em estilo bordado tradicional.", img: "/images/tattooPiercing/tattooRealista3.jpg" },
+                { title: "Zoro One Piece", desc: "Sketch do Zoro de One Piece.", img: "/images/tattooPiercing/tattooAnime1.jpg" },
+                { title: "Choso JJK Blackwork", desc: "Choso detalhado.", img: "/images/tattooPiercing/tattooAnime3.jpg" },
+                { title: "Beija-flor", desc: "Cores vibrantes e movimento.", img: "/images/tattooPiercing/tattooOld3.jpg" }
             ]
         },
         {
             id: 7,
             name: "Rafael Santos",
             styles: ["Old School", "Tradicional", "Flash", "Tatuagem"],
-            img: "/src/assets/images/tatuadores/tatuador7.jpg",
+            img: "/images/tatuadores/tatuador7.jpg",
             rating: 4.4,
             ratingCount: 650,
             summary: "Apaixonado pelo estilo clássico americano. Cores sólidas, linhas grossas e designs atemporais.",
             portfolio: [
-                { title: "The Lovers - Carta de Tarô", desc: "Carta de tarô com mulher, caveira e dados.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-                { title: "Coração Sagrado com Adaga", desc: "Coração sagrado atravessado por adaga com chamas.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" },
-                { title: "Galo Atlético Mineiro", desc: "Mascote do Galo estilo Old School.", img: "/src/assets/images/tattooPiercing/tattooTime3.jpg" }
+                { title: "The Lovers - Carta de Tarô", desc: "Carta de tarô com mulher, caveira e dados.", img: "/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Coração Sagrado com Adaga", desc: "Coração sagrado atravessado por adaga com chamas.", img: "/images/tattooPiercing/tattooOld3.jpg" },
+                { title: "Galo Atlético Mineiro", desc: "Mascote do Galo estilo Old School.", img: "/images/tattooPiercing/tattooTime3.jpg" }
             ]
         },
         {
             id: 8,
             name: "Juliana Mendes",
             styles: ["Lettering", "Script", "Chicano", "Tatuagem"],
-            img: "/src/assets/images/tatuadores/tatuador8.jpg",
+            img: "/images/tatuadores/tatuador8.jpg",
             rating: 4.6,
             ratingCount: 890,
             summary: "Especialista em tipografia e caligrafia. Cada letra é uma obra de arte personalizada.",
             portfolio: [
-                { title: "Nome Minimalista", desc: "Tipografia clean e moderna.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" }
+                { title: "Nome Minimalista", desc: "Tipografia clean e moderna.", img: "/images/tattooPiercing/tattooFine3.jpg" }
             ]
         }
     ];
@@ -239,7 +239,7 @@ const Matchmaker: React.FC = () => {
                                 onClick={() => handleSelect('serviceType', 'Tatuagem')}
                                 className="group h-48 bg-surface-dark hover:bg-surface-light border border-border-dark hover:border-primary/50 rounded-2xl transition-all flex flex-col items-center justify-center gap-4 relative overflow-hidden"
                             >
-                                <div className="absolute inset-0 bg-[url('/src/assets/images/tattooPiercing/tattooRealista1.jpg')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                                <div className="absolute inset-0 bg-[url('/images/tattooPiercing/tattooRealista1.jpg')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
                                 <span className="material-symbols-outlined text-5xl text-white relative z-10 drop-shadow-lg">ink_pen</span>
                                 <span className="text-2xl font-bold text-white uppercase tracking-widest relative z-10 group-hover:scale-105 transition-transform">Tatuagem</span>
                             </button>
@@ -248,7 +248,7 @@ const Matchmaker: React.FC = () => {
                                 onClick={() => handleSelect('serviceType', 'Piercing')}
                                 className="group h-48 bg-surface-dark hover:bg-surface-light border border-border-dark hover:border-blue-500/50 rounded-2xl transition-all flex flex-col items-center justify-center gap-4 relative overflow-hidden"
                             >
-                                <div className="absolute inset-0 bg-[url('/src/assets/images/tattooPiercing/piercing.jpg')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                                <div className="absolute inset-0 bg-[url('/images/tattooPiercing/piercing.jpg')] bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"></div>
                                 <span className="material-symbols-outlined text-5xl text-white relative z-10 drop-shadow-lg">diamond</span>
                                 <span className="text-2xl font-bold text-white uppercase tracking-widest relative z-10 group-hover:scale-105 transition-transform">Piercing</span>
                             </button>

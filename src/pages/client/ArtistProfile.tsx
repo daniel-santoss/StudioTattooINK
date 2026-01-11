@@ -20,15 +20,15 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "https://instagram.com/alexrivera_ink",
             experience: "Mais de 10 anos",
             styles: ["Realismo", "Preto e Cinza", "Retratos"],
-            img: "/src/assets/images/tatuadores/tatuador1.jpg",
+            img: "/images/tatuadores/tatuador1.jpg",
             rating: 4.7,
             ratingCount: 2899,
             bio: "Especialista em realismo preto e cinza com mais de 10 anos de mercado. Busco sempre eternizar momentos e histórias na pele dos meus clientes com a máxima precisão.",
             portfolio: [
-                { title: "Olho e Bússola Realista", desc: "Composição com olho realista, bússola e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooRealista1.jpg" },
-                { title: "Pantera Negra com Lótus", desc: "Pantera negra em preto e cinza com flor de lótus.", img: "/src/assets/images/tattooPiercing/tattooRealista2.jpg" },
-                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/src/assets/images/tattooPiercing/tattooTime1.jpg" },
-                { title: "Yoshi Bordado", desc: "Tatuagem realista do Yoshi com efeito de bordado.", img: "/src/assets/images/tattooPiercing/tattooRealista4.jpg" }
+                { title: "Olho e Bússola Realista", desc: "Composição com olho realista, bússola e fases da lua.", img: "/images/tattooPiercing/tattooRealista1.jpg" },
+                { title: "Pantera Negra com Lótus", desc: "Pantera negra em preto e cinza com flor de lótus.", img: "/images/tattooPiercing/tattooRealista2.jpg" },
+                { title: "Águia Realista Corinthians", desc: "Realismo preto e cinza com escudo do Corinthians.", img: "/images/tattooPiercing/tattooTime1.jpg" },
+                { title: "Yoshi Bordado", desc: "Tatuagem realista do Yoshi com efeito de bordado.", img: "/images/tattooPiercing/tattooRealista4.jpg" }
             ]
         },
         {
@@ -40,19 +40,19 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "https://instagram.com/lucasvane_ink",
             experience: "5 anos",
             styles: ["Neo Tradicional", "Colorido", "Botânico"],
-            img: "/src/assets/images/tatuadores/tatuador2.jpg",
+            img: "/images/tatuadores/tatuador2.jpg",
             rating: 5.0,
             ratingCount: 1450,
             bio: "Lucas traz cores vibrantes e linhas ousadas. Seu estilo Neo Tradicional combina o clássico com o moderno, criando peças únicas e cheias de vida.",
             portfolio: [
-                { title: "Aku Aku Crash Bandicoot", desc: "Máscara Aku Aku do Crash Bandicoot em cores vibrantes estilo Neo Tradicional.", img: "/src/assets/images/tattooPiercing/tattooOld1.jpg" }
+                { title: "Aku Aku Crash Bandicoot", desc: "Máscara Aku Aku do Crash Bandicoot em cores vibrantes estilo Neo Tradicional.", img: "/images/tattooPiercing/tattooOld1.jpg" }
             ]
         },
         {
             id: 3,
             name: "Mika Chen",
             role: "Tatuadora",
-            img: "/src/assets/images/tatuadores/tatuador3.jpg",
+            img: "/images/tatuadores/tatuador3.jpg",
             rating: 4.8,
             ratingCount: 920,
             styles: ["Oriental", "Irezumi", "Dragões"],
@@ -62,17 +62,17 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "instagram.com/mikachen_ink",
             experience: "8 anos",
             portfolio: [
-                { title: "Irezumi Fechamento de Braços", desc: "Fechamento completo de braços e ombros estilo Irezumi com ondas e flores de sakura.", img: "/src/assets/images/tattooPiercing/tattooOriental1.jpg" },
-                { title: "Geisha com Sakura", desc: "Geisha com guarda-sol vermelho e flores de cerejeira.", img: "/src/assets/images/tattooPiercing/tattooOriental2.jpg" },
-                { title: "Dragão Japonês", desc: "Dragão japonês nas costas com flores.", img: "/src/assets/images/tattooPiercing/tattooOriental3.jpg" },
-                { title: "Dragão Yin Yang", desc: "Dragão estilo oriental em preto e cinza envolvendo símbolo Yin Yang.", img: "/src/assets/images/tattooPiercing/tattooOriental4.jpg" }
+                { title: "Irezumi Fechamento de Braços", desc: "Fechamento completo de braços e ombros estilo Irezumi com ondas e flores de sakura.", img: "/images/tattooPiercing/tattooOriental1.jpg" },
+                { title: "Geisha com Sakura", desc: "Geisha com guarda-sol vermelho e flores de cerejeira.", img: "/images/tattooPiercing/tattooOriental2.jpg" },
+                { title: "Dragão Japonês", desc: "Dragão japonês nas costas com flores.", img: "/images/tattooPiercing/tattooOriental3.jpg" },
+                { title: "Dragão Yin Yang", desc: "Dragão estilo oriental em preto e cinza envolvendo símbolo Yin Yang.", img: "/images/tattooPiercing/tattooOriental4.jpg" }
             ]
         },
         {
             id: 4,
             name: "Elena Rosa",
             role: "Tatuadora & Piercer",
-            img: "/src/assets/images/tatuadores/tatuador4.jpg",
+            img: "/images/tatuadores/tatuador4.jpg",
             rating: 4.9,
             ratingCount: 1105,
             styles: ["Fine Line", "Minimalismo", "Escrita"],
@@ -82,20 +82,20 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "instagram.com/elenarosa_ink",
             experience: "4 anos",
             portfolio: [
-                { title: "Carpas Koi e Flores nas Costas", desc: "Fechamento de costas com carpas koi, peônias e fases da lua.", img: "/src/assets/images/tattooPiercing/tattooFine1.jpg" },
-                { title: "Rosto Feminino Interstellar", desc: "Rosto feminino abstrato com tema espacial.", img: "/src/assets/images/tattooPiercing/tattooFine3.jpg" },
-                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/src/assets/images/tattooPiercing/piercing.jpg" },
-                { title: "Polvo Fine Line", desc: "Polvo detalhado em traços finos e delicados.", img: "/src/assets/images/tattooPiercing/tattooOutras1.jpg" },
-                { title: "Septo e Nostril", desc: "Combinação delicada de piercing no septo e nostril com joias douradas.", img: "/src/assets/images/tattooPiercing/piecing2.jpg" },
-                { title: "Sobrancelha Coração", desc: "Joia em formato de coração aplicada na sobrancelha.", img: "/src/assets/images/tattooPiercing/piecing4.jpg" },
-                { title: "Mix Orelha Prata", desc: "Composição completa na orelha com joias prateadas e correntes.", img: "/src/assets/images/tattooPiercing/piecing5.jpg" }
+                { title: "Carpas Koi e Flores nas Costas", desc: "Fechamento de costas com carpas koi, peônias e fases da lua.", img: "/images/tattooPiercing/tattooFine1.jpg" },
+                { title: "Rosto Feminino Interstellar", desc: "Rosto feminino abstrato com tema espacial.", img: "/images/tattooPiercing/tattooFine3.jpg" },
+                { title: "Piercing", desc: "Aplicação de joia em titânio com pedras swarovski.", img: "/images/tattooPiercing/piercing.jpg" },
+                { title: "Polvo Fine Line", desc: "Polvo detalhado em traços finos e delicados.", img: "/images/tattooPiercing/tattooOutras1.jpg" },
+                { title: "Septo e Nostril", desc: "Combinação delicada de piercing no septo e nostril com joias douradas.", img: "/images/tattooPiercing/piecing2.jpg" },
+                { title: "Sobrancelha Coração", desc: "Joia em formato de coração aplicada na sobrancelha.", img: "/images/tattooPiercing/piecing4.jpg" },
+                { title: "Mix Orelha Prata", desc: "Composição completa na orelha com joias prateadas e correntes.", img: "/images/tattooPiercing/piecing5.jpg" }
             ]
         },
         {
             id: 5,
             name: "Lucas Ferreira",
             role: "Tatuador",
-            img: "/src/assets/images/tatuadores/tatuador5.jpg",
+            img: "/images/tatuadores/tatuador5.jpg",
             rating: 4.5,
             ratingCount: 780,
             styles: ["Blackwork", "Geométrico", "Pontilhismo"],
@@ -105,16 +105,16 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "instagram.com/lucasferreira_ink",
             experience: "3 anos",
             portfolio: [
-                { title: "Cérebro, DNA e Coração", desc: "Composição fine line com cérebro, hélice de DNA e coração anatômico.", img: "/src/assets/images/tattooPiercing/tattooFine2.jpg" },
-                { title: "Flamengo Geométrico", desc: "Homenagem ao Flamengo com elementos geométricos e coração anatômico.", img: "/src/assets/images/tattooPiercing/tattooTime2.jpg" },
-                { title: "Água-viva Pontilhismo", desc: "Água-viva detalhada feita em pontilhismo.", img: "/src/assets/images/tattooPiercing/tattooOutras2.jpg" }
+                { title: "Cérebro, DNA e Coração", desc: "Composição fine line com cérebro, hélice de DNA e coração anatômico.", img: "/images/tattooPiercing/tattooFine2.jpg" },
+                { title: "Flamengo Geométrico", desc: "Homenagem ao Flamengo com elementos geométricos e coração anatômico.", img: "/images/tattooPiercing/tattooTime2.jpg" },
+                { title: "Água-viva Pontilhismo", desc: "Água-viva detalhada feita em pontilhismo.", img: "/images/tattooPiercing/tattooOutras2.jpg" }
             ]
         },
         {
             id: 6,
             name: "André Costa",
             role: "Tatuador",
-            img: "/src/assets/images/tatuadores/tatuador6.jpg",
+            img: "/images/tatuadores/tatuador6.jpg",
             rating: 4.9,
             ratingCount: 1230,
             styles: ["Aquarela", "Colorido", "Sketch"],
@@ -124,17 +124,17 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "instagram.com/andrecosta_ink",
             experience: "6 anos",
             portfolio: [
-                { title: "Medusa Blackwork Braço", desc: "Medusa mitológica em blackwork com pontilhismo e serpentes detalhadas.", img: "/src/assets/images/tattooPiercing/tattooOutras3.jpg" },
-                { title: "Zoro e Luffy One Piece", desc: "Roronoa Zoro e Monkey D. Luffy do anime One Piece em estilo sketch preto e cinza.", img: "/src/assets/images/tattooPiercing/tattooAnime1.jpg" },
-                { title: "Medusa Blackwork Mão", desc: "Medusa em blackwork cobrindo dorso da mão com serpentes que se estendem pelos dedos.", img: "/src/assets/images/tattooPiercing/tattooOutras4.jpg" },
-                { title: "Choso JJK Blackwork", desc: "Choso de JJK em estilo blackwork detalhado.", img: "/src/assets/images/tattooPiercing/tattooAnime3.jpg" }
+                { title: "Medusa Blackwork Braço", desc: "Medusa mitológica em blackwork com pontilhismo e serpentes detalhadas.", img: "/images/tattooPiercing/tattooOutras3.jpg" },
+                { title: "Zoro e Luffy One Piece", desc: "Roronoa Zoro e Monkey D. Luffy do anime One Piece em estilo sketch preto e cinza.", img: "/images/tattooPiercing/tattooAnime1.jpg" },
+                { title: "Medusa Blackwork Mão", desc: "Medusa em blackwork cobrindo dorso da mão com serpentes que se estendem pelos dedos.", img: "/images/tattooPiercing/tattooOutras4.jpg" },
+                { title: "Choso JJK Blackwork", desc: "Choso de JJK em estilo blackwork detalhado.", img: "/images/tattooPiercing/tattooAnime3.jpg" }
             ]
         },
         {
             id: 7,
             name: "Rafael Santos",
             role: "Tatuador",
-            img: "/src/assets/images/tatuadores/tatuador7.jpg",
+            img: "/images/tatuadores/tatuador7.jpg",
             rating: 4.4,
             ratingCount: 650,
             styles: ["Old School", "Tradicional", "Flash"],
@@ -144,16 +144,16 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "instagram.com/rafaelsantos_ink",
             experience: "7 anos",
             portfolio: [
-                { title: "The Lovers - Carta de Tarô", desc: "Carta de tarô com mulher, caveira e dados.", img: "/src/assets/images/tattooPiercing/tattooOld2.jpg" },
-                { title: "Coração Sagrado com Adaga", desc: "Coração sagrado atravessado por adaga com chamas.", img: "/src/assets/images/tattooPiercing/tattooOld3.jpg" },
-                { title: "Galo Atlético Mineiro", desc: "Escudo e mascote do Atlético Mineiro em estilo Old School/Realismo.", img: "/src/assets/images/tattooPiercing/tattooTime3.jpg" }
+                { title: "The Lovers - Carta de Tarô", desc: "Carta de tarô com mulher, caveira e dados.", img: "/images/tattooPiercing/tattooOld2.jpg" },
+                { title: "Coração Sagrado com Adaga", desc: "Coração sagrado atravessado por adaga com chamas.", img: "/images/tattooPiercing/tattooOld3.jpg" },
+                { title: "Galo Atlético Mineiro", desc: "Escudo e mascote do Atlético Mineiro em estilo Old School/Realismo.", img: "/images/tattooPiercing/tattooTime3.jpg" }
             ]
         },
         {
             id: 8,
             name: "Juliana Mendes",
             role: "Tatuadora",
-            img: "/src/assets/images/tatuadores/tatuador8.jpg",
+            img: "/images/tatuadores/tatuador8.jpg",
             rating: 4.6,
             ratingCount: 890,
             styles: ["Lettering", "Script", "Chicano"],
@@ -163,9 +163,9 @@ const ArtistProfile: React.FC = () => {
             portfolioLink: "instagram.com/julianamendes_ink",
             experience: "5 anos",
             portfolio: [
-                { title: "Blessed Lettering", desc: "Caligrafia 'Blessed' no pescoço.", img: "/src/assets/images/tattooPiercing/tattooCaligrafia1.jpg" },
-                { title: "Escrita nas Costas", desc: "Texto longo em caligrafia fina nas costas.", img: "/src/assets/images/tattooPiercing/tattooCaligrafia2.jpg" },
-                { title: "Frase no Braço", desc: "Frase motivacional com fonte cursiva no braço.", img: "/src/assets/images/tattooPiercing/tattooCaligrafia3.jpg" }
+                { title: "Blessed Lettering", desc: "Caligrafia 'Blessed' no pescoço.", img: "/images/tattooPiercing/tattooCaligrafia1.jpg" },
+                { title: "Escrita nas Costas", desc: "Texto longo em caligrafia fina nas costas.", img: "/images/tattooPiercing/tattooCaligrafia2.jpg" },
+                { title: "Frase no Braço", desc: "Frase motivacional com fonte cursiva no braço.", img: "/images/tattooPiercing/tattooCaligrafia3.jpg" }
             ]
         }
     ];

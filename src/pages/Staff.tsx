@@ -25,7 +25,7 @@ const initialStaff: StaffMember[] = [
         status: "Disponível",
         email: "alex@inkstudio.com",
         phone: "(11) 99999-0001",
-        avatar: "/src/assets/images/tatuadores/tatuador1.jpg",
+        avatar: "/images/tatuadores/tatuador1.jpg",
         performance: { revenue: "R$ 12.5k", rating: 4.7, ratingCount: 2899 }
     },
     {
@@ -37,7 +37,7 @@ const initialStaff: StaffMember[] = [
         status: "Em Sessão",
         email: "lucas@inkstudio.com",
         phone: "(11) 99999-0002",
-        avatar: "/src/assets/images/tatuadores/tatuador2.jpg",
+        avatar: "/images/tatuadores/tatuador2.jpg",
         performance: { revenue: "R$ 9.2k", rating: 5.0, ratingCount: 1450 }
     },
     {
@@ -49,7 +49,7 @@ const initialStaff: StaffMember[] = [
         status: "Folga",
         email: "mika@inkstudio.com",
         phone: "(11) 99999-0003",
-        avatar: "/src/assets/images/tatuadores/tatuador3.jpg",
+        avatar: "/images/tatuadores/tatuador3.jpg",
         performance: { revenue: "R$ 15.1k", rating: 4.8, ratingCount: 920 }
     },
     {
@@ -61,7 +61,7 @@ const initialStaff: StaffMember[] = [
         status: "Disponível",
         email: "elena@inkstudio.com",
         phone: "(11) 99999-0004",
-        avatar: "/src/assets/images/tatuadores/tatuador4.jpg",
+        avatar: "/images/tatuadores/tatuador4.jpg",
         performance: { revenue: "R$ 11.8k", rating: 4.9, ratingCount: 1105 }
     },
     {
@@ -73,7 +73,7 @@ const initialStaff: StaffMember[] = [
         status: "Disponível",
         email: "ferreira@inkstudio.com",
         phone: "(11) 99999-0005",
-        avatar: "/src/assets/images/tatuadores/tatuador5.jpg",
+        avatar: "/images/tatuadores/tatuador5.jpg",
         performance: { revenue: "R$ 8.5k", rating: 4.5, ratingCount: 780 }
     },
     {
@@ -85,7 +85,7 @@ const initialStaff: StaffMember[] = [
         status: "Em Sessão",
         email: "andre@inkstudio.com",
         phone: "(11) 99999-0006",
-        avatar: "/src/assets/images/tatuadores/tatuador6.jpg",
+        avatar: "/images/tatuadores/tatuador6.jpg",
         performance: { revenue: "R$ 13.2k", rating: 4.9, ratingCount: 1230 }
     },
     {
@@ -97,7 +97,7 @@ const initialStaff: StaffMember[] = [
         status: "Folga",
         email: "rafael@inkstudio.com",
         phone: "(11) 99999-0007",
-        avatar: "/src/assets/images/tatuadores/tatuador7.jpg",
+        avatar: "/images/tatuadores/tatuador7.jpg",
         performance: { revenue: "R$ 7.8k", rating: 4.4, ratingCount: 650 }
     },
     {
@@ -109,7 +109,7 @@ const initialStaff: StaffMember[] = [
         status: "Disponível",
         email: "juliana@inkstudio.com",
         phone: "(11) 99999-0008",
-        avatar: "/src/assets/images/tatuadores/tatuador8.jpg",
+        avatar: "/images/tatuadores/tatuador8.jpg",
         performance: { revenue: "R$ 10.1k", rating: 4.6, ratingCount: 890 }
     }
 ];
