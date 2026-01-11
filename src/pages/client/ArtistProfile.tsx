@@ -9,7 +9,6 @@ const ArtistProfile: React.FC = () => {
     const artistId = searchParams.get('id');
     const [artist, setArtist] = useState<any | null>(null);
 
-    // Mock de dados estendido para incluir campos do design de referência
     const artistsData = [
         {
             id: 1,

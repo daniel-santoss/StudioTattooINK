@@ -13,7 +13,6 @@ const Landing: React.FC = () => {
    const navigate = useNavigate();
    const location = useLocation();
 
-   // Efeito para rolar automaticamente se vier de outra página com state
    useEffect(() => {
       if (location.state && (location.state as any).scrollTo) {
          const sectionId = (location.state as any).scrollTo;
@@ -27,9 +26,8 @@ const Landing: React.FC = () => {
                   top: offsetPosition,
                   behavior: "smooth"
                });
-            }, 100); // Pequeno delay para garantir renderização
+            }, 100);
          }
-         // Limpar o state para não rolar novamente ao recarregar
          window.history.replaceState({}, document.title);
       }
    }, [location]);
@@ -40,7 +38,6 @@ const Landing: React.FC = () => {
       if (isLoggedIn) {
          navigate('/artists');
       } else {
-         // Redireciona para login, e depois volta para artistas
          navigate('/login?redirect=/artists');
       }
    };
@@ -152,7 +149,6 @@ const Landing: React.FC = () => {
                      { name: "Mika Chen", style: "Oriental / Irezumi", img: "/images/tatuadores/tatuador3.jpg" }
                   ].map((artist, i) => (
                      <div key={i} className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-surface-dark cursor-pointer" onClick={() => navigate('/book')}>
-                        {/* Removido grayscale e group-hover:grayscale-0 */}
                         <img src={artist.img} alt={artist.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90"></div>
                         <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -168,7 +164,6 @@ const Landing: React.FC = () => {
                   ))}
                </div>
 
-               {/* Botão Ver Todos Mobile */}
                <div className="mt-8 text-center md:hidden">
                   <button onClick={handleViewAllArtists} className="flex items-center justify-center w-full gap-2 text-primary font-bold uppercase text-xs tracking-widest hover:text-white transition-colors py-4 border border-zinc-800 rounded-xl">
                      Ver Todos <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -190,13 +185,11 @@ const Landing: React.FC = () => {
                   </button>
                </div>
 
-               {/* Imagens com altura aumentada (aspect-[3/5]) mantendo grid de 3 colunas para equilíbrio. Sem overlay e sem clique. */}
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {galleryPreview.map((item, i) => (
                      <div key={i} className="aspect-[3/5] rounded-2xl overflow-hidden bg-surface-dark border border-white/5 relative shadow-lg group">
                         <img src={item.img} className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" alt={`Tatuagem por ${item.name}`} />
 
-                        {/* Overlay com Categoria e Botão - Mesmo estilo da Gallery.tsx */}
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4 backdrop-blur-sm">
                            <span className="text-white font-bold text-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Feito por {item.name}</span>
                            <button

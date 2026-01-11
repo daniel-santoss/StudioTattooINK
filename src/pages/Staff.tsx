@@ -12,7 +12,7 @@ interface StaffMember {
     phone: string;
     avatar: string;
     performance: { revenue: string; rating: number; ratingCount: number };
-    password?: string; // For creating new members
+    password?: string;
 }
 
 const initialStaff: StaffMember[] = [
@@ -114,7 +114,6 @@ const initialStaff: StaffMember[] = [
     }
 ];
 
-// Helper Component for Fractional Stars with Filled Background
 export const RatingDisplay: React.FC<{
     rating: number;
     count?: number;
@@ -138,14 +137,12 @@ export const RatingDisplay: React.FC<{
                         const fillAmount = Math.min(Math.max(rating - (starIndex - 1), 0), 1) * 100;
                         return (
                             <div key={starIndex} className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-                                {/* Background Star (Solid but Dimmed) */}
                                 <span
                                     className={`material-symbols-outlined absolute ${bgColor} select-none leading-none`}
                                     style={{ fontSize: size, fontVariationSettings: "'FILL' 1", lineHeight: 1 }}
                                 >
                                     star
                                 </span>
-                                {/* Foreground Star (Filled with Clip) */}
                                 <div
                                     className="absolute left-0 top-0 overflow-hidden select-none h-full flex items-center"
                                     style={{ width: `${fillAmount}%` }}

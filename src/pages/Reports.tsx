@@ -64,7 +64,6 @@ const Reports: React.FC = () => {
     const [selectedReport, setSelectedReport] = useState<Report | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Filter States
     const [showFilters, setShowFilters] = useState(false);
     const [filterSeverity, setFilterSeverity] = useState('Todas');
     const [filterStatus, setFilterStatus] = useState('Todos');
@@ -82,7 +81,6 @@ const Reports: React.FC = () => {
     };
 
     const handleViewProfile = () => {
-        // Em uma aplicação real, passaria o ID do usuário: navigate(`/admin/profile/${id}`)
         navigate('/admin/profile');
     };
 
@@ -102,7 +100,6 @@ const Reports: React.FC = () => {
         }
     };
 
-    // Date parsing helper for sorting
     const parseDate = (dateStr: string) => {
         const months: { [key: string]: string } = {
             'Jan': 'Jan', 'Fev': 'Feb', 'Mar': 'Mar', 'Abr': 'Apr', 'Mai': 'May', 'Jun': 'Jun',
@@ -117,7 +114,6 @@ const Reports: React.FC = () => {
         return new Date(`${month} ${day} ${year}`).getTime();
     };
 
-    // Filter Logic
     const filteredReports = reports
         .filter(r => filterSeverity === 'Todas' || r.severity === filterSeverity)
         .filter(r => filterStatus === 'Todos' || r.status === filterStatus)
@@ -207,7 +203,6 @@ const Reports: React.FC = () => {
             <div className="grid grid-cols-1 gap-4">
                 {filteredReports.length > 0 ? filteredReports.map((report) => (
                     <div key={report.id} className="bg-surface-dark border border-border-dark rounded-xl p-5 flex flex-col md:flex-row gap-6 hover:border-primary/30 transition-all group animate-fade-in">
-                        {/* Imagem do Relator (Destaque Esquerdo) */}
                         <div className="flex flex-col items-center justify-center gap-2 min-w-[80px]">
                             <img
                                 src={report.reporterImage}
@@ -219,7 +214,6 @@ const Reports: React.FC = () => {
                             </span>
                         </div>
 
-                        {/* Conteúdo */}
                         <div className="flex-1">
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
                                 <h3 className="text-lg font-bold text-white">{report.category}</h3>
@@ -246,7 +240,6 @@ const Reports: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Status e Ações */}
                         <div className="flex flex-row md:flex-col items-center justify-between md:justify-center gap-3 border-t md:border-t-0 md:border-l border-border-dark pt-4 md:pt-0 md:pl-6 min-w-[140px]">
                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border w-full text-center ${getSeverityStyle(report.severity)}`}>
                                 {report.severity}

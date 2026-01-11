@@ -71,7 +71,6 @@ const ClientDashboard: React.FC = () => {
     const [appointments] = useState<Appointment[]>(initialAppointments);
     const [statusFilter, setStatusFilter] = useState<'all' | 'upcoming' | 'completed' | 'cancelled' | 'pending'>('all');
 
-    // Filter Logic
     const filteredAppointments = appointments.filter(apt => {
         if (statusFilter === 'all') return true;
         if (statusFilter === 'pending' && apt.status === 'rescheduling') return true;
@@ -118,7 +117,6 @@ const ClientDashboard: React.FC = () => {
                 </div>
             </div>
 
-            {/* Status Filter */}
             <div className="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-thin scrollbar-thumb-surface-light">
                 {[
                     { id: 'all', label: 'Todos' },
@@ -140,22 +138,17 @@ const ClientDashboard: React.FC = () => {
                 ))}
             </div>
 
-            {/* Appointment List (Cards Limpos) */}
             <div className="flex flex-col gap-4 animate-fade-in">
                 {filteredAppointments.length > 0 ? filteredAppointments.map((apt) => (
                     <div
                         key={apt.id}
                         className="bg-[#121212] border border-zinc-800 rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-center hover:border-primary/40 transition-all duration-300 group relative overflow-hidden"
                     >
-                        {/* Visual Status Indicator Strip */}
                         <div className={`absolute left-0 top-0 bottom-0 w-1 ${apt.status === 'upcoming' ? 'bg-blue-500' :
                             apt.status === 'completed' ? 'bg-emerald-500' :
                                 apt.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
                             }`}></div>
-
-                        {/* Info Container */}
                         <div className="flex flex-1 items-center gap-6 w-full">
-                            {/* Image */}
                             <div className="relative shrink-0">
                                 <img
                                     src={apt.image}
@@ -164,7 +157,6 @@ const ClientDashboard: React.FC = () => {
                                 />
                             </div>
 
-                            {/* Text Details */}
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-3 mb-1">
                                     <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider border ${getStatusBadge(apt.status)}`}>
@@ -180,7 +172,6 @@ const ClientDashboard: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Action Button - Apenas UM botão claro */}
                         <div className="w-full md:w-auto">
                             <button
                                 onClick={() => navigate(`/my-appointments/${apt.id}`)}
