@@ -1,6 +1,6 @@
 # 🖋️ Ink Studio Tattoo (Front-end)
 
-Sistema de gerenciamento para estúdios de **tatuagem e piercing**, desenvolvido para conectar clientes a artistas e facilitar a administração do estúdio. O projeto utiliza uma **arquitetura moderna baseada em React 19 e Vite**, com foco em organização, escalabilidade e experiência do usuário.
+Sistema de gerenciamento para estúdios de **tatuagem e piercing**, desenvolvido para conectar clientes a artistas e facilitar a administração do estúdio. O projeto utiliza uma **arquitetura moderna baseada em React 19 e Vite**, com ênfase na organização, escalabilidade e experiência do usuário.
 
 ---
 
@@ -13,6 +13,38 @@ O projeto foi construído com as seguintes tecnologias principais:
 * **Roteamento:** React Router Dom `v7.11.0`
 * **Estilização:** Tailwind CSS
 * **Assets:** Imagens e arquivos estáticos
+
+---
+
+## 🎨 User Interface & User Experience
+
+O projeto foi pensado com foco em **UI** e **UX**, buscando oferecer uma navegação intuitiva, visual moderno e fluidez na interação entre clientes, artistas e administradores.
+
+### ✨ Principais Destaques de Design
+
+* **Design centrado no usuário**: Fluxos claros para agendamento, navegação e gestão de informações
+* **Layouts responsivos**: Adaptação para diferentes resoluções de tela (desktop, tablets e mobile)
+* **Separação visual de contextos**:
+
+  * Área do cliente com visual mais leve e convidativo
+  * Área administrativa com foco em produtividade e organização
+* **Feedback visual**:
+
+  * Estados de hover e foco
+  * Indicações visuais de ações (botões, cards, navegação)
+* **Componentização visual**:
+
+  * Uso extensivo de componentes reutilizáveis (cards, layouts, topbar e sidebar)
+* **Hierarquia visual bem definida**:
+
+  * Tipografia clara
+  * Espaçamentos consistentes
+  * Organização por seções e cards
+* **Transições e efeitos visuais suaves**:
+
+  * Mudanças de páginas e estados sem quebras bruscas
+
+O objetivo é garantir uma experiência fluida, profissional e acessível, tanto para clientes quanto para artistas e administradores do estúdio.
 
 ---
 
