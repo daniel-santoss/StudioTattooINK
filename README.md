@@ -145,6 +145,6 @@ npm run build
 
 ## 📌 Status do Projeto
 
-🚧 Projeto "Finalizado" (Atuamente sem prévias para futuras mudanças).
+🚧 Projeto "Finalizado" (Atualmente sem prévias para futuras mudanças).
 
 ---
