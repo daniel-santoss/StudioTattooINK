@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "clientName": "Carlos Silva",
+    "artistName": "Alex Rivera",
+    "service": "Tatuagem - Realismo",
+    "date": "2024-06-15",
+    "startTime": "14:00",
+    "endTime": "18:00",
+    "status": "upcoming",
+    "description": "Fechamento de braço, sessão 2",
+    "avatarUrl": "/images/tatuadores/tatuador1.jpg"
+  },
+  {
+    "id": "2",
+    "clientName": "Ana Oliveira",
+    "artistName": "Mika Chen",
+    "service": "Tatuagem - Oriental",
+    "date": "2024-06-20",
+    "startTime": "10:00",
+    "endTime": "12:00",
+    "status": "upcoming",
+    "description": "Dragão na panturrilha",
+    "avatarUrl": "/images/tatuadores/tatuador3.jpg"
+  },
+  {
+    "id": "3",
+    "clientName": "Pedro Santos",
+    "artistName": "Elena Rosa",
+    "service": "Piercing - Helix",
+    "date": "2024-06-01",
+    "startTime": "15:00",
+    "endTime": "15:30",
+    "status": "completed",
+    "description": "Joia em titânio com zircônia",
+    "avatarUrl": "/images/tatuadores/tatuador4.jpg"
+  }
+]

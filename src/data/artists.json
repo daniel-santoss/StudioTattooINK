@@ -1,0 +1,131 @@
+[
+  {
+    "id": "1",
+    "name": "Alex Rivera",
+    "role": "Tatuador",
+    "avatarUrl": "/images/tatuadores/tatuador1.jpg",
+    "styles": ["Realismo", "Preto e Cinza", "Retratos", "Tatuagem"],
+    "instagram": "@alexrivera.ink",
+    "rating": 4.7,
+    "ratingCount": 2899,
+    "summary": "Muitos clientes elogiaram a precisão cirúrgica nos retratos e a leveza da mão durante sessões longas.",
+    "portfolio": [
+      { "title": "Olho e Bússola Realista", "desc": "Composição com olho realista, bússola e fases da lua.", "img": "/images/tattooPiercing/tattooRealista1.jpg" },
+      { "title": "Pantera Negra com Lótus", "desc": "Pantera negra em preto e cinza com flor de lótus.", "img": "/images/tattooPiercing/tattooRealista2.jpg" },
+      { "title": "Águia Realista Corinthians", "desc": "Realismo preto e cinza com escudo do Corinthians.", "img": "/images/tattooPiercing/tattooTime1.jpg" }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Lucas Vane",
+    "role": "Tatuador / Body Piercer",
+    "avatarUrl": "/images/tatuadores/tatuador2.jpg",
+    "styles": ["Neo Tradicional", "Colorido", "Botânico", "Tatuagem", "Piercing"],
+    "instagram": "@lucasvane.art",
+    "rating": 5.0,
+    "ratingCount": 1450,
+    "summary": "Avaliado positivamente pela saturação incrível das cores e também realiza perfurações básicas e avançadas.",
+    "portfolio": [
+      { "title": "Aku Aku Neo Tradicional", "desc": "Máscara Aku Aku do Crash Bandicoot em cores vibrantes.", "img": "/images/tattooPiercing/tattooOld1.jpg" }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Mika Chen",
+    "role": "Tatuador",
+    "avatarUrl": "/images/tatuadores/tatuador3.jpg",
+    "styles": ["Oriental", "Irezumi", "Dragões", "Tatuagem"],
+    "instagram": "@mikachen.irezumi",
+    "rating": 4.8,
+    "ratingCount": 920,
+    "summary": "Clientes destacam o respeito às tradições orientais e a fluidez como os desenhos se encaixam no corpo.",
+    "portfolio": [
+      { "title": "Sakura e Ondas Japonesas", "desc": "Fechamento de braços com flores de sakura e ondas tradicionais.", "img": "/images/tattooPiercing/tattooOriental1.jpg" },
+      { "title": "Geisha com Sakura", "desc": "Geisha com guarda-sol vermelho e flores de cerejeira.", "img": "/images/tattooPiercing/tattooOriental2.jpg" },
+      { "title": "Dragão Japonês", "desc": "Dragão japonês nas costas com flores.", "img": "/images/tattooPiercing/tattooOriental3.jpg" },
+      { "title": "Dragão Yin Yang", "desc": "Dragão estilo oriental em preto e cinza.", "img": "/images/tattooPiercing/tattooOriental4.jpg" }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Elena Rosa",
+    "role": "Tatuadora / Body Piercer",
+    "avatarUrl": "/images/tatuadores/tatuador4.jpg",
+    "styles": ["Fine Line", "Minimalismo", "Escrita", "Tatuagem", "Piercing"],
+    "instagram": "@elenarosa.fineline",
+    "rating": 4.9,
+    "ratingCount": 1105,
+    "summary": "Frequentemente citada pela delicadeza do traço fino e procedimentos de piercing delicados.",
+    "portfolio": [
+      { "title": "Carpas Koi e Flores nas Costas", "desc": "Fechamento de costas com carpas koi, peônias e fases da lua.", "img": "/images/tattooPiercing/tattooFine1.jpg" },
+      { "title": "Rosto Feminino Interstellar", "desc": "Rosto feminino abstrato com tema espacial.", "img": "/images/tattooPiercing/tattooFine3.jpg" },
+      { "title": "Piercing", "desc": "Aplicação de joia em titânio com pedras swarovski.", "img": "/images/tattooPiercing/piercing.jpg" },
+      { "title": "Polvo Fine Line", "desc": "Polvo detalhado em traços finos.", "img": "/images/tattooPiercing/tattooOutras1.jpg" },
+      { "title": "Sobrancelha Coração", "desc": "Piercing de sobrancelha diferenciado.", "img": "/images/tattooPiercing/piecing4.jpg" }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Lucas Ferreira",
+    "role": "Tatuador",
+    "avatarUrl": "/images/tatuadores/tatuador5.jpg",
+    "styles": ["Blackwork", "Geométrico", "Pontilhismo", "Tatuagem"],
+    "instagram": "@lucasferreira.blackwork",
+    "rating": 4.5,
+    "ratingCount": 780,
+    "summary": "Elogiado pela solidez do preto e pela simetria perfeita nas formas geométricas complexas.",
+    "portfolio": [
+      { "title": "Cérebro, DNA e Coração", "desc": "Composição fine line com cérebro, hélice de DNA e coração anatômico.", "img": "/images/tattooPiercing/tattooFine2.jpg" },
+      { "title": "Flamengo Geométrico", "desc": "Homenagem ao Flamengo com geometria.", "img": "/images/tattooPiercing/tattooTime2.jpg" },
+      { "title": "Água-viva Pontilhismo", "desc": "Água-viva detalhada em pontilhismo.", "img": "/images/tattooPiercing/tattooOutras2.jpg" },
+      { "title": "Blackout", "desc": "Cobertura sólida em preto.", "img": "/images/tattooPiercing/tattooRealista3.jpg" }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "André Costa",
+    "role": "Tatuador",
+    "avatarUrl": "/images/tatuadores/tatuador6.jpg",
+    "styles": ["Aquarela", "Colorido", "Sketch", "Tatuagem"],
+    "instagram": "@andrecosta.aquarela",
+    "rating": 4.9,
+    "ratingCount": 1230,
+    "summary": "Clientes adoram a mistura de cores vibrantes e o efeito de pintura fluida que ele consegue criar na pele.",
+    "portfolio": [
+      { "title": "Caveira Mexicana Colorida", "desc": "Sugar skull colorida em estilo bordado tradicional.", "img": "/images/tattooPiercing/tattooRealista3.jpg" },
+      { "title": "Zoro One Piece", "desc": "Sketch do Zoro de One Piece.", "img": "/images/tattooPiercing/tattooAnime1.jpg" },
+      { "title": "Choso JJK Blackwork", "desc": "Choso detalhado.", "img": "/images/tattooPiercing/tattooAnime3.jpg" },
+      { "title": "Beija-flor", "desc": "Cores vibrantes e movimento.", "img": "/images/tattooPiercing/tattooOld3.jpg" }
+    ]
+  },
+  {
+    "id": "7",
+    "name": "Rafael Santos",
+    "role": "Tatuador",
+    "avatarUrl": "/images/tatuadores/tatuador7.jpg",
+    "styles": ["Old School", "Tradicional", "Flash", "Tatuagem"],
+    "instagram": "@rafaelsantos.oldschool",
+    "rating": 4.4,
+    "ratingCount": 650,
+    "summary": "Apaixonado pelo estilo clássico americano. Cores sólidas, linhas grossas e designs atemporais.",
+    "portfolio": [
+      { "title": "The Lovers - Carta de Tarô", "desc": "Carta de tarô com mulher, caveira e dados.", "img": "/images/tattooPiercing/tattooOld2.jpg" },
+      { "title": "Coração Sagrado com Adaga", "desc": "Coração sagrado atravessado por adaga com chamas.", "img": "/images/tattooPiercing/tattooOld3.jpg" },
+      { "title": "Galo Atlético Mineiro", "desc": "Mascote do Galo estilo Old School.", "img": "/images/tattooPiercing/tattooTime3.jpg" }
+    ]
+  },
+  {
+    "id": "8",
+    "name": "Juliana Mendes",
+    "role": "Tatuadora",
+    "avatarUrl": "/images/tatuadores/tatuador8.jpg",
+    "styles": ["Lettering", "Script", "Chicano", "Tatuagem"],
+    "instagram": "@julianamendes.lettering",
+    "rating": 4.6,
+    "ratingCount": 890,
+    "summary": "Especialista em tipografia e caligrafia. Cada letra é uma obra de arte personalizada.",
+    "portfolio": [
+      { "title": "Nome Minimalista", "desc": "Tipografia clean e moderna.", "img": "/images/tattooPiercing/tattooFine3.jpg" }
+    ]
+  }
+]

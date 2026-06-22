@@ -1,0 +1,380 @@
+// Studio Tattoo INK — schema de dados (PT-BR, snake_case)
+// A URL de conexão fica em prisma.config.ts (Prisma 7) / .env.local
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// Enums
+// ============================================================
+
+enum TipoUsuario {
+  CLIENTE
+  PROFISSIONAL
+  ADMIN
+
+  @@map("tipo_usuario")
+}
+
+enum CategoriaServico {
+  TATUAGEM
+  PIERCING
+
+  @@map("categoria_servico")
+}
+
+enum StatusCliente {
+  PROSPECTO
+  ATIVO
+  INATIVO
+  VIP
+
+  @@map("status_cliente")
+}
+
+enum StatusDisponibilidade {
+  DISPONIVEL
+  EM_SESSAO
+  FOLGA
+
+  @@map("status_disponibilidade")
+}
+
+enum NivelExperiencia {
+  INICIANTE
+  DE_1_A_3
+  DE_3_A_5
+  MAIS_DE_5
+
+  @@map("nivel_experiencia")
+}
+
+enum StatusAgendamento {
+  DISPONIVEL
+  AGENDADO
+  EM_ANDAMENTO
+  CONCLUIDO
+  BLOQUEADO
+  CANCELADO
+
+  @@map("status_agendamento")
+}
+
+enum TipoAgendamento {
+  TATUAGEM
+  PIERCING
+  ORCAMENTO
+
+  @@map("tipo_agendamento")
+}
+
+enum StatusPagamento {
+  PENDENTE
+  SINAL_PAGO
+  PAGO_TOTAL
+
+  @@map("status_pagamento")
+}
+
+enum StatusSolicitacao {
+  PENDENTE
+  APROVADA
+  REJEITADA
+  CANCELADA
+
+  @@map("status_solicitacao")
+}
+
+enum StatusCandidatura {
+  PENDENTE
+  APROVADA
+  REJEITADA
+
+  @@map("status_candidatura")
+}
+
+enum StatusOcorrencia {
+  PENDENTE
+  EM_ANALISE
+  RESOLVIDA
+
+  @@map("status_ocorrencia")
+}
+
+enum SeveridadeOcorrencia {
+  BAIXA
+  MEDIA
+  ALTA
+
+  @@map("severidade_ocorrencia")
+}
+
+// ============================================================
+// Identidade
+// ============================================================
+
+model Usuario {
+  id        String      @id @default(cuid())
+  // Vínculo futuro com auth.users do Supabase (preenchido ao plugar a auth)
+  authId    String?     @unique @map("auth_id")
+  nome      String
+  email     String      @unique
+  telefone  String?
+  avatarUrl String?     @map("avatar_url")
+  tipo      TipoUsuario
+
+  cliente      Cliente?
+  profissional Profissional?
+
+  ocorrenciasRelatadas  Ocorrencia[] @relation("OcorrenciaRelator")
+  ocorrenciasRecebidas  Ocorrencia[] @relation("OcorrenciaReportado")
+
+  criadoEm     DateTime  @default(now()) @map("criado_em")
+  atualizadoEm DateTime  @updatedAt @map("atualizado_em")
+  deletadoEm   DateTime? @map("deletado_em")
+
+  @@map("usuario")
+}
+
+model Cliente {
+  id        String @id @default(cuid())
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuarioId String  @unique @map("usuario_id")
+
+  cpf                String?       @map("cpf")
+  dataNascimento     DateTime?     @map("data_nascimento")
+  status             StatusCliente @default(PROSPECTO)
+  alergias           String?
+  observacoesMedicas String?       @map("observacoes_medicas")
+  observacoes        String?
+  totalSessoes       Int           @default(0) @map("total_sessoes")
+  ultimaVisitaEm     DateTime?     @map("ultima_visita_em")
+
+  agendamentos Agendamento[]
+  solicitacoes SolicitacaoAgendamento[]
+
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("cliente")
+}
+
+model Profissional {
+  id        String  @id @default(cuid())
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuarioId String  @unique @map("usuario_id")
+
+  titulo                 String // ex: "Tatuador / Body Piercer"
+  bio                    String?
+  instagram              String?
+  portfolioUrl           String?               @map("portfolio_url")
+  capaUrl                String?               @map("capa_url")
+  oferece                CategoriaServico[] // [TATUAGEM] | [TATUAGEM, PIERCING] | [PIERCING]
+  experiencia            NivelExperiencia?
+  disponibilidade        StatusDisponibilidade @default(DISPONIVEL)
+  aceitandoAgendamentos  Boolean               @default(true) @map("aceitando_agendamentos")
+
+  portfolio    ProfissionalPortfolio[]
+  galeria      ProfissionalGaleria[]
+  estilos      ProfissionalEstilo[]
+  agendamentos Agendamento[]
+  solicitacoes SolicitacaoAgendamento[]
+
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("profissional")
+}
+
+// ============================================================
+// Do profissional (sub-recursos)
+// ============================================================
+
+model ProfissionalPortfolio {
+  id             String       @id @default(cuid())
+  profissional   Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  profissionalId String       @map("profissional_id")
+  titulo         String
+  descricao      String?
+  imagemUrl      String       @map("imagem_url")
+  ordem          Int          @default(0)
+
+  criadoEm DateTime @default(now()) @map("criado_em")
+
+  @@index([profissionalId])
+  @@map("profissional_portfolio")
+}
+
+model ProfissionalGaleria {
+  id             String       @id @default(cuid())
+  profissional   Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  profissionalId String       @map("profissional_id")
+  titulo         String
+  categoria      String
+  imagemUrl      String       @map("imagem_url")
+  descricao      String?
+  destaque       Boolean      @default(false)
+
+  criadoEm DateTime @default(now()) @map("criado_em")
+
+  @@index([profissionalId])
+  @@map("profissional_galeria")
+}
+
+model ProfissionalCandidatura {
+  id             String            @id @default(cuid())
+  nome           String
+  email          String
+  telefone       String?
+  dataNascimento DateTime?         @map("data_nascimento")
+  portfolioUrl   String            @map("portfolio_url")
+  experiencia    NivelExperiencia?
+  estilos        String[] // texto livre — candidato ainda não é Profissional
+  estiloCustom   String?           @map("estilo_custom")
+  avatarUrl      String?           @map("avatar_url")
+  status         StatusCandidatura @default(PENDENTE)
+
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("profissional_candidatura")
+}
+
+// Junção N:N explícita Profissional <-> TattooEstilo
+model ProfissionalEstilo {
+  profissional   Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  profissionalId String       @map("profissional_id")
+  estilo         TattooEstilo @relation(fields: [estiloId], references: [id], onDelete: Cascade)
+  estiloId       String       @map("estilo_id")
+
+  @@id([profissionalId, estiloId])
+  @@index([estiloId])
+  @@map("profissional_estilo")
+}
+
+// ============================================================
+// Catálogos
+// ============================================================
+
+model Servico {
+  id            String           @id @default(cuid())
+  categoria     CategoriaServico
+  nome          String
+  descricao     String?
+  duracaoMin    Int?             @map("duracao_min")
+  precoCentavos Int?             @map("preco_centavos")
+  ativo         Boolean          @default(true)
+
+  agendamentos Agendamento[]
+  solicitacoes SolicitacaoAgendamento[]
+
+  criadoEm DateTime @default(now()) @map("criado_em")
+
+  @@unique([categoria, nome])
+  @@map("servico")
+}
+
+model TattooEstilo {
+  id    String  @id @default(cuid())
+  nome  String  @unique
+  icone String?
+
+  profissionais ProfissionalEstilo[]
+
+  criadoEm DateTime @default(now()) @map("criado_em")
+
+  @@map("tattoo_estilo")
+}
+
+// ============================================================
+// Transacional
+// ============================================================
+
+model Agendamento {
+  id String @id @default(cuid())
+
+  cliente        Cliente?                @relation(fields: [clienteId], references: [id], onDelete: SetNull)
+  clienteId      String?                 @map("cliente_id")
+  profissional   Profissional            @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  profissionalId String                  @map("profissional_id")
+  servico        Servico?                @relation(fields: [servicoId], references: [id], onDelete: SetNull)
+  servicoId      String?                 @map("servico_id")
+  solicitacao    SolicitacaoAgendamento? @relation(fields: [solicitacaoId], references: [id], onDelete: SetNull)
+  solicitacaoId  String?                 @unique @map("solicitacao_id")
+
+  iniciaEm           DateTime          @map("inicia_em")
+  terminaEm          DateTime          @map("termina_em")
+  status             StatusAgendamento @default(AGENDADO)
+  tipo               TipoAgendamento
+  precoCentavos      Int?              @map("preco_centavos")
+  sinalCentavos      Int?              @map("sinal_centavos")
+  statusPagamento    StatusPagamento   @default(PENDENTE) @map("status_pagamento")
+  local              String?
+  imagensReferencia  String[]          @map("imagens_referencia")
+  observacoes        String?
+  observacoesInternas String?          @map("observacoes_internas")
+  motivoCancelamento String?           @map("motivo_cancelamento")
+
+  criadoEm     DateTime  @default(now()) @map("criado_em")
+  atualizadoEm DateTime  @updatedAt @map("atualizado_em")
+  deletadoEm   DateTime? @map("deletado_em")
+
+  @@index([profissionalId, iniciaEm])
+  @@index([clienteId])
+  @@map("agendamento")
+}
+
+model SolicitacaoAgendamento {
+  id String @id @default(cuid())
+
+  cliente        Cliente       @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  clienteId      String        @map("cliente_id")
+  profissional   Profissional? @relation(fields: [profissionalId], references: [id], onDelete: SetNull)
+  profissionalId String?       @map("profissional_id")
+  servico        Servico?      @relation(fields: [servicoId], references: [id], onDelete: SetNull)
+  servicoId      String?       @map("servico_id")
+
+  dataPreferida       DateTime?         @map("data_preferida")
+  periodoPreferido    String?           @map("periodo_preferido")
+  descricao           String
+  imagensReferencia   String[]          @map("imagens_referencia")
+  alergias            String?
+  observacoesMedicas  String?           @map("observacoes_medicas")
+  status              StatusSolicitacao @default(PENDENTE)
+  precoOrcadoCentavos Int?              @map("preco_orcado_centavos")
+  motivoRejeicao      String?           @map("motivo_rejeicao")
+
+  agendamento Agendamento?
+
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@index([clienteId])
+  @@map("solicitacao_agendamento")
+}
+
+model Ocorrencia {
+  id String @id @default(cuid())
+
+  relator            Usuario? @relation("OcorrenciaRelator", fields: [relatorUsuarioId], references: [id], onDelete: SetNull)
+  relatorUsuarioId   String?  @map("relator_usuario_id")
+  reportado          Usuario? @relation("OcorrenciaReportado", fields: [reportadoUsuarioId], references: [id], onDelete: SetNull)
+  reportadoUsuarioId String?  @map("reportado_usuario_id")
+
+  categoria   String
+  descricao   String
+  severidade  SeveridadeOcorrencia
+  status      StatusOcorrencia     @default(PENDENTE)
+  resolvidaEm DateTime?            @map("resolvida_em")
+
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@map("ocorrencia")
+}

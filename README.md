@@ -1,150 +1,109 @@
-# 🖋️ Ink Studio Tattoo (Front-end)
+# 🖋️ Ink Studio Tattoo
 
-Sistema de gerenciamento para estúdios de **tatuagem e piercing**, desenvolvido para conectar clientes a artistas e facilitar a administração do estúdio. O projeto utiliza uma **arquitetura moderna baseada em React 19 e Vite**, com ênfase na organização, escalabilidade e experiência do usuário.
+Plataforma de gestão para estúdios de **tatuagem e piercing**. Conecta clientes a profissionais, expõe portfólios de forma indexável pelo Google e dá ao estúdio as ferramentas para gerenciar agendamentos, solicitações e a operação do dia a dia.
 
----
+## O problema que resolve
 
-## 🚀 Tecnologias Utilizadas
+Estúdios geralmente dependem de DM no Instagram e WhatsApp para divulgar trabalho e receber pedidos de orçamento — um fluxo desorganizado, sem histórico e invisível para buscas. O Ink Studio centraliza isso em três frentes:
 
-O projeto foi construído com as seguintes tecnologias principais:
-
-* **Tecnologias:** React `v19.2.3` e TypeScript `5.8.2`
-* **Build Tool:** Vite `v6.2.0`
-* **Roteamento:** React Router Dom `v7.11.0`
-* **Estilização:** Tailwind CSS
-* **Assets:** Imagens e arquivos estáticos
+- **Vitrine pública indexável** — portfólio dos artistas e galeria com SEO real, para o estúdio ser encontrado no Google.
+- **Solicitação de agendamento** — o cliente descreve a ideia, escolhe profissional e período; o estúdio recebe a solicitação para orçar e confirmar.
+- **Painel de gestão** — áreas por papel (cliente, profissional, gerente) para acompanhar agenda, solicitações e clientes.
 
 ---
 
-## 🎨 User Interface & User Experience
+## 🚀 Tecnologias
 
-O projeto foi pensado com foco em **UI** e **UX**, buscando oferecer uma navegação intuitiva, visual moderno e fluidez na interação entre clientes, artistas e administradores.
-
-### ✨ Principais Destaques de Design
-
-* **Design centrado no usuário**: Fluxos claros para agendamento, navegação e gestão de informações
-* **Layouts responsivos**: Adaptação para diferentes resoluções de tela (desktop, tablets e mobile)
-* **Separação visual de contextos**:
-
-  * Área do cliente com visual mais leve e convidativo
-  * Área administrativa com foco em produtividade e organização
-* **Feedback visual**:
-
-  * Estados de hover e foco
-  * Indicações visuais de ações (botões, cards, navegação)
-* **Componentização visual**:
-
-  * Uso extensivo de componentes reutilizáveis (cards, layouts, topbar e sidebar)
-* **Hierarquia visual bem definida**:
-
-  * Tipografia clara
-  * Espaçamentos consistentes
-  * Organização por seções e cards
-* **Transições e efeitos visuais suaves**:
-
-  * Mudanças de páginas e estados sem quebras bruscas
-
-O objetivo é garantir uma experiência fluida, profissional e acessível, tanto para clientes quanto para artistas e administradores do estúdio.
+| Camada | Stack |
+|---|---|
+| Framework | **Next.js 16** (App Router, Turbopack) |
+| UI | **React 19** + **TypeScript** |
+| Estilização | **Tailwind CSS** (variáveis CSS, `next/font`, tipografia customizada) |
+| Banco de dados | **PostgreSQL** (hospedado no **Supabase**) |
+| ORM | **Prisma 7** (driver adapter sobre conexão pooled) |
+| Autenticação | **Supabase Auth** (cookies `httpOnly`, sessão no servidor) |
+| Testes | **Vitest** + Testing Library |
+| Qualidade | ESLint + Prettier |
 
 ---
 
-## 📋 Funcionalidades
+## 🏗️ Arquitetura
 
-O sistema é dividido em **dois perfis principais**, com base na estrutura de rotas e permissões.
+Monólito modular organizado em **Feature-Sliced Design** com camadas leves por feature (princípio de inversão de dependência da Clean Architecture, sem a cerimônia):
 
-### 👤 Área do Cliente (Público / Privado)
-
-* **Landing Page**: Apresentação do estúdio e portfólio visual
-* **Galeria de Artistas**: Visualização de perfis públicos e trabalhos dos tatuadores
-* **Agendamento**: Solicitação de sessões de tatuagem ou piercing
-* **Matchmaker**: Ferramenta de IA para ajudar o cliente a encontrar o artista ideal
-* **Painel do Cliente**:
-
-  * Histórico de agendamentos
-  * Detalhes das sessões
-* **Autenticação**:
-
-  * Login
-  * Cadastro
-  * Recuperação de senha
-
----
-
-### 🛠️ Área Administrativa / Artista (Acesso Restrito)
-
-* **Dashboard**: Visão geral do estúdio
-* **Gestão de Agenda (Schedule)**: Calendário de atendimentos
-* **Solicitações de Booking**: Aprovação ou rejeição de pedidos de clientes
-* **Gestão de Clientes e Staff**: Administração de usuários e equipe
-* **Histórico e Relatórios**:
-
-  * Serviços realizados
-  * Métricas e relatórios
-* **Perfil**: Edição de dados do usuário/artista
-
----
-
-## 📂 Estrutura do Projeto
-
-A organização das pastas segue um padrão **modular e escalável**:
-
-```bash
+```
 src/
-├── assets/          # Imagens e recursos estáticos (tatuagens, banners, etc)
-├── components/      # Componentes reutilizáveis
-│   ├── ClientLayout # Layout da área pública/cliente (Topbar)
-│   └── Layout       # Layout da área administrativa (Sidebar)
-├── pages/           # Páginas da aplicação
-│   ├── client/      # Páginas da visão do cliente (Landing, Gallery, etc)
-│   └── admin/       # Páginas administrativas (Dashboard, Reports, Staff)
-├── App.tsx          # Configuração principal de rotas e autenticação
-└── main.tsx         # Ponto de entrada da aplicação
+  app/          Rotas, layouts, metadata/SEO (camada fina do Next)
+  features/     Domínios: auth, portfolio, booking, matchmaker…
+    <feature>/
+      data/        DAL — única camada que fala com o banco (server-only)
+      actions/     Server Actions (mutações)
+      components/  UI da feature
+  shared/       libs (prisma, supabase), tipos, layouts e utilitários
+  legacy/       Telas em migração progressiva (não são rotas; importadas sob demanda)
 ```
+
+- **Leitura** de dados acontece via **DAL** (`features/*/data`), consumida diretamente por Server Components — sem HTTP interno.
+- **Escrita** acontece via **Server Actions** (`features/*/actions`), que rodam no servidor com a sessão do usuário.
+- O **domínio de dados é modelado em português** (tabelas/colunas em `snake_case`, ex.: `solicitacao_agendamento`), com enums para conjuntos fixos e relações N:N explícitas para vocabulários extensíveis (ex.: estilos de tatuagem).
 
 ---
 
-## 🔧 Como Executar o Projeto
+## 🎯 Estratégias de renderização (e o porquê de cada uma)
 
-### Pré-requisitos
+O ganho central da migração para o App Router foi poder escolher o modelo de renderização **por rota**, conforme a natureza do conteúdo:
 
-* Node.js instalado (versão recomendada: LTS)
+### Estático / SSG — `/`, `/login`, `/signup`, `/match`
+Páginas que **não dependem de dados por requisição**. São pré-renderizadas em build, servidas como HTML estático.
+**Por quê:** TTFB praticamente instantâneo e SEO máximo. Não há motivo para envolver o servidor a cada acesso de uma landing ou de um formulário de login.
 
-### Instalação das dependências
+### ISR (Incremental Static Regeneration) — `/artists`, `/artists/[id]`, `/gallery`
+Páginas **públicas, SEO-críticas e baseadas em dados que mudam** (portfólio, galeria), mas **não a cada requisição**. São geradas estaticamente a partir do banco e revalidadas em background (ex.: a cada 60s); `generateStaticParams` pré-gera os perfis conhecidos.
+**Por quê:** combina a velocidade/indexação do estático com a frescor do dado real. O estúdio atualiza um portfólio no banco e a página reflete em segundos, **sem rebuild** — algo que CSR puro não daria ao SEO e que SSR puro pagaria caro a cada visita.
+
+### Dinâmico / SSR — área autenticada: `/admin/*`, `/book`, `/my-appointments`, `/profile`
+Conteúdo **por usuário/sessão**, lido de cookies e do banco no servidor, **não indexável**.
+**Por quê:** os dados dependem de quem está logado e do seu papel; precisam ser sempre atuais e protegidos. Renderizar no servidor com a sessão garante autorização real e dados frescos. Como não há valor de SEO aqui, abrir mão do estático é o trade-off correto.
+
+> Resumo: **estático** onde o conteúdo é igual para todos e estável; **ISR** onde é igual para todos mas muda; **dinâmico** onde é específico do usuário.
+
+---
+
+## 🔐 Autenticação e segurança
+
+- Login/cadastro via **Supabase Auth** (email/senha). A sessão vive em **cookies `httpOnly`** — invisível a XSS e legível pelo servidor.
+- O **proxy** (`src/proxy.ts`, convenção do Next 16) faz o refresh da sessão e o redirecionamento otimista das rotas autenticadas.
+- A **autorização real** (por papel: `CLIENTE` / `PROFISSIONAL` / `ADMIN`) é feita **server-side** nas páginas/Server Actions via `getCurrentUser()` — defesa em profundidade, sem depender do middleware como fronteira de segurança.
+- O papel é fonte de verdade no banco (`usuario.tipo`).
+
+---
+
+## ▶️ Como rodar
+
+Pré-requisitos: Node 20+ e um banco PostgreSQL (ex.: projeto no Supabase).
 
 ```bash
+# 1. Dependências
 npm install
-```
 
-### Executar em ambiente de desenvolvimento
+# 2. Variáveis de ambiente — crie um .env.local (NÃO versionado)
+#    DATABASE_URL              -> conexão pooled (Prisma, runtime)
+#    DIRECT_URL                -> conexão direta (Prisma CLI / migrations)
+#    NEXT_PUBLIC_SUPABASE_URL  -> URL do projeto Supabase
+#    NEXT_PUBLIC_SUPABASE_ANON_KEY -> chave publishable (pública)
 
-```bash
+# 3. Banco: aplicar migrations e popular dados de exemplo
+npx prisma migrate dev
+npm run db:seed
+
+# 4. Desenvolvimento
 npm run dev
 ```
 
-O comando acima inicia o servidor de desenvolvimento utilizando o **Vite**.
-
-### Build para produção
-
-```bash
-npm run build
-```
+Scripts úteis: `npm run build`, `npm run test`, `npm run db:studio` (Prisma Studio).
 
 ---
 
-## 🔐 Autenticação e Proteção de Rotas
+## 📈 Status
 
-* O sistema utiliza um componente **`RequireAuth`** para proteger rotas sensíveis
-* O controle de acesso é feito através da chave **`ink_role`** armazenada no `localStorage`
-* Usuários não autenticados ou sem permissão adequada são redirecionados para a rota:
-
-```text
-/login
-```
-
----
-
-## 📌 Status do Projeto
-
-🚧 Projeto "Finalizado" (Atualmente sem prévias para futuras mudanças).
-
----
+Migração de SPA (Vite) → Next.js concluída. Camada pública (artistas, galeria) e o fluxo de **solicitação de agendamento** já são servidos pelo banco real. As telas administrativas estão sendo religadas ao banco progressivamente, preservando o design existente.
