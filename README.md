@@ -1,3 +1,7 @@
+# 🚧 **Em Manutenção**  
+Este projeto está em fase de refatoração e mudança de stack (Next.js 16 + React 19). Antes focado apenas na construção visual e UI/UX, o projeto agora está sendo preparado e estruturado para receber **integração real com Back-end e Banco de Dados**.
+
+
 # 🖋️ Ink Studio Tattoo
 
 Plataforma de gestão para estúdios de **tatuagem e piercing**. Conecta clientes a profissionais, expõe portfólios de forma indexável pelo Google e dá ao estúdio as ferramentas para gerenciar agendamentos, solicitações e a operação do dia a dia.
@@ -75,32 +79,6 @@ Conteúdo **por usuário/sessão**, lido de cookies e do banco no servidor, **n�
 - O **proxy** (`src/proxy.ts`, convenção do Next 16) faz o refresh da sessão e o redirecionamento otimista das rotas autenticadas.
 - A **autorização real** (por papel: `CLIENTE` / `PROFISSIONAL` / `ADMIN`) é feita **server-side** nas páginas/Server Actions via `getCurrentUser()` — defesa em profundidade, sem depender do middleware como fronteira de segurança.
 - O papel é fonte de verdade no banco (`usuario.tipo`).
-
----
-
-## ▶️ Como rodar
-
-Pré-requisitos: Node 20+ e um banco PostgreSQL (ex.: projeto no Supabase).
-
-```bash
-# 1. Dependências
-npm install
-
-# 2. Variáveis de ambiente — crie um .env.local (NÃO versionado)
-#    DATABASE_URL              -> conexão pooled (Prisma, runtime)
-#    DIRECT_URL                -> conexão direta (Prisma CLI / migrations)
-#    NEXT_PUBLIC_SUPABASE_URL  -> URL do projeto Supabase
-#    NEXT_PUBLIC_SUPABASE_ANON_KEY -> chave publishable (pública)
-
-# 3. Banco: aplicar migrations e popular dados de exemplo
-npx prisma migrate dev
-npm run db:seed
-
-# 4. Desenvolvimento
-npm run dev
-```
-
-Scripts úteis: `npm run build`, `npm run test`, `npm run db:studio` (Prisma Studio).
 
 ---
 
