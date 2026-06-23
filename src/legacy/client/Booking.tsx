@@ -26,11 +26,6 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
     const [selectedArtist, setSelectedArtist] = useState<string | null>(null);
     const [previewArtist, setPreviewArtist] = useState<BookingArtist | null>(null);
 
-    // Date State
-    const [selectedDate, setSelectedDate] = useState<string>(""); // Display String
-    const [selectedDateObj, setSelectedDateObj] = useState<Date | null>(null);
-    const [viewDate, setViewDate] = useState(new Date());
-
     const [selectedPeriod, setSelectedPeriod] = useState<string>("");
 
     // Reference Images State
@@ -52,45 +47,6 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
 
     const handleNext = () => setStep(s => s + 1);
     const handleBack = () => setStep(s => s - 1);
-
-    // Calendar Logic
-    const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-    const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
-
-    const handlePrevMonth = () => {
-        const newDate = new Date(viewDate);
-        newDate.setMonth(newDate.getMonth() - 1);
-        setViewDate(newDate);
-    };
-
-    const handleNextMonth = () => {
-        const newDate = new Date(viewDate);
-        newDate.setMonth(newDate.getMonth() + 1);
-        setViewDate(newDate);
-    };
-
-    const handleDateSelect = (day: number) => {
-        const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-        const displayStr = newDate.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
-        setSelectedDate(displayStr);
-        setSelectedDateObj(newDate);
-    };
-
-    // Helper to check if a day is in the past
-    const isPastDate = (day: number) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const checkDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-        return checkDate < today;
-    };
-
-    // Check if date is selected
-    const isSelected = (day: number) => {
-        if (!selectedDate) return false;
-        const checkDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-        const checkStr = checkDate.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' });
-        return selectedDate === checkStr;
-    };
 
     // Handle file selection for reference images
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,12 +85,6 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
         fd.set('profissionalId', selectedArtist);
         fd.set('descricao', descricao);
         fd.set('periodo', selectedPeriod);
-        if (selectedDateObj) {
-            const y = selectedDateObj.getFullYear();
-            const m = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
-            const d = String(selectedDateObj.getDate()).padStart(2, '0');
-            fd.set('dataPreferida', `${y}-${m}-${d}`);
-        }
 
         const res = await criarSolicitacao(null, fd);
         if (res?.error) {
@@ -159,7 +109,7 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
                     {/* Stepper Horizontal */}
                     <div className="mb-10 bg-[#0d0d0d] border border-zinc-800 rounded-2xl p-6">
                         <div className="flex items-center justify-between max-w-2xl mx-auto">
-                            {['Profissional', 'Data e Turno', 'Detalhes', 'Confirmar'].map((label, idx) => {
+                            {['Profissional', 'Período', 'Detalhes', 'Confirmar'].map((label, idx) => {
                                 const s = idx + 1;
                                 const active = step === s;
                                 const completed = step > s;
@@ -264,96 +214,34 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
                             )}
 
                             {step === 2 && (
-                                <div className="animate-fade-in">
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                        {/* Coluna Esquerda: Calendário */}
-                                        <div>
-                                            <h3 className="text-2xl font-display font-bold text-white mb-1">Data</h3>
-                                            <p className="text-zinc-500 mb-6 text-sm">Selecione o dia ideal.</p>
+                                <div className="animate-fade-in max-w-2xl mx-auto">
+                                    <h3 className="text-2xl font-display font-bold text-white mb-1">Período de preferência</h3>
+                                    <p className="text-zinc-500 mb-6 text-sm">Escolha o turno que prefere. Você combina o melhor dia diretamente com o profissional depois.</p>
 
-                                            <div className="bg-[#121212] border border-zinc-800 rounded-2xl p-6 select-none">
-                                                {/* Calendar Header */}
-                                                <div className="flex items-center justify-between mb-6">
-                                                    <button onClick={handlePrevMonth} className="text-zinc-400 hover:text-white p-2">
-                                                        <span className="material-symbols-outlined">chevron_left</span>
-                                                    </button>
-                                                    <span className="text-white font-bold capitalize">
-                                                        {viewDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                                    <div className="flex flex-col gap-3">
+                                        {periods.map(period => (
+                                            <button
+                                                key={period.id}
+                                                onClick={() => setSelectedPeriod(period.id)}
+                                                className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 group ${selectedPeriod === period.id
+                                                    ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)]'
+                                                    : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
+                                                    } `}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <span className={`material-symbols-outlined text-3xl ${selectedPeriod === period.id ? 'text-primary' : 'text-zinc-600 group-hover:text-primary'} `}>
+                                                        {period.icon}
                                                     </span>
-                                                    <button onClick={handleNextMonth} className="text-zinc-400 hover:text-white p-2">
-                                                        <span className="material-symbols-outlined">chevron_right</span>
-                                                    </button>
+                                                    <div className="text-left">
+                                                        <span className="block font-black text-base uppercase tracking-wide">{period.label}</span>
+                                                        <span className={`text-xs font-bold ${selectedPeriod === period.id ? 'text-zinc-300' : 'text-zinc-600'} `}>{period.range}</span>
+                                                    </div>
                                                 </div>
-
-                                                {/* Calendar Grid */}
-                                                <div className="grid grid-cols-7 gap-1 text-center mb-2">
-                                                    {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d, i) => (
-                                                        <span key={i} className="text-[10px] font-black text-zinc-600 uppercase">{d}</span>
-                                                    ))}
-                                                </div>
-                                                <div className="grid grid-cols-7 gap-2">
-                                                    {/* Empty slots for start of month */}
-                                                    {Array.from({ length: getFirstDayOfMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => (
-                                                        <div key={`empty-${i}`} />
-                                                    ))}
-
-                                                    {/* Days */}
-                                                    {Array.from({ length: getDaysInMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => {
-                                                        const day = i + 1;
-                                                        const disabled = isPastDate(day);
-                                                        const selected = isSelected(day);
-
-                                                        return (
-                                                            <button
-                                                                key={day}
-                                                                disabled={disabled}
-                                                                onClick={() => handleDateSelect(day)}
-                                                                className={`size-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all duration-300 ${selected
-                                                                        ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105'
-                                                                        : disabled
-                                                                            ? 'text-zinc-700 cursor-not-allowed'
-                                                                            : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
-                                                                    }`}
-                                                            >
-                                                                {day}
-                                                            </button>
-                                                        )
-                                                    })}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Coluna Direita: Períodos */}
-                                        <div className={`flex flex-col transition-all duration-500 ${selectedDate ? 'opacity-100' : 'opacity-30 pointer-events-none'} `}>
-                                            <h3 className="text-2xl font-display font-bold text-white mb-1">Período</h3>
-                                            <p className="text-zinc-500 mb-6 text-sm">Escolha seu turno de preferência.</p>
-
-                                            <div className="flex flex-col gap-3">
-                                                {periods.map(period => (
-                                                    <button
-                                                        key={period.id}
-                                                        onClick={() => setSelectedPeriod(period.id)}
-                                                        className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 group ${selectedPeriod === period.id
-                                                            ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)]'
-                                                            : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
-                                                            } `}
-                                                    >
-                                                        <div className="flex items-center gap-4">
-                                                            <span className={`material-symbols-outlined text-3xl ${selectedPeriod === period.id ? 'text-primary' : 'text-zinc-600 group-hover:text-primary'} `}>
-                                                                {period.icon}
-                                                            </span>
-                                                            <div className="text-left">
-                                                                <span className="block font-black text-base uppercase tracking-wide">{period.label}</span>
-                                                                <span className={`text-xs font-bold ${selectedPeriod === period.id ? 'text-zinc-300' : 'text-zinc-600'} `}>{period.range}</span>
-                                                            </div>
-                                                        </div>
-                                                        {selectedPeriod === period.id && (
-                                                            <span className="material-symbols-outlined text-primary text-2xl">check_circle</span>
-                                                        )}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
+                                                {selectedPeriod === period.id && (
+                                                    <span className="material-symbols-outlined text-primary text-2xl">check_circle</span>
+                                                )}
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -436,7 +324,7 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
                                                     <span className="text-xs font-black uppercase tracking-wider">Importante</span>
                                                 </div>
                                                 <p className="text-xs text-zinc-400 font-medium leading-relaxed">
-                                                    Entraremos em contato via WhatsApp para confirmar o horário exato dentro do período <strong>{selectedPeriod}</strong>, ver as referências e enviar o orçamento final.
+                                                    Após enviar, combine o melhor dia diretamente com o profissional para o período <strong>{selectedPeriod}</strong>. Ele confirmará o horário, verá as referências e enviará o orçamento.
                                                 </p>
                                             </div>
                                         </div>
@@ -480,7 +368,7 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
 
                                 <button
                                     onClick={step === 3 ? handleSubmit : handleNext}
-                                    disabled={(step === 1 && !selectedArtist) || (step === 2 && (!selectedDate || !selectedPeriod)) || submitting}
+                                    disabled={(step === 1 && !selectedArtist) || (step === 2 && !selectedPeriod) || submitting}
                                     className="px-8 py-4 rounded-xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center gap-2 bg-primary hover:bg-primary-hover text-white shadow-[0_0_25px_rgba(212,17,50,0.4)] hover:shadow-[0_0_35px_rgba(212,17,50,0.6)] disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none"
                                 >
                                     {step === 3 ? (submitting ? 'ENVIANDO...' : 'ENVIAR SOLICITAÇÃO') : 'CONTINUAR'}
@@ -502,7 +390,7 @@ const Booking: React.FC<{ artists: BookingArtist[] }> = ({ artists }) => {
                                 <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-black mb-1">Resumo</p>
                                 <p className="text-white font-bold truncate">{artists.find(a => a.id === selectedArtist)?.name}</p>
                                 <p className="text-sm text-zinc-400 truncate">
-                                    {selectedDate ? `${selectedDate} • ${selectedPeriod || 'Turno a definir'} ` : 'Data a definir'}
+                                    {selectedPeriod ? `Período: ${selectedPeriod}` : 'Turno a definir'}
                                 </p>
                             </div>
                         </div>

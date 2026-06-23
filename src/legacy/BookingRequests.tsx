@@ -1,77 +1,41 @@
 'use client';
 
 import React, { useState } from 'react';
+import { aprovarSolicitacao, recusarSolicitacao } from '@/features/booking/actions/gerenciarSolicitacao';
+import DateTimePicker from '@/features/booking/components/DateTimePicker';
 
-// Interface para os dados da solicitação
 interface BookingRequest {
-    id: number;
+    id: string;
     clientName: string;
     clientEmail: string;
     clientPhone: string;
     clientAvatar: string;
-    clientRating: number; // 1-5
     service: string;
-    requestedDate: string;
-    requestedTime: string;
-    description: string; // Ideia da tattoo
+    periodo: string;
+    description: string;
     medicalInfo: {
         allergies: string;
         notes: string;
     };
-    requestTimestamp: string;
+    requestedAt: string;
 }
 
-// Mock Data
-const initialRequests: BookingRequest[] = [
-    {
-        id: 1,
-        clientName: "Juliana Paiva",
-        clientEmail: "ju.paiva@email.com",
-        clientPhone: "(11) 99876-5432",
-        clientAvatar: "https://i.pravatar.cc/150?u=juliana",
-        clientRating: 5.0,
-        service: "Realismo Preto e Cinza",
-        requestedDate: "20 Nov, 2024",
-        requestedTime: "Tarde (12h-18h)",
-        description: "Gostaria de fazer um retrato realista do meu cachorro no antebraço. Tenho uma foto de referência em alta qualidade.",
-        medicalInfo: {
-            allergies: "Nenhuma conhecida",
-            notes: "Pele sensível, costuma ficar bem vermelha."
-        },
-        requestTimestamp: "Há 2 horas"
-    },
-    {
-        id: 2,
-        clientName: "Roberto Alves",
-        clientEmail: "roberto.a@email.com",
-        clientPhone: "(11) 91234-5678",
-        clientAvatar: "https://i.pravatar.cc/150?u=roberto",
-        clientRating: 4.8,
-        service: "Old School",
-        requestedDate: "22 Nov, 2024",
-        requestedTime: "Manhã (06h-12h)",
-        description: "Quero uma adaga atravessando uma rosa no estilo clássico, colorida. Local: Panturrilha.",
-        medicalInfo: {
-            allergies: "Látex (Precisa de luva nitrílica)",
-            notes: "Diabetes controlada."
-        },
-        requestTimestamp: "Há 5 horas"
-    }
-];
-
-const BookingRequests: React.FC = () => {
+const BookingRequests: React.FC<{ requests: BookingRequest[] }> = ({ requests: initialRequests }) => {
     const [requests, setRequests] = useState<BookingRequest[]>(initialRequests);
     const [selectedRequest, setSelectedRequest] = useState<BookingRequest | null>(null);
 
     // Modals visibility
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
-    const [isApproveModalOpen, setIsApproveModalOpen] = useState(false); // Novo modal
+    const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
 
     // Action States
     const [rejectionData, setRejectionData] = useState({ reason: '', note: '' });
-    const [requestToActId, setRequestToActId] = useState<number | null>(null);
-    const [negotiatedPrice, setNegotiatedPrice] = useState(''); // Novo estado para o preço
+    const [requestToActId, setRequestToActId] = useState<string | null>(null);
+    const [negotiatedPrice, setNegotiatedPrice] = useState('');
+    const [approveDateTime, setApproveDateTime] = useState(''); // "YYYY-MM-DDTHH:mm"
+    const [numeroSessoes, setNumeroSessoes] = useState('1');
+    const [submitting, setSubmitting] = useState(false);
 
     const rejectionReasons = [
         "Agenda indisponível para esta data",
@@ -91,70 +55,76 @@ const BookingRequests: React.FC = () => {
         setSelectedRequest(null);
     };
 
-    // Abre o modal de aprovação (passo intermediário)
-    const handleOpenApprove = (id: number) => {
+    const handleOpenApprove = (id: string) => {
         setRequestToActId(id);
-        setNegotiatedPrice(''); // Limpa o preço anterior
+        setNegotiatedPrice('');
+        setApproveDateTime('');
+        setNumeroSessoes('1');
         setIsApproveModalOpen(true);
     };
 
-    // Formata o valor monetário enquanto o usuário digita
     const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value;
-
-        // Remove tudo que não é dígito
         value = value.replace(/\D/g, "");
-
         if (value === "") {
             setNegotiatedPrice("");
             return;
         }
-
-        // Converte para centavos e formata
         const amount = parseFloat(value) / 100;
         const formatted = amount.toLocaleString("pt-BR", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
-
         setNegotiatedPrice(formatted);
     };
 
-    // Efetiva a aprovação
-    const confirmApprove = (e: React.FormEvent) => {
+    const confirmApprove = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!negotiatedPrice) {
-            alert("Por favor, insira o valor combinado.");
-            return;
-        }
+        if (!requestToActId) return;
+        if (!approveDateTime) { alert("Informe a data e hora combinadas."); return; }
+        if (!negotiatedPrice) { alert("Informe o valor combinado."); return; }
 
-        // Lógica de aprovação (API call) enviando o preço
-        console.log(`Aprovando ID ${requestToActId} com valor R$ ${negotiatedPrice}`);
+        setSubmitting(true);
+        const fd = new FormData();
+        fd.set('solicitacaoId', requestToActId);
+        fd.set('dataHora', approveDateTime);
+        fd.set('valorCentavos', String(parseInt(negotiatedPrice.replace(/\D/g, ''), 10) || 0));
+        fd.set('numeroSessoes', numeroSessoes);
+
+        const res = await aprovarSolicitacao(null, fd);
+        setSubmitting(false);
+        if (res?.error) { alert(res.error); return; }
 
         setRequests(prev => prev.filter(req => req.id !== requestToActId));
         setIsApproveModalOpen(false);
-        setIsDetailsModalOpen(false); // Fecha detalhes se estiver aberto
+        setIsDetailsModalOpen(false);
         setRequestToActId(null);
-        alert(`Agendamento confirmado! Valor registrado: R$ ${negotiatedPrice}`);
     };
 
-    const handleOpenReject = (id: number) => {
+    const handleOpenReject = (id: string) => {
         setRequestToActId(id);
         setRejectionData({ reason: rejectionReasons[0], note: '' });
         setIsRejectModalOpen(true);
     };
 
-    const confirmReject = (e: React.FormEvent) => {
+    const confirmReject = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (requestToActId) {
-            // Lógica de API para recusar com motivo
-            console.log("Recusando ID:", requestToActId, rejectionData);
-            setRequests(prev => prev.filter(req => req.id !== requestToActId));
-            setIsRejectModalOpen(false);
-            setIsDetailsModalOpen(false); // Fecha o detalhe se estiver aberto
-            setRequestToActId(null);
-            alert("Solicitação recusada. O motivo foi enviado ao cliente.");
-        }
+        if (!requestToActId) return;
+
+        setSubmitting(true);
+        const fd = new FormData();
+        fd.set('solicitacaoId', requestToActId);
+        fd.set('motivo', rejectionData.reason);
+        fd.set('nota', rejectionData.note);
+
+        const res = await recusarSolicitacao(null, fd);
+        setSubmitting(false);
+        if (res?.error) { alert(res.error); return; }
+
+        setRequests(prev => prev.filter(req => req.id !== requestToActId));
+        setIsRejectModalOpen(false);
+        setIsDetailsModalOpen(false);
+        setRequestToActId(null);
     };
 
     return (
@@ -180,10 +150,6 @@ const BookingRequests: React.FC = () => {
                             <div className="flex items-center gap-4 w-full md:flex-1">
                                 <div className="relative">
                                     <img src={req.clientAvatar} alt={req.clientName} className="size-16 rounded-xl object-cover bg-surface-light border border-border-dark" />
-                                    <div className="absolute -bottom-2 -right-2 bg-surface-dark rounded-full px-1.5 py-0.5 border border-border-dark flex items-center gap-0.5 shadow-sm">
-                                        <span className="text-[10px] font-bold text-white">{req.clientRating}</span>
-                                        <span className="material-symbols-outlined text-[10px] text-amber-500 fill-current">star</span>
-                                    </div>
                                 </div>
 
                                 <div className="min-w-0 flex-1">
@@ -191,11 +157,11 @@ const BookingRequests: React.FC = () => {
                                     <p className="text-sm text-text-muted mb-1 truncate">{req.clientEmail}</p>
                                     <div className="flex items-center gap-3 text-xs text-text-muted">
                                         <div className="flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-sm text-primary">event</span>
-                                            <span className="text-white font-bold">{req.requestedDate}</span>
+                                            <span className="material-symbols-outlined text-sm text-primary">schedule</span>
+                                            <span className="text-white font-bold">{req.periodo}</span>
                                         </div>
                                         <span>•</span>
-                                        <span>{req.requestTimestamp}</span>
+                                        <span>{req.requestedAt}</span>
                                     </div>
                                 </div>
                             </div>
@@ -241,10 +207,6 @@ const BookingRequests: React.FC = () => {
                                     <h2 className="text-xl font-bold text-white leading-none">{selectedRequest.clientName}</h2>
                                     <div className="flex items-center gap-2 mt-1">
                                         <span className="text-xs text-text-muted bg-surface-light px-2 py-0.5 rounded uppercase tracking-wider font-bold">Cliente</span>
-                                        <div className="flex items-center gap-1 text-amber-500">
-                                            <span className="text-xs font-bold">{selectedRequest.clientRating}</span>
-                                            <span className="material-symbols-outlined text-xs fill-current">star</span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -259,17 +221,17 @@ const BookingRequests: React.FC = () => {
                             {/* Booking Info */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-surface-light/30 p-4 rounded-xl border border-white/5">
-                                    <span className="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Data Solicitada</span>
+                                    <span className="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Turno Preferido</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-white">calendar_month</span>
-                                        <span className="text-lg font-bold text-white">{selectedRequest.requestedDate}</span>
+                                        <span className="material-symbols-outlined text-white">schedule</span>
+                                        <span className="text-lg font-bold text-white">{selectedRequest.periodo}</span>
                                     </div>
                                 </div>
                                 <div className="bg-surface-light/30 p-4 rounded-xl border border-white/5">
-                                    <span className="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Turno/Horário</span>
+                                    <span className="text-xs font-bold text-primary uppercase tracking-widest block mb-1">Solicitado em</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-white">schedule</span>
-                                        <span className="text-lg font-bold text-white">{selectedRequest.requestedTime}</span>
+                                        <span className="material-symbols-outlined text-white">calendar_month</span>
+                                        <span className="text-lg font-bold text-white">{selectedRequest.requestedAt}</span>
                                     </div>
                                 </div>
                             </div>
@@ -281,9 +243,9 @@ const BookingRequests: React.FC = () => {
                                     Ideia / Projeto
                                 </h3>
                                 <div className="bg-background-dark p-4 rounded-lg border border-border-dark">
-                                    <p className="text-sm text-text-light leading-relaxed">"{selectedRequest.description}"</p>
+                                    <p className="text-sm text-text-light leading-relaxed">&quot;{selectedRequest.description}&quot;</p>
                                     <div className="mt-3 pt-3 border-t border-border-dark flex items-center justify-between">
-                                        <span className="text-xs text-text-muted font-bold uppercase">Estilo Sugerido</span>
+                                        <span className="text-xs text-text-muted font-bold uppercase">Serviço</span>
                                         <span className="text-xs text-white bg-primary/20 px-2 py-1 rounded border border-primary/20">{selectedRequest.service}</span>
                                     </div>
                                 </div>
@@ -399,8 +361,8 @@ const BookingRequests: React.FC = () => {
                             </div>
                             <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
                                 <button type="button" onClick={() => setIsRejectModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Cancelar</button>
-                                <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-red-900/20">
-                                    Confirmar Recusa
+                                <button type="submit" disabled={submitting} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-red-900/20 disabled:opacity-50">
+                                    {submitting ? 'Enviando...' : 'Confirmar Recusa'}
                                 </button>
                             </div>
                         </form>
@@ -408,36 +370,52 @@ const BookingRequests: React.FC = () => {
                 </div>
             )}
 
-            {/* Approve Price Modal (NEW) */}
+            {/* Approve Modal (data + hora + valor) */}
             {isApproveModalOpen && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-sm shadow-2xl relative animate-fade-in">
+                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl relative animate-fade-in max-h-[90vh] overflow-y-auto">
                         <form onSubmit={confirmApprove}>
                             <div className="p-6 border-b border-border-dark flex justify-between items-center bg-emerald-500/5 rounded-t-2xl">
                                 <div className="flex items-center gap-2 text-emerald-500">
-                                    <span className="material-symbols-outlined">attach_money</span>
-                                    <h3 className="text-xl font-bold">Definir Valor</h3>
+                                    <span className="material-symbols-outlined">event_available</span>
+                                    <h3 className="text-xl font-bold">Aprovar Agendamento</h3>
                                 </div>
                                 <button type="button" onClick={() => setIsApproveModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
                             </div>
-                            <div className="p-6">
-                                <p className="text-text-muted text-sm mb-6">Confirme o valor final negociado para esta sessão.</p>
+                            <div className="p-6 space-y-5">
+                                <p className="text-text-muted text-sm">Lance a data, horário, nº de sessões e valor combinados com o cliente. Ele receberá para confirmar.</p>
 
                                 <div>
-                                    <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Valor da Sessão (R$)</label>
-                                    <div className="relative">
-                                        {/* Ícone centralizado verticalmente */}
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted font-bold pointer-events-none text-lg">R$</span>
+                                    <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Data e horário combinados</label>
+                                    <DateTimePicker onChange={setApproveDateTime} />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Nº de sessões</label>
                                         <input
                                             required
-                                            type="text" // Mudado para text para permitir formatação
-                                            inputMode="numeric"
-                                            autoFocus
-                                            value={negotiatedPrice}
-                                            onChange={handlePriceChange}
-                                            className="w-full bg-background-dark border border-border-dark rounded-xl py-4 pl-14 text-white text-2xl font-bold focus:border-emerald-500 placeholder-zinc-700 outline-none transition-all"
-                                            placeholder="0,00"
+                                            type="number"
+                                            min={1}
+                                            value={numeroSessoes}
+                                            onChange={(e) => setNumeroSessoes(e.target.value)}
+                                            className="w-full bg-background-dark border border-border-dark rounded-xl py-3 px-4 text-white text-lg font-bold focus:border-emerald-500 outline-none transition-all"
                                         />
+                                    </div>
+                                    <div>
+                                        <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Valor total (R$)</label>
+                                        <div className="relative">
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted font-bold pointer-events-none text-sm">R$</span>
+                                            <input
+                                                required
+                                                type="text"
+                                                inputMode="numeric"
+                                                value={negotiatedPrice}
+                                                onChange={handlePriceChange}
+                                                className="w-full bg-background-dark border border-border-dark rounded-xl py-3 pl-10 text-white text-lg font-bold focus:border-emerald-500 placeholder-zinc-700 outline-none transition-all"
+                                                placeholder="0,00"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -451,9 +429,10 @@ const BookingRequests: React.FC = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-emerald-900/20"
+                                    disabled={submitting}
+                                    className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-emerald-900/20 disabled:opacity-50"
                                 >
-                                    Confirmar
+                                    {submitting ? 'Enviando...' : 'Confirmar'}
                                 </button>
                             </div>
                         </form>

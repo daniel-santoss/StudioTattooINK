@@ -57,6 +57,7 @@ enum NivelExperiencia {
 
 enum StatusAgendamento {
   DISPONIVEL
+  AGUARDANDO_CONFIRMACAO
   AGENDADO
   EM_ANDAMENTO
   CONCLUIDO
@@ -64,6 +65,25 @@ enum StatusAgendamento {
   CANCELADO
 
   @@map("status_agendamento")
+}
+
+enum MotivoRecusaData {
+  DIA
+  HORARIO
+  VALOR
+
+  @@map("motivo_recusa_data")
+}
+
+enum TipoEventoAgendamento {
+  SOLICITACAO_CRIADA
+  DATA_PROPOSTA
+  DATA_CONFIRMADA
+  DATA_RECUSADA
+  STATUS_ALTERADO
+  CANCELADO
+
+  @@map("tipo_evento_agendamento")
 }
 
 enum TipoAgendamento {
@@ -134,6 +154,7 @@ model Usuario {
 
   ocorrenciasRelatadas  Ocorrencia[] @relation("OcorrenciaRelator")
   ocorrenciasRecebidas  Ocorrencia[] @relation("OcorrenciaReportado")
+  eventosAgendamento    AgendamentoEvento[]
 
   criadoEm     DateTime  @default(now()) @map("criado_em")
   atualizadoEm DateTime  @updatedAt @map("atualizado_em")
@@ -156,8 +177,9 @@ model Cliente {
   totalSessoes       Int           @default(0) @map("total_sessoes")
   ultimaVisitaEm     DateTime?     @map("ultima_visita_em")
 
-  agendamentos Agendamento[]
-  solicitacoes SolicitacaoAgendamento[]
+  agendamentos        Agendamento[]
+  solicitacoes        SolicitacaoAgendamento[]
+  servicosContratados ServicoContratado[]
 
   criadoEm     DateTime @default(now()) @map("criado_em")
   atualizadoEm DateTime @updatedAt @map("atualizado_em")
@@ -180,11 +202,12 @@ model Profissional {
   disponibilidade        StatusDisponibilidade @default(DISPONIVEL)
   aceitandoAgendamentos  Boolean               @default(true) @map("aceitando_agendamentos")
 
-  portfolio    ProfissionalPortfolio[]
-  galeria      ProfissionalGaleria[]
-  estilos      ProfissionalEstilo[]
-  agendamentos Agendamento[]
-  solicitacoes SolicitacaoAgendamento[]
+  portfolio           ProfissionalPortfolio[]
+  galeria             ProfissionalGaleria[]
+  estilos             ProfissionalEstilo[]
+  agendamentos        Agendamento[]
+  solicitacoes        SolicitacaoAgendamento[]
+  servicosContratados ServicoContratado[]
 
   criadoEm     DateTime @default(now()) @map("criado_em")
   atualizadoEm DateTime @updatedAt @map("atualizado_em")
@@ -271,8 +294,9 @@ model Servico {
   precoCentavos Int?             @map("preco_centavos")
   ativo         Boolean          @default(true)
 
-  agendamentos Agendamento[]
-  solicitacoes SolicitacaoAgendamento[]
+  agendamentos        Agendamento[]
+  solicitacoes        SolicitacaoAgendamento[]
+  servicosContratados ServicoContratado[]
 
   criadoEm DateTime @default(now()) @map("criado_em")
 
@@ -307,6 +331,11 @@ model Agendamento {
   servicoId      String?                 @map("servico_id")
   solicitacao    SolicitacaoAgendamento? @relation(fields: [solicitacaoId], references: [id], onDelete: SetNull)
   solicitacaoId  String?                 @unique @map("solicitacao_id")
+  eventos        AgendamentoEvento[]
+
+  servicoContratado   ServicoContratado? @relation(fields: [servicoContratadoId], references: [id], onDelete: Cascade)
+  servicoContratadoId String?            @map("servico_contratado_id")
+  numeroSessao        Int                @default(1) @map("numero_sessao")
 
   iniciaEm           DateTime          @map("inicia_em")
   terminaEm          DateTime          @map("termina_em")
@@ -320,6 +349,8 @@ model Agendamento {
   observacoes        String?
   observacoesInternas String?          @map("observacoes_internas")
   motivoCancelamento String?           @map("motivo_cancelamento")
+  motivosRecusaData  MotivoRecusaData[] @map("motivos_recusa_data")
+  obsRecusaData      String?            @map("obs_recusa_data")
 
   criadoEm     DateTime  @default(now()) @map("criado_em")
   atualizadoEm DateTime  @updatedAt @map("atualizado_em")
@@ -327,6 +358,7 @@ model Agendamento {
 
   @@index([profissionalId, iniciaEm])
   @@index([clienteId])
+  @@index([servicoContratadoId])
   @@map("agendamento")
 }
 
@@ -377,4 +409,47 @@ model Ocorrencia {
   atualizadoEm DateTime @updatedAt @map("atualizado_em")
 
   @@map("ocorrencia")
+}
+
+// Linha do tempo append-only de cada agendamento (auditoria / disputas).
+// Só INSERE — nunca edita nem apaga.
+model AgendamentoEvento {
+  id             String                @id @default(cuid())
+  agendamento    Agendamento           @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  agendamentoId  String                @map("agendamento_id")
+  tipo           TipoEventoAgendamento
+  autor          Usuario?              @relation(fields: [autorUsuarioId], references: [id], onDelete: SetNull)
+  autorUsuarioId String?               @map("autor_usuario_id")
+  descricao      String?
+  dadosEvento    Json?                 @map("dados_evento")
+
+  criadoEm DateTime @default(now()) @map("criado_em")
+
+  @@index([agendamentoId, criadoEm])
+  @@map("agendamento_evento")
+}
+
+// Serviço contratado pelo cliente (o "trabalho"): agrupa as sessões.
+// 1 ServicoContratado → N Agendamentos (sessões).
+model ServicoContratado {
+  id             String       @id @default(cuid())
+  cliente        Cliente      @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  clienteId      String       @map("cliente_id")
+  profissional   Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  profissionalId String       @map("profissional_id")
+  servico        Servico?     @relation(fields: [servicoId], references: [id], onDelete: SetNull)
+  servicoId      String?      @map("servico_id")
+
+  descricao          String
+  valorTotalCentavos Int?    @map("valor_total_centavos")
+  numeroSessoes      Int     @default(1) @map("numero_sessoes")
+
+  agendamentos Agendamento[]
+
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  @@index([clienteId])
+  @@index([profissionalId])
+  @@map("servico_contratado")
 }

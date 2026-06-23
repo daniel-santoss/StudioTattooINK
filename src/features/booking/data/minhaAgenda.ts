@@ -30,8 +30,8 @@ function reais(centavos: number | null): string {
 }
 
 const AG_STATUS: Record<string, AgendaItem['status']> = {
-  AGENDADO: 'upcoming', EM_ANDAMENTO: 'upcoming', CONCLUIDO: 'completed',
-  CANCELADO: 'cancelled', BLOQUEADO: 'upcoming', DISPONIVEL: 'upcoming',
+  AGUARDANDO_CONFIRMACAO: 'pending', AGENDADO: 'upcoming', EM_ANDAMENTO: 'upcoming',
+  CONCLUIDO: 'completed', CANCELADO: 'cancelled', BLOQUEADO: 'upcoming', DISPONIVEL: 'upcoming',
 };
 const SOL_STATUS: Record<string, AgendaItem['status']> = {
   PENDENTE: 'pending', APROVADA: 'upcoming', REJEITADA: 'cancelled', CANCELADA: 'cancelled',

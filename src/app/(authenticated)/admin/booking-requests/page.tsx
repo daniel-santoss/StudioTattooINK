@@ -1,10 +1,19 @@
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/features/auth/data/session';
+import { getSolicitacoesPendentes } from '@/features/booking/data/booking';
+import BookingRequests from '@/legacy/BookingRequests';
 
-const BookingRequestsContent = dynamic(() => import('@/legacy/BookingRequests'));
+export const metadata: Metadata = {
+  title: 'Solicitações de Booking',
+  robots: { index: false },
+};
 
-export const metadata: Metadata = { title: 'Solicitações de Booking', robots: { index: false } };
+export default async function BookingRequestsPage() {
+  const usuario = await getCurrentUser();
+  if (!usuario) redirect('/login');
 
-export default function BookingRequestsPage() {
-  return <BookingRequestsContent />;
+  const requests = await getSolicitacoesPendentes(usuario.profissional?.id ?? null);
+
+  return <BookingRequests requests={requests} />;
 }

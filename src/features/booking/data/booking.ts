@@ -34,3 +34,35 @@ export async function getServicos() {
   });
   return servicos;
 }
+
+const REQ_FMT = new Intl.DateTimeFormat('pt-BR', {
+  day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo',
+});
+
+/**
+ * Solicitações PENDENTES para o profissional (as dele + as sem preferência).
+ * Se profissionalId for null (ex.: admin), retorna todas as pendentes.
+ */
+export async function getSolicitacoesPendentes(profissionalId: string | null) {
+  const sols = await prisma.solicitacaoAgendamento.findMany({
+    where: {
+      status: 'PENDENTE',
+      ...(profissionalId ? { OR: [{ profissionalId }, { profissionalId: null }] } : {}),
+    },
+    include: { cliente: { include: { usuario: true } }, servico: true },
+    orderBy: { criadoEm: 'desc' },
+  });
+
+  return sols.map((s) => ({
+    id: s.id,
+    clientName: s.cliente.usuario.nome,
+    clientEmail: s.cliente.usuario.email,
+    clientPhone: s.cliente.usuario.telefone ?? '—',
+    clientAvatar: s.cliente.usuario.avatarUrl ?? 'https://i.pravatar.cc/150',
+    service: s.servico?.nome ?? 'A definir',
+    periodo: s.periodoPreferido ?? 'Sem preferência',
+    description: s.descricao,
+    medicalInfo: { allergies: s.alergias ?? '', notes: s.observacoesMedicas ?? '' },
+    requestedAt: REQ_FMT.format(s.criadoEm),
+  }));
+}
