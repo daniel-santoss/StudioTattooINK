@@ -4,32 +4,26 @@ import type { MatchArtist, MatchPreferences } from '@/shared/types';
 
 const mockArtists: MatchArtist[] = [
   {
-    id: 1,
+    id: '1',
     name: 'Realismo Pro',
     styles: ['Realismo', 'Preto e Cinza'],
     img: '',
-    rating: 5.0,
-    ratingCount: 100,
     summary: '',
     portfolio: []
   },
   {
-    id: 2,
+    id: '2',
     name: 'Piercing Expert',
     styles: ['Piercing'],
     img: '',
-    rating: 4.8,
-    ratingCount: 50,
     summary: '',
     portfolio: []
   },
   {
-    id: 3,
+    id: '3',
     name: 'Fine Line Artist',
     styles: ['Fine Line', 'Minimalismo'],
     img: '',
-    rating: 4.5,
-    ratingCount: 200,
     summary: '',
     portfolio: []
   }

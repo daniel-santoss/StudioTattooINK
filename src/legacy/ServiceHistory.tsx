@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 interface HistoryItem {
-    id: number;
+    id: string;
     day: string; // "28"
     month: string; // "DEZ"
     year: string; // "2025"
@@ -18,84 +18,18 @@ interface HistoryItem {
     type: 'tattoo' | 'piercing' | 'orcamento';
 }
 
-const initialHistory: HistoryItem[] = [
-    {
-        id: 7,
-        day: "28",
-        month: "DEZ",
-        year: "2025",
-        time: "09:00",
-        clientName: "Leticia Sabatella",
-        clientAvatar: "https://i.pravatar.cc/150?u=30",
-        service: "Piercing Umbigo",
-        status: "concluido",
-        type: "piercing"
-    },
-    {
-        id: 1,
-        day: "20",
-        month: "OUT",
-        year: "2024",
-        time: "14:00",
-        clientName: "Marcus Thorn",
-        clientAvatar: "https://i.pravatar.cc/150?u=1",
-        service: "Fechamento de Braço - Sessão 1",
-        status: "concluido",
-        type: "tattoo"
-    },
-    {
-        id: 2,
-        day: "18",
-        month: "OUT",
-        year: "2024",
-        time: "10:00",
-        clientName: "Lucas Vane",
-        clientAvatar: "https://i.pravatar.cc/150?u=2",
-        service: "Rosa Old School",
-        status: "concluido",
-        type: "tattoo"
-    },
-    {
-        id: 3,
-        day: "15",
-        month: "OUT",
-        year: "2024",
-        time: "16:00",
-        clientName: "Jessica Rabbit",
-        clientAvatar: "https://i.pravatar.cc/150?u=3",
-        service: "Micro Realismo Pet",
-        status: "retoque",
-        type: "tattoo"
-    },
-    {
-        id: 99,
-        day: "05",
-        month: "OUT",
-        year: "2024",
-        time: "13:00",
-        clientName: "John Doe",
-        clientAvatar: "https://i.pravatar.cc/150?u=4",
-        service: "Dragão Oriental",
-        status: "cancelado",
-        type: "tattoo"
-    }
-];
+// Selo "Em breve" para ações ainda sem backend (mantidas visíveis a pedido).
+const EmBreve = () => (
+    <span className="ml-auto text-[9px] uppercase tracking-wider text-text-muted border border-border-dark rounded px-1.5 py-0.5">Em breve</span>
+);
 
-const ServiceHistory: React.FC = () => {
+const ServiceHistory: React.FC<{ items: HistoryItem[] }> = ({ items }) => {
     const navigate = useNavigate();
-    const [history] = useState<HistoryItem[]>(initialHistory);
     const [searchTerm, setSearchTerm] = useState('');
 
     // Menu State
-    const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
+    const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const menuRef = useRef<HTMLDivElement>(null);
-
-    // Modal States
-    const [isRateModalOpen, setIsRateModalOpen] = useState(false);
-    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null);
-    const [clientRating, setClientRating] = useState(0);
-    const [ratingComment, setRatingComment] = useState("");
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -107,42 +41,16 @@ const ServiceHistory: React.FC = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const toggleMenu = (id: number, e: React.MouseEvent) => {
+    const toggleMenu = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         setActiveMenuId(activeMenuId === id ? null : id);
     };
 
-    const handleCardClick = (id: number) => {
+    const handleCardClick = (id: string) => {
         navigate(`/admin/appointment/${id}`);
     };
 
-    const handleOpenRate = (item: HistoryItem) => {
-        setSelectedItem(item);
-        setClientRating(0);
-        setRatingComment("");
-        setIsRateModalOpen(true);
-        setActiveMenuId(null);
-    };
-
-    const handleOpenReport = (item: HistoryItem) => {
-        setSelectedItem(item);
-        setIsReportModalOpen(true);
-        setActiveMenuId(null);
-    };
-
-    const submitClientRating = (e: React.FormEvent) => {
-        e.preventDefault();
-        alert(`Avaliação enviada com sucesso para ${selectedItem?.clientName}!`);
-        setIsRateModalOpen(false);
-    };
-
-    const submitReport = (e: React.FormEvent) => {
-        e.preventDefault();
-        alert(`Ocorrência registrada sobre o atendimento #${selectedItem?.id}`);
-        setIsReportModalOpen(false);
-    };
-
-    const filteredHistory = history.filter(item =>
+    const filteredHistory = items.filter(item =>
         item.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.service.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -171,7 +79,7 @@ const ServiceHistory: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
                     <h1 className="font-tattoo text-4xl text-white mb-2">Histórico de Atendimentos</h1>
-                    <p className="text-text-muted text-sm">Visualize os trabalhos realizados e avaliações.</p>
+                    <p className="text-text-muted text-sm">Visualize os trabalhos realizados.</p>
                 </div>
 
                 <div className="relative flex-1 md:max-w-xs">
@@ -261,24 +169,27 @@ const ServiceHistory: React.FC = () => {
                                                         Ver Detalhes
                                                     </button>
 
-                                                    {(item.status === 'concluido' || item.status === 'retoque') && (
-                                                        <button
-                                                            onClick={() => handleOpenRate(item)}
-                                                            className="w-full text-left px-3 py-2 text-sm text-amber-500 hover:bg-white/10 rounded-lg flex items-center gap-2 font-medium"
-                                                        >
-                                                            <span className="material-symbols-outlined text-lg">star</span>
-                                                            Avaliar Cliente
-                                                        </button>
-                                                    )}
+                                                    {/* Ações ainda sem backend — visíveis, sinalizadas como "Em breve" */}
+                                                    <button
+                                                        disabled
+                                                        title="Em breve"
+                                                        className="w-full text-left px-3 py-2 text-sm text-amber-500/40 rounded-lg flex items-center gap-2 font-medium cursor-not-allowed"
+                                                    >
+                                                        <span className="material-symbols-outlined text-lg">star</span>
+                                                        Avaliar Cliente
+                                                        <EmBreve />
+                                                    </button>
 
                                                     <div className="h-px bg-white/10 my-1"></div>
 
                                                     <button
-                                                        onClick={() => handleOpenReport(item)}
-                                                        className="w-full text-left px-3 py-2 text-sm text-text-muted hover:text-white hover:bg-white/10 rounded-lg flex items-center gap-2 font-medium"
+                                                        disabled
+                                                        title="Em breve"
+                                                        className="w-full text-left px-3 py-2 text-sm text-text-muted/50 rounded-lg flex items-center gap-2 font-medium cursor-not-allowed"
                                                     >
                                                         <span className="material-symbols-outlined text-lg">flag</span>
                                                         Reportar
+                                                        <EmBreve />
                                                     </button>
                                                 </div>
                                             </div>
@@ -290,103 +201,6 @@ const ServiceHistory: React.FC = () => {
                     ))
                 )}
             </div>
-
-            {/* Rate Client Modal (Matches Client Side Style) */}
-            {isRateModalOpen && selectedItem && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={(e) => e.stopPropagation()}>
-                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl relative animate-fade-in">
-                        <form onSubmit={submitClientRating}>
-                            <div className="p-6 border-b border-border-dark flex justify-between items-center">
-                                <h3 className="text-xl font-bold text-white">Avaliar Atendimento</h3>
-                                <button type="button" onClick={() => setIsRateModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
-                            </div>
-                            <div className="p-6 text-center">
-                                <p className="text-text-muted text-sm mb-4">Como foi atender <span className="text-white font-bold">{selectedItem.clientName}</span>?</p>
-                                <div className="flex justify-center gap-2 mb-6">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <button
-                                            key={star}
-                                            type="button"
-                                            onClick={() => setClientRating(star)}
-                                            className="group p-1 transition-transform hover:scale-110 focus:outline-none"
-                                        >
-                                            <span
-                                                className={`material-symbols-outlined text-4xl transition-colors duration-200 ${star <= clientRating ? 'text-amber-500' : 'text-zinc-600'
-                                                    }`}
-                                                style={{
-                                                    fontVariationSettings: `'FILL' ${star <= clientRating ? 1 : 0}, 'wght' 400, 'GRAD' 0, 'opsz' 24`
-                                                }}
-                                            >
-                                                star
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
-                                <textarea
-                                    value={ratingComment}
-                                    onChange={(e) => setRatingComment(e.target.value)}
-                                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-primary placeholder-zinc-600 resize-none transition-all"
-                                    rows={3}
-                                    placeholder="Deixe um comentário (opcional)..."
-                                ></textarea>
-                            </div>
-                            <div className="p-6 border-t border-border-dark flex justify-end">
-                                <button type="submit" className="w-full bg-primary hover:bg-primary-hover text-white py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors">
-                                    ENVIAR AVALIAÇÃO
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {/* Modal Report Incident */}
-            {isReportModalOpen && selectedItem && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl relative animate-fade-in">
-                        <form onSubmit={submitReport}>
-                            <div className="p-6 border-b border-border-dark flex justify-between items-center bg-red-500/5">
-                                <div className="flex items-center gap-2 text-red-500">
-                                    <span className="material-symbols-outlined">report_problem</span>
-                                    <h3 className="text-xl font-bold">Reportar Incidente</h3>
-                                </div>
-                                <button type="button" onClick={() => setIsReportModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
-                            </div>
-                            <div className="p-6">
-                                <p className="text-text-muted text-sm mb-4">Registrar ocorrência com o cliente <span className="text-white font-bold">{selectedItem.clientName}</span>.</p>
-
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Tipo de Incidente</label>
-                                        <select className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white text-sm focus:border-red-500">
-                                            <option>Não comparecimento (No-show)</option>
-                                            <option>Atraso excessivo</option>
-                                            <option>Problemas no pagamento</option>
-                                            <option>Comportamento inadequado</option>
-                                            <option>Cuidados pós-tattoo negligenciados</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Observações</label>
-                                        <textarea
-                                            required
-                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-red-500 placeholder-zinc-700"
-                                            rows={4}
-                                            placeholder="Descreva o ocorrido para registro interno..."
-                                        ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border-t border-border-dark flex justify-end gap-3">
-                                <button type="button" onClick={() => setIsReportModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Cancelar</button>
-                                <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-red-900/20">
-                                    Registrar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

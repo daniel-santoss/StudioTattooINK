@@ -34,9 +34,10 @@ interface AuthenticatedLayoutShellProps {
   children: React.ReactNode;
   role: UserRole;
   name: string;
+  avatarUrl?: string;
 }
 
-const AuthenticatedLayoutShell: React.FC<AuthenticatedLayoutShellProps> = ({ children, role, name }) => {
+const AuthenticatedLayoutShell: React.FC<AuthenticatedLayoutShellProps> = ({ children, role, name, avatarUrl }) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -97,7 +98,7 @@ const AuthenticatedLayoutShell: React.FC<AuthenticatedLayoutShellProps> = ({ chi
                 onClick={() => router.push('/admin/profile')}
                 className="flex items-center gap-3 flex-1 overflow-hidden cursor-pointer"
               >
-                <div className="size-10 rounded-full bg-cover bg-center border border-border-dark" style={{ backgroundImage: 'url(https://i.pravatar.cc/150?u=a042581f4e29026024d)' }}></div>
+                <div className="size-10 rounded-full bg-cover bg-center border border-border-dark bg-surface-light" style={{ backgroundImage: `url(${avatarUrl || '/images/tatuadores/tatuador1.jpg'})` }}></div>
                 <div className="flex flex-col overflow-hidden flex-1 text-left">
                   <span className="text-sm font-bold text-white group-hover:text-primary transition-colors truncate">{name}</span>
                   <span className="text-xs text-text-muted truncate capitalize">{roleLabel}</span>

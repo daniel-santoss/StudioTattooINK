@@ -6,24 +6,11 @@ import Link from 'next/link';
 import { useMatchmaker } from '@/features/matchmaker/hooks/useMatchmaker';
 import { matchArtists, getTattooStyles, getPiercingTypes, getPlacementOptions } from '@/features/matchmaker/services/matchingEngine';
 import type { MatchArtist } from '@/shared/types';
-import artistsData from '@/data/artists.json';
 
-const MatchmakerWizard: React.FC = () => {
+const MatchmakerWizard: React.FC<{ artists: MatchArtist[] }> = ({ artists }) => {
   const router = useRouter();
   const { step, preferences, handleSelect, goBack, reset, start } = useMatchmaker();
   const [selectedArtist, setSelectedArtist] = useState<MatchArtist | null>(null);
-
-  // Cast JSON data to typed array
-  const artists: MatchArtist[] = artistsData.map(a => ({
-    id: parseInt(a.id),
-    name: a.name,
-    styles: a.styles,
-    img: a.avatarUrl,
-    rating: a.rating ?? 0,
-    ratingCount: a.ratingCount ?? 0,
-    summary: a.summary ?? '',
-    portfolio: (a.portfolio ?? []).map(p => ({ title: p.title, desc: p.desc, img: p.img })),
-  }));
 
   const results = matchArtists(artists, preferences);
   const recommendations = results.map(r => r.artist);
@@ -167,10 +154,6 @@ const MatchmakerWizard: React.FC = () => {
                           ))}
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 shadow-lg">
-                        <span className="material-symbols-outlined text-amber-500 text-sm fill-current">star</span>
-                        <span className="text-white font-bold text-sm">{artist.rating.toFixed(1)}</span>
-                      </div>
                     </div>
                   </div>
 
@@ -224,14 +207,10 @@ const MatchmakerWizard: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-3xl font-black text-white leading-tight mb-1">{selectedArtist.name}</h2>
-                  <div className="flex items-center gap-2">
-                    <span className="text-white font-bold text-sm">{selectedArtist.rating}</span>
-                    <div className="flex text-amber-500">
-                      {[1, 2, 3, 4, 5].map(s => (
-                        <span key={s} className="material-symbols-outlined text-sm fill-current" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                      ))}
-                    </div>
-                    <span className="text-text-muted text-sm ml-1">({selectedArtist.ratingCount.toLocaleString('pt-BR')})</span>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedArtist.styles.slice(0, 3).map((s) => (
+                      <span key={s} className="text-[9px] uppercase font-bold text-white/90 bg-white/10 px-1.5 py-0.5 rounded border border-white/5">{s}</span>
+                    ))}
                   </div>
                 </div>
               </div>

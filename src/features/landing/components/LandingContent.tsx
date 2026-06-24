@@ -6,13 +6,21 @@ import Link from 'next/link';
 import { useAuth } from '@/shared/hooks/useAuth';
 
 interface GalleryPreviewItem {
-  id: number;
+  id: string;
+  artistId: string;
   name: string;
   category: string;
   img: string;
 }
 
-const LandingContent: React.FC = () => {
+interface ArtistPreview {
+  id: string;
+  name: string;
+  style: string;
+  img: string;
+}
+
+const LandingContent: React.FC<{ artists: ArtistPreview[]; galleryPreview: GalleryPreviewItem[] }> = ({ artists, galleryPreview }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated } = useAuth();
@@ -55,21 +63,12 @@ const LandingContent: React.FC = () => {
   const handleNavigateToArtist = () => {
     if (selectedImage) {
       if (isAuthenticated) {
-        router.push(`/artists/${selectedImage.id}`);
+        router.push(`/artists/${selectedImage.artistId}`);
       } else {
-        router.push(`/login?redirect=${encodeURIComponent(`/artists/${selectedImage.id}`)}`);
+        router.push(`/login?redirect=${encodeURIComponent(`/artists/${selectedImage.artistId}`)}`);
       }
     }
   };
-
-  const galleryPreview = [
-    { id: 1, name: 'Alex Rivera', category: 'Realismo', img: '/images/tattooPiercing/tattooRealista1.jpg' },
-    { id: 3, name: 'Mika Chen', category: 'Oriental', img: '/images/tattooPiercing/tattooOriental1.jpg' },
-    { id: 4, name: 'Elena Rosa', category: 'Fine Line', img: '/images/tattooPiercing/tattooFine1.jpg' },
-    { id: 3, name: 'Mika Chen', category: 'Oriental', img: '/images/tattooPiercing/tattooOriental4.jpg' },
-    { id: 6, name: 'André Costa', category: 'Anime', img: '/images/tattooPiercing/tattooAnime1.jpg' },
-    { id: 4, name: 'Elena Rosa', category: 'Piercing', img: '/images/tattooPiercing/piecing5.jpg' },
-  ];
 
   return (
     <div className="flex flex-col">
@@ -127,12 +126,8 @@ const LandingContent: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { name: 'Alex Rivera', style: 'Realismo Preto e Cinza', img: '/images/tatuadores/tatuador1.jpg' },
-              { name: 'Lucas Vane', style: 'Neo Tradicional', img: '/images/tatuadores/tatuador2.jpg' },
-              { name: 'Mika Chen', style: 'Oriental / Irezumi', img: '/images/tatuadores/tatuador3.jpg' },
-            ].map((artist, i) => (
-              <div key={i} className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-surface-dark cursor-pointer" onClick={() => router.push('/book')}>
+            {artists.map((artist) => (
+              <div key={artist.id} className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-surface-dark cursor-pointer" onClick={() => router.push('/book')}>
                 <img src={artist.img} alt={artist.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">

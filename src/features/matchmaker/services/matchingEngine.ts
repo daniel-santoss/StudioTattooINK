@@ -55,8 +55,7 @@ export function matchArtists(
           (preferences.serviceType === 'Tatuagem'
             ? true
             : a.styles.includes('Piercing'))
-      )
-      .sort((a, b) => b.rating - a.rating);
+      );
     results = [...results, ...remaining].slice(0, 3);
   }
 
@@ -84,12 +83,6 @@ function calculateScore(
   ) {
     score += 30;
   }
-
-  // Bonus por rating
-  score += artist.rating * 4; // max +20
-
-  // Bonus por volume de avaliações (popularidade)
-  if (artist.ratingCount > 1000) score += 5;
 
   return Math.min(100, score);
 }

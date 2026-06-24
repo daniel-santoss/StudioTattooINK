@@ -58,7 +58,7 @@ export async function getSolicitacoesPendentes(profissionalId: string | null) {
     clientName: s.cliente.usuario.nome,
     clientEmail: s.cliente.usuario.email,
     clientPhone: s.cliente.usuario.telefone ?? '—',
-    clientAvatar: s.cliente.usuario.avatarUrl ?? 'https://i.pravatar.cc/150',
+    clientAvatar: s.cliente.usuario.avatarUrl ?? '/images/tatuadores/tatuador1.jpg',
     service: s.servico?.nome ?? 'A definir',
     periodo: s.periodoPreferido ?? 'Sem preferência',
     description: s.descricao,

@@ -72,12 +72,10 @@ export interface MatchPreferences {
 }
 
 export interface MatchArtist {
-  id: number;
+  id: string;
   name: string;
   styles: string[];
   img: string;
-  rating: number;
-  ratingCount: number;
   summary: string;
   portfolio: MatchPortfolioItem[];
 }

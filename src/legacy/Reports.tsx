@@ -2,16 +2,14 @@
 
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 interface Report {
-    id: number;
-    type: 'client_report' | 'artist_report'; // Quem reportou
+    id: string;
+    type: 'client_report' | 'artist_report';
     reporterName: string;
     reporterImage: string;
-    reportedName: string; // Quem foi reportado
-    reportedImage: string; // Foto de quem foi reportado
+    reportedName: string;
+    reportedImage: string;
     date: string;
     category: string;
     description: string;
@@ -19,51 +17,7 @@ interface Report {
     severity: 'Baixa' | 'Média' | 'Alta';
 }
 
-const initialReports: Report[] = [
-    {
-        id: 1,
-        type: 'client_report',
-        reporterName: "Marcus Thorn",
-        reporterImage: "https://i.pravatar.cc/150?u=1",
-        reportedName: "Alex Rivera",
-        reportedImage: "/images/tatuadores/tatuador1.jpg",
-        date: "20 Out, 2024",
-        category: "Atraso excessivo",
-        description: "O tatuador chegou com 1 hora de atraso e não avisou previamente.",
-        status: 'Pendente',
-        severity: 'Baixa'
-    },
-    {
-        id: 2,
-        type: 'artist_report',
-        reporterName: "Lucas Vane",
-        reporterImage: "/images/tatuadores/tatuador2.jpg",
-        reportedName: "John Doe",
-        reportedImage: "https://i.pravatar.cc/150?u=4",
-        date: "18 Out, 2024",
-        category: "Não comparecimento",
-        description: "Cliente não apareceu para a sessão e não responde mensagens.",
-        status: 'Em Análise',
-        severity: 'Média'
-    },
-    {
-        id: 3,
-        type: 'client_report',
-        reporterName: "Jessica Rabbit",
-        reporterImage: "https://i.pravatar.cc/150?u=3",
-        reportedName: "Mika Chen",
-        reportedImage: "/images/tatuadores/tatuador3.jpg",
-        date: "15 Out, 2024",
-        category: "Comportamento inadequado",
-        description: "Senti desconforto com alguns comentários feitos durante a sessão.",
-        status: 'Pendente',
-        severity: 'Alta'
-    }
-];
-
-const Reports: React.FC = () => {
-    const navigate = useNavigate();
-    const [reports, setReports] = useState<Report[]>(initialReports);
+const Reports: React.FC<{ reports: Report[] }> = ({ reports }) => {
     const [selectedReport, setSelectedReport] = useState<Report | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -75,16 +29,6 @@ const Reports: React.FC = () => {
     const handleOpenDetails = (report: Report) => {
         setSelectedReport(report);
         setIsModalOpen(true);
-    };
-
-    const handleStatusChange = (status: 'Resolvido' | 'Em Análise') => {
-        if (!selectedReport) return;
-        setReports(prev => prev.map(r => r.id === selectedReport.id ? { ...r, status } : r));
-        setIsModalOpen(false);
-    };
-
-    const handleViewProfile = () => {
-        navigate('/admin/profile');
     };
 
     const getSeverityStyle = (sev: string) => {
@@ -261,13 +205,13 @@ const Reports: React.FC = () => {
                 )) : (
                     <div className="bg-surface-dark border border-border-dark rounded-xl p-12 text-center">
                         <span className="material-symbols-outlined text-4xl text-text-muted mb-4">filter_list_off</span>
-                        <h3 className="text-lg font-bold text-white mb-2">Nenhum resultado encontrado</h3>
-                        <p className="text-text-muted text-sm">Tente ajustar os filtros para ver mais ocorrências.</p>
+                        <h3 className="text-lg font-bold text-white mb-2">Nenhuma ocorrência</h3>
+                        <p className="text-text-muted text-sm">Não há ocorrências para os filtros selecionados.</p>
                     </div>
                 )}
             </div>
 
-            {/* Modal Detail */}
+            {/* Modal Detail (somente leitura) */}
             {isModalOpen && selectedReport && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
                     <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-lg shadow-2xl relative animate-fade-in">
@@ -301,54 +245,43 @@ const Reports: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div className="grid grid-cols-2 gap-4 mb-2">
                                 <div>
                                     <p className="text-xs text-text-muted uppercase font-bold mb-2">Quem Reportou</p>
-                                    <div className="flex items-center gap-3 mb-3">
+                                    <div className="flex items-center gap-3">
                                         <img src={selectedReport.reporterImage} className="size-10 rounded-full border border-border-dark" />
                                         <div>
                                             <p className="text-sm font-bold text-white">{selectedReport.reporterName}</p>
                                             <p className="text-xs text-text-muted capitalize">{selectedReport.type === 'client_report' ? 'Cliente' : 'Tatuador'}</p>
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={handleViewProfile}
-                                        className="text-xs text-primary hover:text-white font-bold uppercase tracking-wide flex items-center gap-1 transition-colors"
-                                    >
-                                        <span className="material-symbols-outlined text-sm">visibility</span>
-                                        Ver Perfil
-                                    </button>
                                 </div>
                                 <div>
                                     <p className="text-xs text-text-muted uppercase font-bold mb-2">Reportado</p>
-                                    <div className="flex items-center gap-3 h-10 px-3 bg-surface-light rounded-lg border border-white/5 mb-3">
+                                    <div className="flex items-center gap-3 h-10 px-3 bg-surface-light rounded-lg border border-white/5">
                                         <img src={selectedReport.reportedImage} className="size-6 rounded-full object-cover" />
                                         <p className="text-sm font-bold text-white">{selectedReport.reportedName}</p>
                                     </div>
-                                    <button
-                                        onClick={handleViewProfile}
-                                        className="text-xs text-primary hover:text-white font-bold uppercase tracking-wide flex items-center gap-1 transition-colors"
-                                    >
-                                        <span className="material-symbols-outlined text-sm">visibility</span>
-                                        Ver Perfil
-                                    </button>
                                 </div>
                             </div>
                         </div>
 
+                        {/* Ações de moderação ainda sem backend ("Em breve") */}
                         <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark/50 rounded-b-2xl">
                             <button
-                                onClick={() => handleStatusChange('Em Análise')}
-                                disabled={selectedReport.status !== 'Pendente'}
-                                className="px-4 py-2 border border-border-dark hover:bg-white/5 text-text-muted hover:text-white rounded-lg font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled
+                                title="Em breve"
+                                className="px-4 py-2 border border-border-dark text-text-muted/40 rounded-lg font-bold text-sm cursor-not-allowed"
                             >
                                 Marcar Em Análise
                             </button>
                             <button
-                                onClick={() => handleStatusChange('Resolvido')}
-                                className="px-6 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-sm transition-colors shadow-lg shadow-primary/20"
+                                disabled
+                                title="Em breve"
+                                className="px-6 py-2 bg-primary/40 text-white/60 rounded-lg font-bold text-sm cursor-not-allowed flex items-center gap-2"
                             >
                                 Resolver Caso
+                                <span className="text-[9px] tracking-wider border border-white/20 rounded px-1.5 py-0.5">Em breve</span>
                             </button>
                         </div>
                     </div>

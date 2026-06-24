@@ -1,155 +1,38 @@
 'use client';
 
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import React, { useState, useEffect, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { confirmarData, recusarData } from '@/features/booking/actions/confirmarAgendamento';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
-// Interface expandida para incluir detalhes do projeto
 interface AppointmentDetail {
-    id: number;
+    id: string;
     artist: string;
     artistRole: string;
     artistAvatar: string;
     service: string;
-    date: string;
     fullDate: string; // Para display extenso
     time: string;
     duration: string;
     status: 'upcoming' | 'completed' | 'cancelled' | 'pending' | 'rescheduling';
+    aguardandoConfirmacao: boolean; // proposta do profissional pendente de confirmação do cliente
     price: string;
-    paidAmount: string; // Novo campo: Valor já pago
-    remainingAmount: string; // Novo campo: Valor restante
+    paidAmount: string; // Valor já pago
+    remainingAmount: string; // Valor restante
     paymentStatus: 'Pendente' | 'Pago' | 'Parcial';
     location: string;
     description: string;
     referenceImages: string[];
     cancellationReason?: string;
-    rescheduleInfo?: {
-        newDate: string;
-        newTime: string; // Armazena "Manhã", "Tarde" etc.
-        reason: string;
-        requestedBy: 'artist' | 'client';
-    };
+    recusaAnterior?: { motivos: string[]; obs: string } | null;
 }
 
-// Mock Data Database
-const appointmentsDB: AppointmentDetail[] = [
-    {
-        id: 1,
-        artist: "Alex Rivera",
-        artistRole: "Realismo Preto e Cinza",
-        artistAvatar: "/images/tatuadores/tatuador1.jpg",
-        service: "Fechamento de Braço - Sessão 2",
-        date: "15 Nov, 2024",
-        fullDate: "Sexta-feira, 15 de Novembro de 2024",
-        time: "14:00",
-        duration: "4 horas",
-        status: "upcoming",
-        price: "R$ 1.200,00",
-        paidAmount: "R$ 400,00", // Sinal
-        remainingAmount: "R$ 800,00",
-        paymentStatus: "Pendente",
-        location: "Ink Studio - Sala 02",
-        description: "Continuação do fechamento do braço esquerdo. Foco na parte interna do antebraço, sombreamento do leão e início do fundo geométrico.",
-        referenceImages: [
-            "/images/tattooPiercing/tattooRealista1.jpg",
-            "/images/tattooPiercing/tattooRealista2.jpg"
-        ]
-    },
-    {
-        id: 4,
-        artist: "Elena Rosa",
-        artistRole: "Fine Line",
-        artistAvatar: "/images/tatuadores/tatuador4.jpg",
-        service: "Fine Line Minimalista",
-        date: "20 Dez, 2024",
-        fullDate: "Sexta-feira, 20 de Dezembro de 2024",
-        time: "11:00",
-        duration: "1h 30min",
-        status: "pending",
-        price: "A confirmar",
-        paidAmount: "R$ 0,00",
-        remainingAmount: "A confirmar",
-        paymentStatus: "Pendente",
-        location: "Ink Studio - Sala 01",
-        description: "Borboleta delicada no pulso com traços finos e pequenos detalhes pontilhados. Tamanho aprox. 5cm.",
-        referenceImages: [
-            "/images/tattooPiercing/tattooFine1.jpg"
-        ]
-    },
-    {
-        id: 5,
-        artist: "Alex Rivera",
-        artistRole: "Realismo",
-        artistAvatar: "/images/tatuadores/tatuador1.jpg",
-        service: "Retoque Realismo",
-        date: "25 Nov, 2024",
-        fullDate: "Segunda-feira, 25 de Novembro de 2024",
-        time: "09:00",
-        duration: "1 hora",
-        status: "rescheduling",
-        price: "R$ 0,00",
-        paidAmount: "R$ 0,00",
-        remainingAmount: "R$ 0,00",
-        paymentStatus: "Pago",
-        location: "Ink Studio - Sala 02",
-        description: "Retoque na pigmentação do olho do tigre feito há 2 meses. Pequenas falhas na cicatrização.",
-        referenceImages: [],
-        rescheduleInfo: {
-            newDate: "28 Nov, 2024",
-            newTime: "Manhã",
-            reason: "Imprevisto de saúde.",
-            requestedBy: "artist"
-        }
-    },
-    {
-        id: 2,
-        artist: "Lucas Vane",
-        artistRole: "Neo Traditional",
-        artistAvatar: "/images/tatuadores/tatuador2.jpg",
-        service: "Rosa Old School",
-        date: "10 Out, 2024",
-        fullDate: "Quinta-feira, 10 de Outubro de 2024",
-        time: "10:00",
-        duration: "2 horas",
-        status: "completed",
-        price: "R$ 450,00",
-        paidAmount: "R$ 450,00",
-        remainingAmount: "R$ 0,00",
-        paymentStatus: "Pago",
-        location: "Ink Studio - Sala 03",
-        description: "Rosa clássica old school na mão direita. Cores sólidas: Vermelho, Verde e Amarelo.",
-        referenceImages: [
-            "/images/tattooPiercing/tattooOld1.jpg"
-        ]
-    },
-    {
-        id: 3,
-        artist: "Mika Chen",
-        artistRole: "Oriental",
-        artistAvatar: "/images/tatuadores/tatuador3.jpg",
-        service: "Dragão Oriental",
-        date: "05 Out, 2024",
-        fullDate: "Sábado, 05 de Outubro de 2024",
-        time: "16:00",
-        duration: "4 horas",
-        status: "cancelled",
-        price: "R$ 0,00",
-        paidAmount: "R$ 0,00",
-        remainingAmount: "R$ 0,00",
-        paymentStatus: "Pendente",
-        location: "Ink Studio - Sala 04",
-        description: "Sessão cancelada.",
-        referenceImages: [],
-        cancellationReason: "Indisponibilidade de agenda do tatuador."
-    }
-];
-
-const periods = [
-    { id: 'Manhã', label: 'Manhã', range: '06h - 12h', icon: 'wb_twilight' },
-    { id: 'Tarde', label: 'Tarde', range: '12h - 18h', icon: 'wb_sunny' },
-    { id: 'Noite', label: 'Noite', range: '18h - 00h', icon: 'dark_mode' },
+// Opções de recusa da proposta (espelham o enum MotivoRecusaData do banco)
+const REJECT_OPTIONS: { id: 'DIA' | 'HORARIO' | 'VALOR'; label: string; icon: string }[] = [
+    { id: 'DIA', label: 'Dia', icon: 'event' },
+    { id: 'HORARIO', label: 'Horário', icon: 'schedule' },
+    { id: 'VALOR', label: 'Valor', icon: 'payments' },
 ];
 
 const getPeriodFromTime = (time: string) => {
@@ -159,202 +42,52 @@ const getPeriodFromTime = (time: string) => {
     return { label: 'Noite (18h-00h)', icon: 'dark_mode' };
 };
 
-const ClientAppointmentDetails: React.FC = () => {
-    const { id } = useParams() as { id: string };
-    const navigate = useNavigate();
-    const [appointment, setAppointment] = useState<AppointmentDetail | null>(null);
-    const [loading, setLoading] = useState(true);
+// Selo "Em breve" para ações ainda sem backend (mantidas visíveis a pedido).
+const EmBreve = () => (
+    <span className="ml-1 text-[9px] uppercase tracking-wider text-text-muted border border-border-dark rounded px-1.5 py-0.5">Em breve</span>
+);
 
-    // Modal States
-    const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-    const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
-    const [isRateModalOpen, setIsRateModalOpen] = useState(false);
-    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null }> = ({ appointment: initialAppointment }) => {
+    const navigate = useNavigate();
+    const router = useRouter();
+    const [appointment, setAppointment] = useState<AppointmentDetail | null>(initialAppointment);
+    const [isPending, startTransition] = useTransition();
+    const [actionError, setActionError] = useState<string | null>(null);
+
+    // Modal States (apenas o fluxo real de recusa de proposta)
+    const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
 
     // Form States
-    const [cancelReasonData, setCancelReasonData] = useState({ reason: 'Imprevisto pessoal', note: '' });
-    const [rescheduleData, setRescheduleData] = useState({ newDate: '', newPeriod: '', reason: '' });
-    const [ratingValue, setRatingValue] = useState(0);
     const [showErrors, setShowErrors] = useState(false);
+    const [rejectMotivos, setRejectMotivos] = useState<('DIA' | 'HORARIO' | 'VALOR')[]>([]);
+    const [rejectObs, setRejectObs] = useState('');
 
-    // Calendar State & Manual Input
-    const [viewDate, setViewDate] = useState(new Date());
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [dateInput, setDateInput] = useState("");
-    const calendarRef = useRef<HTMLDivElement>(null);
+    // Reflete dados novos vindos do servidor (após router.refresh()).
+    useEffect(() => { setAppointment(initialAppointment); }, [initialAppointment]);
 
-    useEffect(() => {
-        // Simulating fetch
-        setTimeout(() => {
-            const found = appointmentsDB.find(apt => apt.id === Number(id));
-            setAppointment(found || null);
-            setLoading(false);
-        }, 500);
-    }, [id]);
+    // Cliente confirma a data/valor propostos pelo profissional.
+    const handleConfirmar = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await confirmarData(appointment.id);
+            if (res?.error) { setActionError(res.error); return; }
+            router.refresh();
+        });
+    };
 
-    // Close calendar when clicking outside
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
-                setIsCalendarOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [calendarRef]);
-
-    const handleCancel = (e: React.FormEvent) => {
+    // Cliente recusa a proposta (motivos + observação obrigatórios); status permanece aguardando.
+    const handleRecusar = (e: React.FormEvent) => {
         e.preventDefault();
-        if (appointment) {
-            setAppointment({
-                ...appointment,
-                status: 'cancelled',
-                cancellationReason: `${cancelReasonData.reason}: ${cancelReasonData.note}`
-            });
-            setIsCancelModalOpen(false);
-            alert("Agendamento cancelado com sucesso.");
-        }
-    };
-
-    const handleReschedule = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // Show validation errors if any field is invalid
-        const isDateValid = !!rescheduleData.newDate;
-        const isTimeValid = !!rescheduleData.newPeriod;
-        const isReasonValid = !!rescheduleData.reason.trim();
-
-        if (!isDateValid || !isTimeValid || !isReasonValid) {
-            setShowErrors(true);
-            return;
-        }
-
-        if (appointment) {
-            // Format for display: DD/MM/YYYY
-            const [y, m, d] = rescheduleData.newDate.split('-');
-            // Simples string build para evitar timezone shift na exibição
-
-            const formattedFullDate = new Date(rescheduleData.newDate).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-
-            setAppointment({
-                ...appointment,
-                status: 'rescheduling',
-                rescheduleInfo: {
-                    newDate: formattedFullDate,
-                    newTime: rescheduleData.newPeriod, // Saving period label
-                    reason: rescheduleData.reason,
-                    requestedBy: 'client'
-                }
-            });
-            setIsRescheduleModalOpen(false);
-            alert("Solicitação de reagendamento enviada.");
-        }
-    };
-
-    const handleRate = (e: React.FormEvent) => {
-        e.preventDefault();
-        alert("Obrigado pela sua avaliação!");
-        setIsRateModalOpen(false);
-    };
-
-    const handleReport = (e: React.FormEvent) => {
-        e.preventDefault();
-        alert("Problema reportado. Nossa equipe entrará em contato.");
-        setIsReportModalOpen(false);
-    };
-
-    // --- Calendar & Input Logic ---
-
-    const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-    const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
-
-    const handlePrevMonth = () => {
-        const newDate = new Date(viewDate);
-        newDate.setMonth(newDate.getMonth() - 1);
-        setViewDate(newDate);
-    };
-
-    const handleNextMonth = () => {
-        const newDate = new Date(viewDate);
-        newDate.setMonth(newDate.getMonth() + 1);
-        setViewDate(newDate);
-    };
-
-    const handleDateSelect = (day: number) => {
-        const year = viewDate.getFullYear();
-        const month = viewDate.getMonth() + 1;
-
-        // Format ISO for State
-        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        setRescheduleData({ ...rescheduleData, newDate: dateStr });
-
-        // Format DD/MM/YYYY for Input
-        const displayStr = `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
-        setDateInput(displayStr);
-
-        setIsCalendarOpen(false);
-        // Reset errors for date if present
-        if (showErrors && dateStr) setShowErrors(false);
-    };
-
-    const handleManualDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let val = e.target.value.replace(/\D/g, ''); // Remove não dígitos
-
-        if (val.length > 8) val = val.substring(0, 8); // Max 8 digitos
-
-        // Máscara DD/MM/AAAA
-        if (val.length >= 5) {
-            val = val.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1/$2/$3');
-        } else if (val.length >= 3) {
-            val = val.replace(/(\d{2})(\d{1,2})/, '$1/$2');
-        }
-
-        setDateInput(val);
-
-        // Validação ao completar a data (10 chars = DD/MM/AAAA)
-        if (val.length === 10) {
-            const [day, month, year] = val.split('/').map(Number);
-
-            // Check for valid day in month (e.g. 30/02)
-            const daysInMonth = new Date(year, month, 0).getDate();
-
-            if (month < 1 || month > 12 || day < 1 || day > daysInMonth) {
-                setRescheduleData({ ...rescheduleData, newDate: '' }); // Data inválida
-                return;
-            }
-
-            const testDate = new Date(year, month - 1, day);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const isValid =
-                testDate.getFullYear() === year &&
-                year >= today.getFullYear() &&
-                testDate >= today;
-
-            if (isValid) {
-                const isoDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                setRescheduleData({ ...rescheduleData, newDate: isoDate });
-                setViewDate(testDate); // Sincroniza o calendário visual
-            } else {
-                setRescheduleData({ ...rescheduleData, newDate: '' }); // Data inválida
-            }
-        } else {
-            setRescheduleData({ ...rescheduleData, newDate: '' }); // Data incompleta
-        }
-    };
-
-    const isPastDate = (day: number) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const checkDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-        return checkDate < today;
-    };
-
-    const isSelected = (day: number) => {
-        if (!rescheduleData.newDate) return false;
-        const [y, m, d] = rescheduleData.newDate.split('-').map(Number);
-        return viewDate.getFullYear() === y && viewDate.getMonth() + 1 === m && day === d;
+        if (!appointment) return;
+        if (rejectMotivos.length === 0 || !rejectObs.trim()) { setShowErrors(true); return; }
+        setActionError(null);
+        startTransition(async () => {
+            const res = await recusarData(appointment.id, rejectMotivos, rejectObs.trim());
+            if (res?.error) { setActionError(res.error); return; }
+            setIsRejectModalOpen(false);
+            router.refresh();
+        });
     };
 
     const getStatusBadge = (status: string) => {
@@ -368,7 +101,6 @@ const ClientAppointmentDetails: React.FC = () => {
         }
     };
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center text-text-muted">Carregando detalhes...</div>;
     if (!appointment) return <div className="min-h-screen flex items-center justify-center text-text-muted">Agendamento não encontrado.</div>;
 
     const periodData = getPeriodFromTime(appointment.time);
@@ -402,32 +134,30 @@ const ClientAppointmentDetails: React.FC = () => {
                                     <h1 className="font-tattoo text-3xl md:text-4xl text-white">{appointment.service}</h1>
                                     {getStatusBadge(appointment.status)}
                                 </div>
-                                <p className="text-text-muted text-sm">ID do Agendamento: #{appointment.id}882024</p>
+                                <p className="text-text-muted text-sm">ID do Agendamento: #{appointment.id}</p>
                             </div>
 
-                            {/* Actions Group */}
+                            {/* Actions Group — ações ainda sem backend ficam visíveis e desabilitadas ("Em breve") */}
                             <div className="flex flex-wrap gap-3 w-full md:w-auto">
-                                {(appointment.status === 'upcoming' || appointment.status === 'pending') && (
+                                {(appointment.status === 'upcoming' || appointment.status === 'pending') && !appointment.aguardandoConfirmacao && (
                                     <>
                                         <button
-                                            onClick={() => {
-                                                // Reset reschedule state when opening
-                                                setRescheduleData({ newDate: '', newPeriod: '', reason: '' });
-                                                setDateInput('');
-                                                setShowErrors(false);
-                                                setIsRescheduleModalOpen(true);
-                                            }}
-                                            className="flex-1 md:flex-none px-5 py-2.5 bg-surface-light border border-border-dark text-white hover:bg-white/10 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
+                                            disabled
+                                            title="Em breve"
+                                            className="flex-1 md:flex-none px-5 py-2.5 bg-surface-light border border-border-dark text-white/40 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-not-allowed"
                                         >
                                             <span className="material-symbols-outlined text-sm">edit_calendar</span>
                                             Remarcar
+                                            <EmBreve />
                                         </button>
                                         <button
-                                            onClick={() => setIsCancelModalOpen(true)}
-                                            className="flex-1 md:flex-none px-5 py-2.5 border border-red-500/30 text-red-500 hover:bg-red-500/10 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
+                                            disabled
+                                            title="Em breve"
+                                            className="flex-1 md:flex-none px-5 py-2.5 border border-red-500/20 text-red-500/40 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-not-allowed"
                                         >
                                             <span className="material-symbols-outlined text-sm">cancel</span>
                                             Cancelar
+                                            <EmBreve />
                                         </button>
                                     </>
                                 )}
@@ -435,18 +165,22 @@ const ClientAppointmentDetails: React.FC = () => {
                                 {appointment.status === 'completed' && (
                                     <>
                                         <button
-                                            onClick={() => setIsRateModalOpen(true)}
-                                            className="flex-1 md:flex-none px-5 py-2.5 bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
+                                            disabled
+                                            title="Em breve"
+                                            className="flex-1 md:flex-none px-5 py-2.5 bg-amber-500/10 text-amber-500/40 border border-amber-500/20 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-not-allowed"
                                         >
                                             <span className="material-symbols-outlined text-sm">star</span>
                                             Avaliar Serviço
+                                            <EmBreve />
                                         </button>
                                         <button
-                                            onClick={() => setIsReportModalOpen(true)}
-                                            className="flex-1 md:flex-none px-5 py-2.5 border border-border-dark text-text-muted hover:text-red-400 hover:border-red-500/30 rounded-lg font-bold text-xs uppercase tracking-wide transition-all flex items-center justify-center gap-2"
+                                            disabled
+                                            title="Em breve"
+                                            className="flex-1 md:flex-none px-5 py-2.5 border border-border-dark text-text-muted/40 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-not-allowed"
                                         >
                                             <span className="material-symbols-outlined text-sm">flag</span>
                                             Reportar
+                                            <EmBreve />
                                         </button>
                                     </>
                                 )}
@@ -467,9 +201,9 @@ const ClientAppointmentDetails: React.FC = () => {
                                     </div>
                                     <div className="ml-auto">
                                         <button
-                                            onClick={() => navigate('/artist-profile?id=1')} // Mock ID
-                                            className="size-10 rounded-lg bg-surface-dark hover:bg-white/10 flex items-center justify-center text-text-muted hover:text-white transition-colors border border-border-dark"
-                                            title="Ver Perfil"
+                                            disabled
+                                            title="Ver perfil — em breve"
+                                            className="size-10 rounded-lg bg-surface-dark flex items-center justify-center text-text-muted/40 border border-border-dark cursor-not-allowed"
                                         >
                                             <span className="material-symbols-outlined">person</span>
                                         </button>
@@ -509,30 +243,46 @@ const ClientAppointmentDetails: React.FC = () => {
 
                             {/* Right Column: Logistics */}
                             <div className="space-y-6">
-                                {/* Reschedule Info Box if Active */}
-                                {appointment.status === 'rescheduling' && appointment.rescheduleInfo && (
+                                {/* Proposta do profissional aguardando a confirmação do cliente */}
+                                {appointment.aguardandoConfirmacao && (
                                     <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-6 relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-3 opacity-10">
-                                            <span className="material-symbols-outlined text-6xl text-yellow-500">change_circle</span>
+                                            <span className="material-symbols-outlined text-6xl text-yellow-500">event_available</span>
                                         </div>
                                         <h3 className="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <span className="material-symbols-outlined text-sm">info</span>
-                                            Em Reagendamento
+                                            Aguardando sua confirmação
                                         </h3>
                                         <div className="space-y-3 relative z-10">
-                                            <p className="text-sm text-white">Solicitado por: <strong>{appointment.rescheduleInfo.requestedBy === 'client' ? 'Você' : 'Profissional'}</strong></p>
+                                            <p className="text-sm text-white">O profissional propôs a seguinte data e valor:</p>
                                             <div className="bg-background-dark/50 p-3 rounded-lg border border-yellow-500/10">
-                                                <p className="text-xs text-text-muted uppercase font-bold mb-1">Sugestão</p>
-                                                <p className="text-white font-bold">{appointment.rescheduleInfo.newDate} • {appointment.rescheduleInfo.newTime}</p>
+                                                <p className="text-white font-bold">{appointment.fullDate}</p>
+                                                <p className="text-sm text-text-light mt-1">{appointment.time} • {appointment.price}</p>
                                             </div>
-                                            <p className="text-xs text-text-light italic">"{appointment.rescheduleInfo.reason}"</p>
-
-                                            {appointment.rescheduleInfo.requestedBy === 'artist' && (
-                                                <div className="flex gap-2 mt-2">
-                                                    <button className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-bold text-xs uppercase">Aceitar</button>
-                                                    <button className="flex-1 py-2 bg-red-600/20 text-red-500 hover:bg-red-600/30 rounded font-bold text-xs uppercase">Recusar</button>
-                                                </div>
+                                            {appointment.recusaAnterior && (
+                                                <p className="text-xs text-text-light italic">
+                                                    Você já recusou ({appointment.recusaAnterior.motivos.join(', ')}). Aguarde o profissional repropor ou confirme abaixo.
+                                                </p>
                                             )}
+                                            {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
+                                            <div className="flex gap-2 mt-2">
+                                                <button
+                                                    type="button"
+                                                    disabled={isPending}
+                                                    onClick={handleConfirmar}
+                                                    className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-bold text-xs uppercase disabled:opacity-50"
+                                                >
+                                                    {isPending ? 'Confirmando...' : 'Confirmar'}
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    disabled={isPending}
+                                                    onClick={() => { setShowErrors(false); setActionError(null); setRejectMotivos([]); setRejectObs(''); setIsRejectModalOpen(true); }}
+                                                    className="flex-1 py-2 bg-red-600/20 text-red-500 hover:bg-red-600/30 rounded font-bold text-xs uppercase disabled:opacity-50"
+                                                >
+                                                    Recusar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -602,7 +352,7 @@ const ClientAppointmentDetails: React.FC = () => {
                     </div>
 
                     {/* Cancellation Notice if Cancelled */}
-                    {appointment.status === 'cancelled' && (
+                    {appointment.status === 'cancelled' && appointment.cancellationReason && (
                         <div className="bg-red-500/10 border-t border-red-500/20 p-6 text-center">
                             <p className="text-red-400 font-bold text-sm uppercase tracking-wide mb-1">Agendamento Cancelado</p>
                             <p className="text-white text-sm">Motivo: {appointment.cancellationReason}</p>
@@ -611,304 +361,69 @@ const ClientAppointmentDetails: React.FC = () => {
                 </div>
             </div>
 
-            {/* --- MODALS --- */}
-
-            {/* Cancel Modal */}
-            {isCancelModalOpen && (
+            {/* Reject Proposal Modal */}
+            {isRejectModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
                     <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl relative animate-fade-in">
-                        <form onSubmit={handleCancel}>
+                        <form onSubmit={handleRecusar}>
                             <div className="p-6 border-b border-border-dark flex justify-between items-center bg-red-500/5 rounded-t-2xl">
                                 <div className="flex items-center gap-2 text-red-500">
                                     <span className="material-symbols-outlined">event_busy</span>
-                                    <h3 className="text-xl font-bold">Cancelar</h3>
+                                    <h3 className="text-xl font-bold">Recusar Proposta</h3>
                                 </div>
-                                <button type="button" onClick={() => setIsCancelModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
+                                <button type="button" onClick={() => setIsRejectModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
                             </div>
                             <div className="p-6">
-                                <p className="text-text-muted text-sm mb-4">Tem certeza? Esta ação não pode ser desfeita.</p>
+                                <p className="text-text-muted text-sm mb-4">Diga o que não funcionou para o profissional propor outra opção.</p>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Motivo</label>
-                                        <select
-                                            value={cancelReasonData.reason}
-                                            onChange={(e) => setCancelReasonData({ ...cancelReasonData, reason: e.target.value })}
-                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white text-sm focus:border-red-500"
-                                        >
-                                            <option>Imprevisto pessoal</option>
-                                            <option>Problema financeiro</option>
-                                            <option>Problema de saúde</option>
-                                            <option>Outros</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Detalhes</label>
-                                        <textarea
-                                            value={cancelReasonData.note}
-                                            onChange={(e) => setCancelReasonData({ ...cancelReasonData, note: e.target.value })}
-                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-red-500 placeholder-zinc-700"
-                                            rows={3}
-                                            placeholder="Explique melhor se desejar..."
-                                        ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
-                                <button type="button" onClick={() => setIsCancelModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Voltar</button>
-                                <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors">
-                                    Confirmar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {/* Reschedule Modal (Visual Padronizado em Vermelho) */}
-            {isRescheduleModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={(e) => e.stopPropagation()}>
-                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-lg shadow-2xl relative animate-fade-in flex flex-col max-h-[90vh]">
-                        <form onSubmit={handleReschedule} className="flex flex-col h-full">
-                            <div className="p-6 border-b border-border-dark flex justify-between items-center bg-surface-dark rounded-t-2xl">
-                                <div className="flex items-center gap-2 text-primary">
-                                    <span className="material-symbols-outlined">edit_calendar</span>
-                                    <h3 className="text-xl font-bold text-white">Solicitar Mudança</h3>
-                                </div>
-                                <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
-                            </div>
-
-                            <div className="p-6 overflow-y-auto space-y-8 flex-1">
-                                <p className="text-text-muted text-sm">Sugira uma nova data e turno. O tatuador precisará aprovar.</p>
-
-                                {/* Date Selection (Input Manual + Calendar Popover) */}
-                                <div className="relative" ref={calendarRef}>
-                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Nova Data <span className="text-primary">*</span></label>
-
-                                    {/* Input com ícone */}
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            value={dateInput}
-                                            onChange={handleManualDateChange}
-                                            onClick={() => setIsCalendarOpen(true)}
-                                            placeholder="DD/MM/AAAA"
-                                            maxLength={10}
-                                            className={`w-full bg-background-dark border rounded-lg p-3 text-sm text-white placeholder-text-muted focus:outline-none transition-all ${showErrors && !rescheduleData.newDate
-                                                ? 'border-red-500 focus:border-red-500'
-                                                : isCalendarOpen
-                                                    ? 'border-primary ring-1 ring-primary'
-                                                    : 'border-border-dark hover:border-white/30'
-                                                }`}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-white"
-                                        >
-                                            <span className="material-symbols-outlined text-xl">calendar_month</span>
-                                        </button>
-                                    </div>
-                                    {showErrors && !rescheduleData.newDate && (
-                                        <p className="text-red-500 text-xs mt-1">Data inválida ou inexistente</p>
-                                    )}
-
-                                    {/* Floating Calendar */}
-                                    {isCalendarOpen && (
-                                        <div className="absolute top-full left-0 mt-2 z-20 bg-[#1a1a1a] border border-border-dark rounded-xl p-3 shadow-2xl w-full max-w-[280px] animate-fade-in select-none">
-                                            {/* Header */}
-                                            <div className="flex items-center justify-between mb-3">
-                                                <button type="button" onClick={handlePrevMonth} className="text-text-muted hover:text-white p-1 rounded hover:bg-white/10 transition-colors">
-                                                    <span className="material-symbols-outlined text-sm">chevron_left</span>
-                                                </button>
-                                                <span className="text-white font-bold capitalize text-xs">
-                                                    {viewDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
-                                                </span>
-                                                <button type="button" onClick={handleNextMonth} className="text-text-muted hover:text-white p-1 rounded hover:bg-white/10 transition-colors">
-                                                    <span className="material-symbols-outlined text-sm">chevron_right</span>
-                                                </button>
-                                            </div>
-
-                                            {/* Grid */}
-                                            <div className="grid grid-cols-7 gap-1 text-center mb-1">
-                                                {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(d => (
-                                                    <span key={d} className="text-[9px] font-black text-text-muted uppercase">{d}</span>
-                                                ))}
-                                            </div>
-                                            <div className="grid grid-cols-7 gap-1">
-                                                {/* Empty slots */}
-                                                {Array.from({ length: getFirstDayOfMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => (
-                                                    <div key={`empty-${i}`} />
-                                                ))}
-                                                {/* Days */}
-                                                {Array.from({ length: getDaysInMonth(viewDate.getFullYear(), viewDate.getMonth()) }).map((_, i) => {
-                                                    const day = i + 1;
-                                                    const disabled = isPastDate(day);
-                                                    const selected = isSelected(day);
-
-                                                    return (
-                                                        <button
-                                                            key={day}
-                                                            type="button"
-                                                            disabled={disabled}
-                                                            onClick={() => handleDateSelect(day)}
-                                                            className={`
-                                                                size-7 rounded-md flex items-center justify-center text-xs font-bold transition-all
-                                                                ${selected
-                                                                    ? 'bg-primary text-white shadow-md'
-                                                                    : disabled
-                                                                        ? 'text-zinc-700 cursor-not-allowed'
-                                                                        : 'text-zinc-300 hover:bg-surface-light hover:text-white'
-                                                                }
-                                                            `}
-                                                        >
-                                                            {day}
-                                                        </button>
-                                                    )
-                                                })}
-                                            </div>
+                                        <label className="text-xs font-bold text-text-muted uppercase mb-2 block">O que você quer ajustar? <span className="text-primary">*</span></label>
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {REJECT_OPTIONS.map((opt) => {
+                                                const active = rejectMotivos.includes(opt.id);
+                                                return (
+                                                    <button
+                                                        key={opt.id}
+                                                        type="button"
+                                                        onClick={() => setRejectMotivos((prev) => active ? prev.filter((m) => m !== opt.id) : [...prev, opt.id])}
+                                                        className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all gap-1 ${active
+                                                            ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)]'
+                                                            : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
+                                                            }`}
+                                                    >
+                                                        <span className="material-symbols-outlined text-xl">{opt.icon}</span>
+                                                        <span className="text-xs font-bold uppercase">{opt.label}</span>
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
-                                    )}
-                                </div>
-
-                                {/* Period Selection (Cards) */}
-                                <div>
-                                    <label className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3">Turno de Preferência <span className="text-primary">*</span></label>
-                                    <div className="grid grid-cols-3 gap-3">
-                                        {periods.map((period) => (
-                                            <button
-                                                key={period.id}
-                                                type="button"
-                                                onClick={() => setRescheduleData({ ...rescheduleData, newPeriod: period.id })}
-                                                className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300 gap-1 ${rescheduleData.newPeriod === period.id
-                                                    ? 'bg-[#121212] border-primary text-white shadow-[0_0_20px_rgba(212,17,50,0.2)] scale-105'
-                                                    : 'bg-[#121212] border-zinc-800 text-zinc-400 hover:border-primary hover:text-white'
-                                                    }`}
-                                            >
-                                                <span className="material-symbols-outlined text-xl">{period.icon}</span>
-                                                <span className="text-xs font-bold uppercase">{period.label}</span>
-                                                <span className="text-[9px] font-medium opacity-80">{period.range}</span>
-                                            </button>
-                                        ))}
+                                        {showErrors && rejectMotivos.length === 0 && (
+                                            <p className="text-red-500 text-xs mt-1">Selecione ao menos um motivo</p>
+                                        )}
                                     </div>
-                                </div>
-
-                                {/* Reason */}
-                                <div>
-                                    <label className="text-xs font-bold text-text-muted uppercase mb-2 block">Motivo <span className="text-primary">*</span></label>
-                                    <textarea
-                                        value={rescheduleData.reason}
-                                        onChange={(e) => setRescheduleData({ ...rescheduleData, reason: e.target.value })}
-                                        className={`w-full bg-background-dark border rounded-lg p-3 text-white text-sm focus:outline-none placeholder-zinc-700 ${showErrors && !rescheduleData.reason.trim()
-                                            ? 'border-red-500 focus:border-red-500'
-                                            : 'border-border-dark focus:border-primary'
-                                            }`}
-                                        rows={3}
-                                        placeholder="Ex: Tive um imprevisto no trabalho..."
-                                    ></textarea>
-                                    {showErrors && !rescheduleData.reason.trim() && (
-                                        <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
-                                    )}
+                                    <div>
+                                        <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Detalhes <span className="text-primary">*</span></label>
+                                        <textarea
+                                            value={rejectObs}
+                                            onChange={(e) => setRejectObs(e.target.value)}
+                                            className={`w-full bg-background-dark border rounded-lg p-3 text-white text-sm focus:outline-none placeholder-zinc-700 ${showErrors && !rejectObs.trim()
+                                                ? 'border-red-500 focus:border-red-500'
+                                                : 'border-border-dark focus:border-red-500'
+                                                }`}
+                                            rows={3}
+                                            placeholder="Ex: o valor ficou acima do meu orçamento..."
+                                        ></textarea>
+                                        {showErrors && !rejectObs.trim() && (
+                                            <p className="text-red-500 text-xs mt-1">Campo obrigatório</p>
+                                        )}
+                                    </div>
+                                    {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
                                 </div>
                             </div>
                             <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
-                                <button type="button" onClick={() => setIsRescheduleModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm uppercase tracking-wide">Cancelar</button>
-                                <button type="submit" className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors shadow-lg shadow-primary/20">
-                                    ENVIAR
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {/* Rate Modal */}
-            {isRateModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl relative animate-fade-in">
-                        <form onSubmit={handleRate}>
-                            <div className="p-6 border-b border-border-dark flex justify-between items-center">
-                                <h3 className="text-xl font-bold text-white">Avaliar Atendimento</h3>
-                                <button type="button" onClick={() => setIsRateModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
-                            </div>
-                            <div className="p-6 text-center">
-                                <p className="text-text-muted text-sm mb-4">Como foi sua experiência com <span className="text-white font-bold">{appointment.artist}</span>?</p>
-                                <div className="flex justify-center gap-2 mb-6">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <button
-                                            key={star}
-                                            type="button"
-                                            onClick={() => setRatingValue(star)}
-                                            className="group p-1 transition-transform hover:scale-110 focus:outline-none"
-                                        >
-                                            <span
-                                                className={`material-symbols-outlined text-4xl transition-colors duration-200 ${star <= ratingValue ? 'text-amber-500' : 'text-zinc-600'
-                                                    }`}
-                                                style={{
-                                                    fontVariationSettings: `'FILL' ${star <= ratingValue ? 1 : 0}, 'wght' 400, 'GRAD' 0, 'opsz' 24`
-                                                }}
-                                            >
-                                                star
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
-                                <textarea
-                                    className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-xl p-4 text-white text-sm focus:outline-none focus:border-primary placeholder-zinc-600 resize-none transition-all"
-                                    rows={3}
-                                    placeholder="Deixe um comentário (opcional)..."
-                                ></textarea>
-                            </div>
-                            <div className="p-6 border-t border-border-dark flex justify-end">
-                                <button type="submit" className="w-full bg-primary hover:bg-primary-hover text-white py-3 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors">
-                                    Enviar Avaliação
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {/* Report Modal */}
-            {isReportModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl relative animate-fade-in">
-                        <form onSubmit={handleReport}>
-                            <div className="p-6 border-b border-border-dark flex justify-between items-center bg-red-500/5">
-                                <div className="flex items-center gap-2 text-red-500">
-                                    <span className="material-symbols-outlined">report_problem</span>
-                                    <h3 className="text-xl font-bold">Reportar Problema</h3>
-                                </div>
-                                <button type="button" onClick={() => setIsReportModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
-                            </div>
-                            <div className="p-6">
-                                <p className="text-text-muted text-sm mb-4">Descreva o problema ocorrido no atendimento.</p>
-
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Motivo</label>
-                                        <select className="w-full bg-background-dark border border-border-dark rounded-lg p-2.5 text-white text-sm focus:border-red-500">
-                                            <option>Atraso excessivo</option>
-                                            <option>Comportamento inadequado</option>
-                                            <option>Resultado insatisfatório</option>
-                                            <option>Cobrança indevida</option>
-                                            <option>Outro</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold text-text-muted uppercase mb-1 block">Descrição</label>
-                                        <textarea
-                                            required
-                                            className="w-full bg-background-dark border border-border-dark rounded-lg p-3 text-white text-sm focus:border-red-500 placeholder-zinc-700"
-                                            rows={4}
-                                            placeholder="Dê detalhes sobre o ocorrido..."
-                                        ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6 border-t border-border-dark flex justify-end gap-3">
-                                <button type="button" onClick={() => setIsReportModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Cancelar</button>
-                                <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors">
-                                    Enviar Report
+                                <button type="button" onClick={() => setIsRejectModalOpen(false)} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Voltar</button>
+                                <button type="submit" disabled={isPending} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors disabled:opacity-50">
+                                    {isPending ? 'Enviando...' : 'Enviar Recusa'}
                                 </button>
                             </div>
                         </form>

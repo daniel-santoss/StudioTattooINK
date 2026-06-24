@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import LandingContent from '@/features/landing/components/LandingContent';
+import { getAllArtists } from '@/features/portfolio/data/artists';
+import { getGallery } from '@/features/portfolio/data/gallery';
+
+const AVATAR_FALLBACK = '/images/tatuadores/tatuador1.jpg';
 
 export const metadata: Metadata = {
   title: 'Ink Studio — Tatuagem & Piercing | Agende sua Sessão',
@@ -13,12 +18,27 @@ export const metadata: Metadata = {
   },
 };
 
-import { Suspense } from 'react';
+export default async function HomePage() {
+  const [allArtists, gallery] = await Promise.all([getAllArtists(), getGallery()]);
 
-export default function HomePage() {
+  const artists = allArtists.slice(0, 3).map((a) => ({
+    id: a.id,
+    name: a.name,
+    style: a.styles[0] ?? a.role,
+    img: a.avatarUrl || AVATAR_FALLBACK,
+  }));
+
+  const galleryPreview = gallery.slice(0, 6).map((g) => ({
+    id: g.id,
+    artistId: g.artistId,
+    name: g.artist,
+    category: g.category,
+    img: g.imageUrl,
+  }));
+
   return (
     <Suspense fallback={<div className="min-h-screen bg-background-dark"></div>}>
-      <LandingContent />
+      <LandingContent artists={artists} galleryPreview={galleryPreview} />
     </Suspense>
   );
 }

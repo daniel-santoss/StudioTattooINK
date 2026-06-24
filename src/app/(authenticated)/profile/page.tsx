@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/features/auth/data/session';
+import { getPerfil } from '@/features/auth/data/perfil';
 
 const ProfileContent = dynamic(() => import('@/legacy/Profile'));
 
@@ -8,6 +11,10 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default function ProfilePage() {
-  return <ProfileContent />;
+export default async function ProfilePage() {
+  const usuario = await getCurrentUser();
+  if (!usuario) redirect('/login');
+
+  const profile = await getPerfil(usuario.id);
+  return <ProfileContent profile={profile} />;
 }

@@ -56,6 +56,30 @@ export async function getArtistById(id: string) {
   };
 }
 
+/** Artistas com portfólio para o matchmaker (/match). Sem avaliação (não existe no domínio). */
+export async function getArtistsForMatch() {
+  const profs = await prisma.profissional.findMany({
+    where: { usuario: { deletadoEm: null } },
+    include: {
+      usuario: true,
+      estilos: { include: { estilo: true } },
+      portfolio: { orderBy: { ordem: 'asc' } },
+    },
+    orderBy: { usuario: { nome: 'asc' } },
+  });
+
+  return profs.map((p) => ({
+    id: p.id,
+    name: p.usuario.nome,
+    styles: p.estilos.map((e) => e.estilo.nome),
+    img: p.usuario.avatarUrl ?? '/images/tatuadores/tatuador1.jpg',
+    summary: p.bio ?? '',
+    portfolio: p.portfolio.map((item) => ({
+      title: item.titulo, desc: item.descricao ?? '', img: item.imagemUrl,
+    })),
+  }));
+}
+
 /** IDs para generateStaticParams (ISR). */
 export async function getArtistIds(): Promise<string[]> {
   const profs = await prisma.profissional.findMany({ select: { id: true } });
