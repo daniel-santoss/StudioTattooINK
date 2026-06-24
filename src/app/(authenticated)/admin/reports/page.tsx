@@ -11,6 +11,7 @@ export const metadata: Metadata = { title: 'Ocorrências', robots: { index: fals
 export default async function ReportsPage() {
   const usuario = await getCurrentUser();
   if (!usuario) redirect('/login');
+  if (usuario.tipo !== 'ADMIN') redirect('/admin/dashboard');
 
   const reports = await getOcorrencias();
   return <ReportsContent reports={reports} />;

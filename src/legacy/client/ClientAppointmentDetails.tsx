@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { confirmarData, recusarData } from '@/features/booking/actions/confirmarAgendamento';
+import CopyButton from '@/shared/components/CopyButton';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 interface AppointmentDetail {
@@ -134,7 +135,7 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
                                     <h1 className="font-tattoo text-3xl md:text-4xl text-white">{appointment.service}</h1>
                                     {getStatusBadge(appointment.status)}
                                 </div>
-                                <p className="text-text-muted text-sm">ID do Agendamento: #{appointment.id}</p>
+                                <p className="text-text-muted text-sm flex items-center gap-2">ID do Agendamento: #{appointment.id} <CopyButton value={appointment.id} title="Copiar ID do agendamento" /></p>
                             </div>
 
                             {/* Actions Group — ações ainda sem backend ficam visíveis e desabilitadas ("Em breve") */}

@@ -11,6 +11,7 @@ export const metadata: Metadata = { title: 'Tatuadores', robots: { index: false 
 export default async function StaffPage() {
   const usuario = await getCurrentUser();
   if (!usuario) redirect('/login');
+  if (usuario.tipo !== 'ADMIN') redirect('/admin/dashboard');
 
   const staff = await getProfissionais();
   return <StaffContent staff={staff} />;

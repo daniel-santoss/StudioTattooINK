@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '@/shared/hooks/useAuth';
+import { logout } from '@/features/auth/actions/auth';
+import { getSessaoHeader, type SessaoHeader } from '@/features/auth/actions/sessao';
 
 interface PublicLayoutShellProps {
   children: React.ReactNode;
@@ -12,7 +13,9 @@ interface PublicLayoutShellProps {
 const PublicLayoutShell: React.FC<PublicLayoutShellProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { role, isAuthenticated, logout } = useAuth();
+  const [session, setSession] = useState<SessaoHeader>({ isAuthenticated: false, role: null });
+  useEffect(() => { getSessaoHeader().then(setSession).catch(() => {}); }, []);
+  const { isAuthenticated, role } = session;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -81,11 +84,13 @@ const PublicLayoutShell: React.FC<PublicLayoutShellProps> = ({ children }) => {
                   href={role === 'client' ? '/my-appointments' : '/admin/dashboard'}
                   className="text-xs font-bold text-white hover:text-primary transition-colors uppercase tracking-wider"
                 >
-                  Olá, {role === 'client' ? 'Cliente' : 'Artista'}
+                  Olá, {role === 'client' ? 'Cliente' : role === 'admin' ? 'Gerente' : 'Artista'}
                 </Link>
-                <button onClick={logout} className="text-text-muted hover:text-white transition-colors">
-                  <span className="material-symbols-outlined">logout</span>
-                </button>
+                <form action={logout}>
+                  <button type="submit" className="text-text-muted hover:text-white transition-colors" title="Sair">
+                    <span className="material-symbols-outlined">logout</span>
+                  </button>
+                </form>
               </div>
             ) : (
               <Link href="/login" className="text-xs font-bold text-text-muted hover:text-white uppercase tracking-widest transition-colors">
@@ -128,12 +133,14 @@ const PublicLayoutShell: React.FC<PublicLayoutShellProps> = ({ children }) => {
                   >
                     Minha Conta
                   </Link>
-                  <button
-                    onClick={logout}
-                    className="w-full py-3 rounded border border-border-dark text-text-muted hover:text-white font-bold uppercase tracking-wider"
-                  >
-                    Sair
-                  </button>
+                  <form action={logout} className="w-full">
+                    <button
+                      type="submit"
+                      className="w-full py-3 rounded border border-border-dark text-text-muted hover:text-white font-bold uppercase tracking-wider"
+                    >
+                      Sair
+                    </button>
+                  </form>
                 </>
               ) : (
                 <Link

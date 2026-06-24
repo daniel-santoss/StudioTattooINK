@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import CopyButton from '@/shared/components/CopyButton';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 // Interface adaptada para a visão do Artista (dados reais via prop)
@@ -96,6 +97,7 @@ const ArtistAppointmentDetails: React.FC<{ appointment: ArtistAppointmentView | 
                                 <p className="text-text-muted text-sm flex items-center gap-2">
                                     <span className="material-symbols-outlined text-sm">tag</span>
                                     ID Sessão: #{appointment.id}
+                                    <CopyButton value={appointment.id} title="Copiar ID do agendamento" />
                                 </p>
                             </div>
 

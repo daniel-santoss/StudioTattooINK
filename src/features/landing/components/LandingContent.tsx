@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '@/shared/hooks/useAuth';
 
 interface GalleryPreviewItem {
   id: string;
@@ -20,10 +19,9 @@ interface ArtistPreview {
   img: string;
 }
 
-const LandingContent: React.FC<{ artists: ArtistPreview[]; galleryPreview: GalleryPreviewItem[] }> = ({ artists, galleryPreview }) => {
+const LandingContent: React.FC<{ artists: ArtistPreview[]; galleryPreview: GalleryPreviewItem[]; isAuthenticated: boolean }> = ({ artists, galleryPreview, isAuthenticated }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const scrollTo = searchParams?.get('scrollTo');

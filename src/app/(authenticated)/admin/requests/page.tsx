@@ -11,6 +11,7 @@ export const metadata: Metadata = { title: 'Solicitações', robots: { index: fa
 export default async function RequestsPage() {
   const usuario = await getCurrentUser();
   if (!usuario) redirect('/login');
+  if (usuario.tipo !== 'ADMIN') redirect('/admin/dashboard');
 
   const requests = await getCandidaturas();
   return <RequestsContent requests={requests} />;

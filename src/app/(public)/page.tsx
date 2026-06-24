@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import LandingContent from '@/features/landing/components/LandingContent';
 import { getAllArtists } from '@/features/portfolio/data/artists';
 import { getGallery } from '@/features/portfolio/data/gallery';
+import { getCurrentUser } from '@/features/auth/data/session';
 
 const AVATAR_FALLBACK = '/images/tatuadores/tatuador1.jpg';
 
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [allArtists, gallery] = await Promise.all([getAllArtists(), getGallery()]);
+  const [allArtists, gallery, usuario] = await Promise.all([getAllArtists(), getGallery(), getCurrentUser()]);
 
   const artists = allArtists.slice(0, 3).map((a) => ({
     id: a.id,
@@ -38,7 +39,7 @@ export default async function HomePage() {
 
   return (
     <Suspense fallback={<div className="min-h-screen bg-background-dark"></div>}>
-      <LandingContent artists={artists} galleryPreview={galleryPreview} />
+      <LandingContent artists={artists} galleryPreview={galleryPreview} isAuthenticated={!!usuario} />
     </Suspense>
   );
 }
