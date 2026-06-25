@@ -30,10 +30,20 @@ export async function aprovarSolicitacao(_prev: GerenciarState, formData: FormDa
     return { error: 'Solicitação não encontrada ou já tratada.' };
   }
 
-  const profissionalId = sol.profissionalId ?? usuario.profissional?.id ?? null;
+  // Autorização: só o profissional destinatário (ou ADMIN) pode aprovar.
+  // Se a solicitação não tem destinatário, o profissional logado a assume.
+  const meuProfId = usuario.profissional?.id ?? null;
+  if (usuario.tipo !== 'ADMIN' && (!meuProfId || (sol.profissionalId && sol.profissionalId !== meuProfId))) {
+    return { error: 'Você não pode tratar esta solicitação.' };
+  }
+
+  const profissionalId = sol.profissionalId ?? meuProfId;
   if (!profissionalId) return { error: 'Nenhum profissional associado a esta solicitação.' };
 
   const iniciaEm = new Date(`${dataHora}:00-03:00`);
+  if (iniciaEm.getTime() <= Date.now()) {
+    return { error: 'A data e hora da sessão devem ser futuras.' };
+  }
   const terminaEm = new Date(iniciaEm.getTime() + 2 * 60 * 60 * 1000); // estimativa; sessão tem duração variável
   const tipo = sol.servico?.categoria === 'PIERCING' ? 'PIERCING' : 'TATUAGEM';
   const precoSessaoCentavos = Math.round(valorTotalCentavos / numeroSessoes);
@@ -107,6 +117,12 @@ export async function recusarSolicitacao(_prev: GerenciarState, formData: FormDa
   const sol = await prisma.solicitacaoAgendamento.findUnique({ where: { id: solicitacaoId } });
   if (!sol || sol.status !== 'PENDENTE') {
     return { error: 'Solicitação não encontrada ou já tratada.' };
+  }
+
+  // Autorização: só o profissional destinatário (ou ADMIN) pode recusar.
+  const meuProfId = usuario.profissional?.id ?? null;
+  if (usuario.tipo !== 'ADMIN' && (!meuProfId || (sol.profissionalId && sol.profissionalId !== meuProfId))) {
+    return { error: 'Você não pode tratar esta solicitação.' };
   }
 
   await prisma.solicitacaoAgendamento.update({

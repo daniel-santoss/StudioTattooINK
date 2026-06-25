@@ -26,6 +26,11 @@ export async function criarSolicitacao(_prev: BookingState, formData: FormData):
   const periodoPreferido = String(formData.get('periodo') ?? '') || null;
   const dataRaw = String(formData.get('dataPreferida') ?? '');
   const dataPreferida = dataRaw ? new Date(`${dataRaw}T12:00:00-03:00`) : null;
+  if (dataPreferida) {
+    // Início de hoje no fuso de SP — uma data preferida não pode estar no passado.
+    const hojeSP = new Date(`${new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date())}T00:00:00-03:00`);
+    if (dataPreferida < hojeSP) return { error: 'A data preferida não pode estar no passado.' };
+  }
   const alergias = String(formData.get('alergias') ?? '').trim() || null;
 
   await prisma.solicitacaoAgendamento.create({

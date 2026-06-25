@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/shared/lib/prisma';
 import { getCurrentUser } from '@/features/auth/data/session';
+import { propostaPendentePorCliente } from '@/features/booking/lib/proposta';
 
 export type ConfirmacaoState = { ok?: boolean; error?: string };
 
@@ -24,20 +25,10 @@ export async function confirmarData(agendamentoId: string): Promise<ConfirmacaoS
   if (ag.status !== 'AGUARDANDO_CONFIRMACAO') {
     return { error: 'Este agendamento não está aguardando confirmação.' };
   }
-
-  await prisma.agendamento.update({
-    where: { id: ag.id },
-    data: {
-      status: 'AGENDADO',
-      eventos: {
-        create: {
-          tipo: 'DATA_CONFIRMADA',
-          autorUsuarioId: usuario.id,
-          descricao: 'Cliente confirmou a data e o valor propostos.',
-        },
-      },
-    },
-  });
+  // Se foi o próprio cliente que propôs a data (reagendamento), quem confirma é o profissional.
+  if (await propostaPendentePorCliente(ag.id)) {
+    return { error: 'Aguardando o profissional confirmar a data que você propôs.' };
+  }
 
   revalidatePath(`/my-appointments/${ag.id}`);
   revalidatePath('/my-appointments');
@@ -68,6 +59,9 @@ export async function recusarData(
   if (!ag) return { error: 'Agendamento não encontrado.' };
   if (ag.status !== 'AGUARDANDO_CONFIRMACAO') {
     return { error: 'Este agendamento não está aguardando confirmação.' };
+  }
+  if (await propostaPendentePorCliente(ag.id)) {
+    return { error: 'Você propôs esta data; aguarde o profissional responder.' };
   }
 
   await prisma.agendamento.update({

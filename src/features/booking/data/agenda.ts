@@ -1,5 +1,6 @@
 import 'server-only';
 import { prisma } from '@/shared/lib/prisma';
+import { propostaDoCliente } from '@/features/booking/lib/proposta';
 
 // Agenda vista por profissional/admin (tela Schedule). Dados reais de Agendamento.
 
@@ -7,6 +8,8 @@ export interface ScheduleItem {
   id: string;
   time: string;
   endTime: string;
+  dateISO: string; // "YYYY-MM-DD" no fuso de SP (para o filtro por data)
+  dateLabel: string; // "Ter, 25/06" para exibir no card
   clientName: string;
   clientAvatar: string;
   artistName: string;
@@ -18,6 +21,16 @@ export interface ScheduleItem {
 const timeFmt = new Intl.DateTimeFormat('pt-BR', {
   hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo',
 });
+const isoDateFmt = new Intl.DateTimeFormat('en-CA', {
+  year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'America/Sao_Paulo',
+}); // en-CA → "YYYY-MM-DD"
+const weekdayFmt = new Intl.DateTimeFormat('pt-BR', { weekday: 'short', timeZone: 'America/Sao_Paulo' });
+const dayMonthFmt = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Sao_Paulo' });
+// Rótulo curto p/ o card da agenda: "Ter, 25/06".
+function cardDate(d: Date): string {
+  const wd = weekdayFmt.format(d).replace('.', '');
+  return `${wd.charAt(0).toUpperCase()}${wd.slice(1)}, ${dayMonthFmt.format(d)}`;
+}
 const fullDateFmt = new Intl.DateTimeFormat('pt-BR', {
   weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Sao_Paulo',
 });
@@ -52,21 +65,31 @@ export async function getAgendaProfissional(profissionalId: string | null): Prom
       cliente: { include: { usuario: true } },
       profissional: { include: { usuario: true } },
       servico: true,
+      servicoContratado: true,
     },
     orderBy: { iniciaEm: 'asc' },
   });
 
-  return agendamentos.map((a) => ({
-    id: a.id,
-    time: timeFmt.format(a.iniciaEm),
-    endTime: timeFmt.format(a.terminaEm),
-    clientName: a.cliente?.usuario.nome ?? 'Cliente',
-    clientAvatar: a.cliente?.usuario.avatarUrl ?? AVATAR_FALLBACK,
-    artistName: a.profissional.usuario.nome,
-    service: a.servico?.nome ?? a.observacoes ?? 'Sessão',
-    status: SCHED_STATUS[a.status] ?? 'confirmado',
-    type: SCHED_TYPE[a.tipo] ?? 'tattoo',
-  }));
+  return agendamentos.map((a) => {
+    const sc = a.servicoContratado;
+    const nomeBase = a.servico?.nome ?? sc?.descricao ?? a.observacoes ?? 'Sessão';
+    const service = sc && sc.numeroSessoes > 1
+      ? `${nomeBase} — Sessão ${a.numeroSessao}/${sc.numeroSessoes}`
+      : nomeBase;
+    return {
+      id: a.id,
+      time: timeFmt.format(a.iniciaEm),
+      endTime: timeFmt.format(a.terminaEm),
+      dateISO: isoDateFmt.format(a.iniciaEm),
+      dateLabel: cardDate(a.iniciaEm),
+      clientName: a.cliente?.usuario.nome ?? 'Cliente',
+      clientAvatar: a.cliente?.usuario.avatarUrl ?? AVATAR_FALLBACK,
+      artistName: a.profissional.usuario.nome,
+      service,
+      status: SCHED_STATUS[a.status] ?? 'confirmado',
+      type: SCHED_TYPE[a.tipo] ?? 'tattoo',
+    };
+  });
 }
 
 // ============================================================
@@ -84,6 +107,7 @@ export interface HistoryItem {
   service: string;
   status: 'concluido' | 'cancelado' | 'retoque';
   type: 'tattoo' | 'piercing' | 'orcamento';
+  proximaSessaoPendente: boolean; // contrato multi-sessão concluído sem a próxima sessão agendada
 }
 
 const MESES_ABBR = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
@@ -102,12 +126,22 @@ export async function getHistoricoProfissional(profissionalId: string | null): P
       status: { in: ['CONCLUIDO', 'CANCELADO'] },
       ...(profissionalId ? { profissionalId } : {}),
     },
-    include: { cliente: { include: { usuario: true } }, servico: true },
+    include: {
+      cliente: { include: { usuario: true } },
+      servico: true,
+      servicoContratado: { include: { agendamentos: { select: { numeroSessao: true } } } },
+    },
     orderBy: { iniciaEm: 'desc' },
   });
 
   return agendamentos.map((a) => {
     const { day, month, year } = dmy(a.iniciaEm);
+    const sc = a.servicoContratado;
+    const proximaSessaoPendente =
+      a.status === 'CONCLUIDO' &&
+      !!sc &&
+      a.numeroSessao < sc.numeroSessoes &&
+      !sc.agendamentos.some((s) => s.numeroSessao === a.numeroSessao + 1);
     return {
       id: a.id,
       day, month, year,
@@ -117,6 +151,7 @@ export async function getHistoricoProfissional(profissionalId: string | null): P
       service: a.servico?.nome ?? a.observacoes ?? 'Sessão',
       status: a.status === 'CANCELADO' ? 'cancelado' : 'concluido',
       type: SCHED_TYPE[a.tipo] ?? 'tattoo',
+      proximaSessaoPendente,
     };
   });
 }
@@ -137,6 +172,14 @@ export interface AgendaDetalheProfissional {
   time: string;
   duration: string;
   status: 'confirmado' | 'em-andamento' | 'concluido' | 'cancelado' | 'rescheduling' | 'noshow';
+  aguardandoConfirmacao: boolean; // qualquer AGUARDANDO_CONFIRMACAO (trava o "Iniciar")
+  aguardandoConfirmacaoCliente: boolean; // profissional propôs; aguardando o cliente
+  aguardandoMinhaConfirmacao: boolean; // cliente propôs (reagendou); o profissional deve confirmar
+  iniciaEmISO: string; // data/hora agendada (p/ comparar com "agora" ao iniciar/finalizar)
+  numeroSessao: number;
+  numeroSessoes: number;
+  temProximaSessao: boolean; // contrato com mais sessões além desta
+  proximaSessaoPendente: boolean; // concluída, mas a próxima sessão do contrato ainda não foi agendada
   price: string;
   deposit: string;
   remaining: string;
@@ -164,7 +207,13 @@ export async function getAgendamentoDetalheProfissional(
     include: {
       cliente: { include: { usuario: true } },
       servico: true,
-      servicoContratado: true,
+      servicoContratado: { include: { agendamentos: { select: { numeroSessao: true } } } },
+      eventos: {
+        where: { tipo: 'DATA_PROPOSTA' },
+        orderBy: { criadoEm: 'desc' },
+        take: 1,
+        select: { autorUsuarioId: true },
+      },
     },
   });
   if (!a) return null;
@@ -192,6 +241,18 @@ export async function getAgendamentoDetalheProfissional(
     time: timeFmt.format(a.iniciaEm),
     duration: `${horas} hora${horas > 1 ? 's' : ''}`,
     status: ART_STATUS[a.status] ?? 'confirmado',
+    aguardandoConfirmacao: a.status === 'AGUARDANDO_CONFIRMACAO',
+    aguardandoConfirmacaoCliente: a.status === 'AGUARDANDO_CONFIRMACAO' && !propostaDoCliente(a.cliente?.usuarioId, a.eventos[0]?.autorUsuarioId),
+    aguardandoMinhaConfirmacao: a.status === 'AGUARDANDO_CONFIRMACAO' && propostaDoCliente(a.cliente?.usuarioId, a.eventos[0]?.autorUsuarioId),
+    iniciaEmISO: a.iniciaEm.toISOString(),
+    numeroSessao: a.numeroSessao,
+    numeroSessoes: a.servicoContratado?.numeroSessoes ?? 1,
+    temProximaSessao: !!a.servicoContratado && a.numeroSessao < a.servicoContratado.numeroSessoes,
+    proximaSessaoPendente:
+      a.status === 'CONCLUIDO' &&
+      !!a.servicoContratado &&
+      a.numeroSessao < a.servicoContratado.numeroSessoes &&
+      !a.servicoContratado.agendamentos.some((s) => s.numeroSessao === a.numeroSessao + 1),
     price: reais(total),
     deposit: reais(sinal),
     remaining: restante != null ? reais(restante) : 'A confirmar',

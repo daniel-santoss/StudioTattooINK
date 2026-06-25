@@ -16,6 +16,7 @@ interface HistoryItem {
     service: string;
     status: 'concluido' | 'cancelado' | 'retoque';
     type: 'tattoo' | 'piercing' | 'orcamento';
+    proximaSessaoPendente: boolean;
 }
 
 // Selo "Em breve" para ações ainda sem backend (mantidas visíveis a pedido).
@@ -140,6 +141,12 @@ const ServiceHistory: React.FC<{ items: HistoryItem[] }> = ({ items }) => {
 
                                 {/* Status & Menu Actions */}
                                 <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end mt-2 md:mt-0 relative">
+                                    {item.proximaSessaoPendente && (
+                                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border whitespace-nowrap bg-yellow-500/10 text-yellow-500 border-yellow-500/30 flex items-center gap-1.5">
+                                            <span className="material-symbols-outlined text-[14px]">hourglass_top</span>
+                                            Aguardando próxima sessão
+                                        </span>
+                                    )}
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border whitespace-nowrap ${getStatusStyle(item.status)}`}>
                                         {item.status === 'retoque' ? 'Retoque' : item.status.replace('-', ' ')}
                                     </span>

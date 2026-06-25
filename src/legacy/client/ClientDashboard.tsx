@@ -11,7 +11,7 @@ interface Appointment {
     service: string;
     date: string;
     time: string;
-    status: 'upcoming' | 'completed' | 'cancelled' | 'pending' | 'rescheduling';
+    status: 'upcoming' | 'completed' | 'cancelled' | 'pending' | 'rescheduling' | 'em-andamento';
     price: string;
     image: string;
 }
@@ -23,6 +23,7 @@ const ClientDashboard: React.FC<{ appointments: Appointment[] }> = ({ appointmen
     const filteredAppointments = appointments.filter(apt => {
         if (statusFilter === 'all') return true;
         if (statusFilter === 'pending' && apt.status === 'rescheduling') return true;
+        if (statusFilter === 'upcoming' && apt.status === 'em-andamento') return true;
         return apt.status === statusFilter;
     });
 
@@ -33,6 +34,7 @@ const ClientDashboard: React.FC<{ appointments: Appointment[] }> = ({ appointmen
             case 'cancelled': return 'bg-red-500/10 text-red-500 border-red-500/20 opacity-70';
             case 'pending': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
             case 'rescheduling': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
+            case 'em-andamento': return 'bg-purple-500/10 text-purple-500 border-purple-500/20';
             default: return 'bg-text-muted/10 text-text-muted border-text-muted/20';
         }
     };
@@ -44,6 +46,7 @@ const ClientDashboard: React.FC<{ appointments: Appointment[] }> = ({ appointmen
             case 'cancelled': return 'Cancelado';
             case 'pending': return 'Aguardando';
             case 'rescheduling': return 'Reagendando';
+            case 'em-andamento': return 'Em andamento';
             default: return status;
         }
     };
@@ -95,7 +98,8 @@ const ClientDashboard: React.FC<{ appointments: Appointment[] }> = ({ appointmen
                     >
                         <div className={`absolute left-0 top-0 bottom-0 w-1 ${apt.status === 'upcoming' ? 'bg-blue-500' :
                             apt.status === 'completed' ? 'bg-emerald-500' :
-                                apt.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
+                                apt.status === 'em-andamento' ? 'bg-purple-500' :
+                                    apt.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
                             }`}></div>
                         <div className="flex flex-1 items-center gap-6 w-full">
                             <div className="relative shrink-0">

@@ -1,5 +1,6 @@
 import 'server-only';
 import { prisma } from '@/shared/lib/prisma';
+import { propostaDoCliente } from '@/features/booking/lib/proposta';
 
 // Agenda do cliente: agendamentos confirmados + solicitações pendentes,
 // mapeados para o formato que o componente ClientDashboard já espera.
@@ -10,7 +11,7 @@ export interface AgendaItem {
   service: string;
   date: string;
   time: string;
-  status: 'upcoming' | 'completed' | 'cancelled' | 'pending' | 'rescheduling';
+  status: 'upcoming' | 'completed' | 'cancelled' | 'pending' | 'rescheduling' | 'em-andamento';
   price: string;
   image: string;
 }
@@ -30,7 +31,7 @@ function reais(centavos: number | null): string {
 }
 
 const AG_STATUS: Record<string, AgendaItem['status']> = {
-  AGUARDANDO_CONFIRMACAO: 'pending', AGENDADO: 'upcoming', EM_ANDAMENTO: 'upcoming',
+  AGUARDANDO_CONFIRMACAO: 'pending', AGENDADO: 'upcoming', EM_ANDAMENTO: 'em-andamento',
   CONCLUIDO: 'completed', CANCELADO: 'cancelled', BLOQUEADO: 'upcoming', DISPONIVEL: 'upcoming',
 };
 const SOL_STATUS: Record<string, AgendaItem['status']> = {
@@ -91,7 +92,8 @@ export interface AgendaDetalhe {
   time: string;
   duration: string;
   status: AgendaItem['status'];
-  aguardandoConfirmacao: boolean;
+  aguardandoConfirmacao: boolean; // proposta do profissional pendente da confirmação do cliente
+  aguardandoProfissional: boolean; // cliente propôs (reagendamento) e aguarda o profissional
   price: string;
   paidAmount: string;
   remainingAmount: string;
@@ -120,6 +122,13 @@ export async function getAgendamentoDetalhe(id: string, clienteId: string): Prom
       profissional: { include: { usuario: true } },
       servico: true,
       servicoContratado: true,
+      cliente: { select: { usuarioId: true } },
+      eventos: {
+        where: { tipo: 'DATA_PROPOSTA' },
+        orderBy: { criadoEm: 'desc' },
+        take: 1,
+        select: { autorUsuarioId: true },
+      },
     },
   });
 
@@ -127,6 +136,8 @@ export async function getAgendamentoDetalhe(id: string, clienteId: string): Prom
     const horas = Math.max(1, Math.round((a.terminaEm.getTime() - a.iniciaEm.getTime()) / 3_600_000));
     const pago = a.sinalCentavos ?? 0;
     const total = a.precoCentavos;
+    const propCliente = propostaDoCliente(a.cliente?.usuarioId, a.eventos[0]?.autorUsuarioId);
+    const aguardando = a.status === 'AGUARDANDO_CONFIRMACAO';
     const nomeBase = a.servico?.nome ?? a.servicoContratado?.descricao ?? a.observacoes ?? 'Sessão';
     return {
       id: a.id,
@@ -140,7 +151,8 @@ export async function getAgendamentoDetalhe(id: string, clienteId: string): Prom
       time: timeFmt.format(a.iniciaEm),
       duration: `${horas} hora${horas > 1 ? 's' : ''}`,
       status: AG_STATUS[a.status] ?? 'upcoming',
-      aguardandoConfirmacao: a.status === 'AGUARDANDO_CONFIRMACAO',
+      aguardandoConfirmacao: aguardando && !propCliente,
+      aguardandoProfissional: aguardando && propCliente,
       price: reais(total),
       paidAmount: reais(pago),
       remainingAmount: total != null ? reais(total - pago) : 'A confirmar',
@@ -173,6 +185,7 @@ export async function getAgendamentoDetalhe(id: string, clienteId: string): Prom
     duration: 'A definir',
     status: SOL_STATUS[s.status] ?? 'pending',
     aguardandoConfirmacao: false,
+    aguardandoProfissional: false,
     price: reais(s.precoOrcadoCentavos),
     paidAmount: reais(0),
     remainingAmount: 'A confirmar',

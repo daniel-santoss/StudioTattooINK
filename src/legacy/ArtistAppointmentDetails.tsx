@@ -1,9 +1,12 @@
 'use client';
 
 
-import React from 'react';
+import React, { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import CopyButton from '@/shared/components/CopyButton';
+import { iniciarSessao, finalizarSessao, agendarProximaSessao } from '@/features/booking/actions/cicloSessao';
+import { confirmarRemarcacaoCliente, remarcarAgendamento } from '@/features/booking/actions/gerenciarAgendamento';
+import DateTimePicker from '@/features/booking/components/DateTimePicker';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 // Interface adaptada para a visão do Artista (dados reais via prop)
@@ -19,6 +22,14 @@ interface ArtistAppointmentView {
     time: string;
     duration: string;
     status: 'confirmado' | 'em-andamento' | 'concluido' | 'cancelado' | 'rescheduling' | 'noshow';
+    aguardandoConfirmacao: boolean;
+    aguardandoConfirmacaoCliente: boolean;
+    aguardandoMinhaConfirmacao: boolean;
+    iniciaEmISO: string;
+    numeroSessao: number;
+    numeroSessoes: number;
+    temProximaSessao: boolean;
+    proximaSessaoPendente: boolean;
     price: string;
     deposit: string; // Sinal pago
     remaining: string; // Restante a pagar
@@ -47,6 +58,81 @@ const EmBreve = () => (
 
 const ArtistAppointmentDetails: React.FC<{ appointment: ArtistAppointmentView | null }> = ({ appointment }) => {
     const navigate = useNavigate();
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const [actionError, setActionError] = useState<string | null>(null);
+    const [confirmar, setConfirmar] = useState<null | 'iniciar' | 'finalizar'>(null);
+    const [proximaModalOpen, setProximaModalOpen] = useState(false);
+    const [proximaDataHora, setProximaDataHora] = useState('');
+    const [remarcarModalOpen, setRemarcarModalOpen] = useState(false);
+    const [novaDataRemarcar, setNovaDataRemarcar] = useState('');
+
+    // Profissional confirma a data que o CLIENTE propôs (reagendamento).
+    const onConfirmarRemarcacao = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await confirmarRemarcacaoCliente(appointment.id);
+            if (res?.error) { setActionError(res.error); return; }
+            router.refresh();
+        });
+    };
+    // Profissional recusa a data do cliente propondo outra (contraproposta → aguarda o cliente).
+    const onRecusarRemarcacao = () => { setActionError(null); setNovaDataRemarcar(''); setRemarcarModalOpen(true); };
+    const confirmarRemarcar = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await remarcarAgendamento(appointment.id, novaDataRemarcar);
+            if (res?.error) { setActionError(res.error); return; }
+            setRemarcarModalOpen(false);
+            router.refresh();
+        });
+    };
+
+    // A ação está sendo feita no mesmo dia (fuso do estúdio) da data agendada?
+    const dia = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const noDiaAgendado = () => !appointment || dia(new Date(appointment.iniciaEmISO)) === dia(new Date());
+
+    const executarIniciar = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await iniciarSessao(appointment.id);
+            if (res?.error) { setActionError(res.error); return; }
+            setConfirmar(null);
+            router.refresh();
+        });
+    };
+
+    const executarFinalizar = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await finalizarSessao(appointment.id);
+            if (res?.error) { setActionError(res.error); return; }
+            setConfirmar(null);
+            router.refresh();
+        });
+    };
+
+    // Agendar a próxima sessão do contrato (ação separada da finalização).
+    const executarAgendarProxima = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await agendarProximaSessao(appointment.id, proximaDataHora);
+            if (res?.error) { setActionError(res.error); return; }
+            setProximaModalOpen(false);
+            router.refresh();
+        });
+    };
+
+    // Se a data de hoje difere da agendada, pede confirmação antes de registrar.
+    const onIniciar = () => { setActionError(null); noDiaAgendado() ? executarIniciar() : setConfirmar('iniciar'); };
+    // Finalizar é independente de agendar a próxima sessão: só conclui a sessão atual.
+    const onFinalizar = () => { setActionError(null); noDiaAgendado() ? executarFinalizar() : setConfirmar('finalizar'); };
+    const onAgendarProxima = () => { setActionError(null); setProximaDataHora(''); setProximaModalOpen(true); };
 
     const getStatusBadge = (status: string) => {
         switch (status) {
@@ -101,38 +187,95 @@ const ArtistAppointmentDetails: React.FC<{ appointment: ArtistAppointmentView | 
                                 </p>
                             </div>
 
-                            {/* Operational Actions — ainda sem backend, visíveis e desabilitadas ("Em breve") */}
-                            <div className="flex flex-wrap items-center gap-3">
-                                {appointment.status === 'confirmado' && (
-                                    <button
-                                        disabled
-                                        title="Em breve"
-                                        className="px-6 py-3 bg-emerald-600/40 text-white/60 rounded-xl font-bold text-sm uppercase tracking-wide flex items-center gap-2 cursor-not-allowed"
-                                    >
-                                        <span className="material-symbols-outlined">play_arrow</span>
-                                        Iniciar Sessão
-                                        <EmBreve />
-                                    </button>
-                                )}
+                            {/* Ciclo da sessão (ações reais) */}
+                            <div className="flex flex-col items-stretch md:items-end gap-2">
+                                <div className="flex flex-wrap items-center gap-3">
+                                    {appointment.status === 'confirmado' && (
+                                        appointment.aguardandoMinhaConfirmacao ? (
+                                            <div className="flex flex-col items-stretch gap-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 max-w-xs">
+                                                <span className="text-yellow-500 font-bold text-xs uppercase tracking-wide flex items-center gap-2">
+                                                    <span className="material-symbols-outlined text-sm">event_available</span>
+                                                    O cliente propôs uma nova data
+                                                </span>
+                                                <div className="bg-background-dark/50 border border-yellow-500/10 rounded-lg px-3 py-2">
+                                                    <p className="text-white font-bold text-sm leading-tight">{appointment.fullDate}</p>
+                                                    <p className="text-xs text-text-light mt-0.5">{appointment.time}</p>
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        type="button"
+                                                        disabled={isPending}
+                                                        onClick={onConfirmarRemarcacao}
+                                                        className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-bold text-xs uppercase disabled:opacity-50"
+                                                    >
+                                                        {isPending ? '...' : 'Confirmar'}
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        disabled={isPending}
+                                                        onClick={onRecusarRemarcacao}
+                                                        className="flex-1 py-2 bg-surface-light text-white hover:bg-white/10 rounded font-bold text-xs uppercase disabled:opacity-50"
+                                                    >
+                                                        Propor outra
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : appointment.aguardandoConfirmacaoCliente ? (
+                                            <span className="px-4 py-3 rounded-xl border border-yellow-500/30 text-yellow-500 bg-yellow-500/10 font-bold text-xs uppercase tracking-wide flex items-center gap-2">
+                                                <span className="material-symbols-outlined text-sm">hourglass_top</span>
+                                                Aguardando confirmação do cliente
+                                            </span>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                disabled={isPending}
+                                                onClick={onIniciar}
+                                                className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm uppercase tracking-wide shadow-lg shadow-emerald-900/20 flex items-center gap-2 transition-all disabled:opacity-50"
+                                            >
+                                                <span className="material-symbols-outlined">play_arrow</span>
+                                                {isPending ? 'Iniciando...' : 'Iniciar Sessão'}
+                                            </button>
+                                        )
+                                    )}
 
-                                {appointment.status === 'em-andamento' && (
-                                    <button
-                                        disabled
-                                        title="Em breve"
-                                        className="px-6 py-3 bg-primary/40 text-white/60 rounded-xl font-bold text-sm uppercase tracking-wide flex items-center gap-2 cursor-not-allowed"
-                                    >
-                                        <span className="material-symbols-outlined">check_circle</span>
-                                        Finalizar Sessão
-                                        <EmBreve />
-                                    </button>
-                                )}
+                                    {appointment.status === 'em-andamento' && (
+                                        <button
+                                            type="button"
+                                            disabled={isPending}
+                                            onClick={onFinalizar}
+                                            className="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm uppercase tracking-wide shadow-lg shadow-primary/20 flex items-center gap-2 transition-all disabled:opacity-50"
+                                        >
+                                            <span className="material-symbols-outlined">check_circle</span>
+                                            {isPending ? 'Finalizando...' : 'Finalizar Sessão'}
+                                        </button>
+                                    )}
 
-                                {appointment.status === 'concluido' && (
-                                    <button className="px-6 py-3 border border-emerald-500/30 text-emerald-500 bg-emerald-500/10 rounded-xl font-bold text-sm uppercase tracking-wide cursor-default flex items-center gap-2">
-                                        <span className="material-symbols-outlined">verified</span>
-                                        Concluído
-                                    </button>
+                                    {appointment.status === 'concluido' && (
+                                        appointment.proximaSessaoPendente ? (
+                                            <button
+                                                type="button"
+                                                disabled={isPending}
+                                                onClick={onAgendarProxima}
+                                                className="px-6 py-3 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm uppercase tracking-wide shadow-lg shadow-primary/20 flex items-center gap-2 transition-all disabled:opacity-50"
+                                            >
+                                                <span className="material-symbols-outlined">event_upcoming</span>
+                                                Agendar próxima sessão
+                                            </button>
+                                        ) : (
+                                            <button className="px-6 py-3 border border-emerald-500/30 text-emerald-500 bg-emerald-500/10 rounded-xl font-bold text-sm uppercase tracking-wide cursor-default flex items-center gap-2">
+                                                <span className="material-symbols-outlined">verified</span>
+                                                Concluído
+                                            </button>
+                                        )
+                                    )}
+                                </div>
+                                {appointment.status === 'concluido' && appointment.proximaSessaoPendente && (
+                                    <span className="text-yellow-500 bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide flex items-center gap-1.5">
+                                        <span className="material-symbols-outlined text-sm">hourglass_top</span>
+                                        Aguardando agendamento da sessão {appointment.numeroSessao + 1}/{appointment.numeroSessoes}
+                                    </span>
                                 )}
+                                {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
                             </div>
                         </div>
 
@@ -243,6 +386,11 @@ const ArtistAppointmentDetails: React.FC<{ appointment: ArtistAppointmentView | 
                             <div className="space-y-6">
                                 {/* Date & Time Card */}
                                 <div className="bg-surface-light/10 border border-white/5 rounded-2xl p-6">
+                                    {appointment.aguardandoConfirmacao && (
+                                        <p className="mb-4 text-[10px] text-yellow-500 font-bold uppercase tracking-wide bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-3 py-2">
+                                            Previsão — aguardando confirmação
+                                        </p>
+                                    )}
                                     <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Agenda</h3>
 
                                     <div className="space-y-6">
@@ -258,12 +406,15 @@ const ArtistAppointmentDetails: React.FC<{ appointment: ArtistAppointmentView | 
                                             </div>
                                         </div>
 
-                                        {/* Turno/Horário Block - Updated to Match Requested Style */}
+                                        {/* Horário Block — hora exata + turno */}
                                         <div>
-                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Turno/Horário</span>
+                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Horário</span>
                                             <div className="flex items-center gap-3">
                                                 <span className="material-symbols-outlined text-white">{periodData.icon}</span>
-                                                <span className="text-white font-bold text-xl">{periodData.label}</span>
+                                                <div>
+                                                    <p className="text-white font-bold text-xl leading-tight">{appointment.time}</p>
+                                                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-wide mt-0.5">{periodData.label}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -326,6 +477,106 @@ const ArtistAppointmentDetails: React.FC<{ appointment: ArtistAppointmentView | 
                     </div>
                 </div>
             </div>
+
+            {/* Confirmação quando a ação é registrada em data diferente da agendada */}
+            {confirmar && appointment && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
+                        <div className="p-6 text-center">
+                            <div className="size-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-yellow-500/10 text-yellow-500">
+                                <span className="material-symbols-outlined text-3xl">event_busy</span>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">Data diferente da agendada</h3>
+                            <p className="text-text-muted text-sm leading-relaxed">
+                                {confirmar === 'iniciar' ? 'O início' : 'A finalização'} está sendo registrado em data diferente da agendada (<span className="text-white font-bold">{appointment.fullDate}</span>). Deseja continuar mesmo assim?
+                            </p>
+                            {actionError && <p className="text-red-500 text-xs mt-3">{actionError}</p>}
+                        </div>
+                        <div className="flex border-t border-border-dark">
+                            <button
+                                onClick={() => setConfirmar(null)}
+                                disabled={isPending}
+                                className="flex-1 py-4 text-sm font-bold text-text-muted hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50"
+                            >
+                                Cancelar
+                            </button>
+                            <div className="w-px bg-border-dark"></div>
+                            <button
+                                onClick={() => (confirmar === 'iniciar' ? executarIniciar() : executarFinalizar())}
+                                disabled={isPending}
+                                className="flex-1 py-4 text-sm font-bold uppercase tracking-wide text-primary hover:bg-white/5 transition-colors disabled:opacity-50"
+                            >
+                                {isPending ? 'Registrando...' : 'Continuar'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Agendar a próxima sessão (contrato multi-sessão) — cliente confirma depois */}
+            {proximaModalOpen && appointment && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl relative flex flex-col max-h-[90vh]">
+                        <div className="p-6 border-b border-border-dark flex justify-between items-center">
+                            <div className="flex items-center gap-2 text-primary">
+                                <span className="material-symbols-outlined">event_upcoming</span>
+                                <h3 className="text-xl font-bold text-white">Próxima sessão</h3>
+                            </div>
+                            <button type="button" onClick={() => setProximaModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
+                        </div>
+                        <div className="p-6 overflow-y-auto space-y-4">
+                            <p className="text-text-muted text-sm">
+                                Defina a data da{' '}
+                                <strong className="text-white">sessão {appointment.numeroSessao + 1}/{appointment.numeroSessoes}</strong> — o cliente vai confirmar ou recusar essa data.
+                            </p>
+                            <DateTimePicker onChange={setProximaDataHora} />
+                            {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
+                        </div>
+                        <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
+                            <button type="button" onClick={() => setProximaModalOpen(false)} disabled={isPending} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm">Cancelar</button>
+                            <button
+                                type="button"
+                                onClick={executarAgendarProxima}
+                                disabled={!proximaDataHora || isPending}
+                                className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors disabled:opacity-50"
+                            >
+                                {isPending ? 'Agendando...' : 'Agendar sessão'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Profissional contrapropõe data (recusa a do cliente) → aguarda o cliente */}
+            {remarcarModalOpen && appointment && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in" onClick={() => !isPending && setRemarcarModalOpen(false)}>
+                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-6 border-b border-border-dark flex justify-between items-center">
+                            <div className="flex items-center gap-2 text-primary">
+                                <span className="material-symbols-outlined">edit_calendar</span>
+                                <h3 className="text-xl font-bold text-white">Propor outra data</h3>
+                            </div>
+                            <button type="button" onClick={() => setRemarcarModalOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
+                        </div>
+                        <div className="p-6 overflow-y-auto space-y-4">
+                            <p className="text-text-muted text-sm">Escolha uma nova data. O cliente vai precisar confirmar.</p>
+                            <DateTimePicker onChange={setNovaDataRemarcar} />
+                            {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
+                        </div>
+                        <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
+                            <button type="button" onClick={() => setRemarcarModalOpen(false)} disabled={isPending} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm disabled:opacity-50">Voltar</button>
+                            <button
+                                type="button"
+                                onClick={confirmarRemarcar}
+                                disabled={!novaDataRemarcar || isPending}
+                                className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors disabled:opacity-50"
+                            >
+                                {isPending ? 'Enviando...' : 'Propor e reenviar'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

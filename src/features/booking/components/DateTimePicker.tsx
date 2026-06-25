@@ -23,14 +23,30 @@ const DateTimePicker: React.FC<{ onChange: (value: string) => void }> = ({ onCha
     const diasNoMes = new Date(ano, mes + 1, 0).getDate();
     const primeiroDia = new Date(ano, mes, 1).getDay();
 
+    const hoje = new Date();
+    const hojeStr = `${hoje.getFullYear()}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
+
+    // Hora/minuto no passado quando o dia escolhido é hoje (impede sessão retroativa).
+    const horaPassada = (day: string | null, h: string) =>
+        day === hojeStr && h !== '' && parseInt(h) < hoje.getHours();
+    const minutoPassado = (day: string | null, h: string, m: string) =>
+        day === hojeStr && h !== '' && parseInt(h) === hoje.getHours() && m !== '' && parseInt(m) <= hoje.getMinutes();
+
     const emit = (day: string | null, h: string, m: string) => {
-        onChange(day && h && m ? `${day}T${h}:${m}` : '');
+        const completo = !!(day && h && m) && !horaPassada(day, h) && !minutoPassado(day, h, m);
+        onChange(completo ? `${day}T${h}:${m}` : '');
     };
 
     const selecionarDia = (d: number) => {
         const dayStr = `${ano}-${pad(mes + 1)}-${pad(d)}`;
+        // Ao mudar para hoje, descarta hora/minuto que tenham ficado no passado.
+        let h = hora, m = minuto;
+        if (horaPassada(dayStr, h)) { h = ''; m = ''; }
+        else if (minutoPassado(dayStr, h, m)) { m = ''; }
         setSelectedDay(dayStr);
-        emit(dayStr, hora, minuto);
+        setHora(h);
+        setMinuto(m);
+        emit(dayStr, h, m);
     };
 
     const isPast = (d: number) => {
@@ -87,14 +103,14 @@ const DateTimePicker: React.FC<{ onChange: (value: string) => void }> = ({ onCha
             {/* Horário */}
             <div className="flex items-center gap-2 mt-4 pt-3 border-t border-border-dark">
                 <span className="material-symbols-outlined text-primary text-lg">schedule</span>
-                <select value={hora} onChange={(e) => { setHora(e.target.value); emit(selectedDay, e.target.value, minuto); }} className="bg-surface-dark border border-border-dark rounded-lg py-2 px-3 text-white text-sm flex-1 focus:border-primary outline-none">
+                <select value={hora} onChange={(e) => { setHora(e.target.value); setMinuto(''); emit(selectedDay, e.target.value, ''); }} className="bg-surface-dark border border-border-dark rounded-lg py-2 px-3 text-white text-sm flex-1 focus:border-primary outline-none">
                     <option value="">Hora</option>
-                    {HORAS.map(h => <option key={h} value={h}>{h}h</option>)}
+                    {HORAS.map(h => <option key={h} value={h} disabled={horaPassada(selectedDay, h)}>{h}h</option>)}
                 </select>
                 <span className="text-zinc-500 font-bold">:</span>
                 <select value={minuto} onChange={(e) => { setMinuto(e.target.value); emit(selectedDay, hora, e.target.value); }} className="bg-surface-dark border border-border-dark rounded-lg py-2 px-3 text-white text-sm flex-1 focus:border-primary outline-none">
                     <option value="">Min</option>
-                    {MINUTOS.map(m => <option key={m} value={m}>{m}</option>)}
+                    {MINUTOS.map(m => <option key={m} value={m} disabled={minutoPassado(selectedDay, hora, m)}>{m}</option>)}
                 </select>
             </div>
         </div>

@@ -4,6 +4,8 @@
 import React, { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { confirmarData, recusarData } from '@/features/booking/actions/confirmarAgendamento';
+import { clienteCancelar, clienteRemarcar } from '@/features/booking/actions/gerenciarAgendamentoCliente';
+import DateTimePicker from '@/features/booking/components/DateTimePicker';
 import CopyButton from '@/shared/components/CopyButton';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
@@ -16,8 +18,9 @@ interface AppointmentDetail {
     fullDate: string; // Para display extenso
     time: string;
     duration: string;
-    status: 'upcoming' | 'completed' | 'cancelled' | 'pending' | 'rescheduling';
+    status: 'upcoming' | 'completed' | 'cancelled' | 'pending' | 'rescheduling' | 'em-andamento';
     aguardandoConfirmacao: boolean; // proposta do profissional pendente de confirmação do cliente
+    aguardandoProfissional: boolean; // cliente propôs (reagendou) e aguarda o profissional
     price: string;
     paidAmount: string; // Valor já pago
     remainingAmount: string; // Valor restante
@@ -63,8 +66,38 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
     const [rejectMotivos, setRejectMotivos] = useState<('DIA' | 'HORARIO' | 'VALOR')[]>([]);
     const [rejectObs, setRejectObs] = useState('');
 
+    // Cancelar / Remarcar pelo cliente
+    const [cancelarOpen, setCancelarOpen] = useState(false);
+    const [remarcarOpen, setRemarcarOpen] = useState(false);
+    const [motivoCancel, setMotivoCancel] = useState('');
+    const [novaData, setNovaData] = useState('');
+
     // Reflete dados novos vindos do servidor (após router.refresh()).
     useEffect(() => { setAppointment(initialAppointment); }, [initialAppointment]);
+
+    const onCancelar = () => { setActionError(null); setMotivoCancel(''); setCancelarOpen(true); };
+    const onRemarcar = () => { setActionError(null); setNovaData(''); setRemarcarOpen(true); };
+
+    const confirmarCancelar = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await clienteCancelar(appointment.id, motivoCancel);
+            if (res?.error) { setActionError(res.error); return; }
+            setCancelarOpen(false);
+            router.refresh();
+        });
+    };
+    const confirmarRemarcar = () => {
+        if (!appointment) return;
+        setActionError(null);
+        startTransition(async () => {
+            const res = await clienteRemarcar(appointment.id, novaData);
+            if (res?.error) { setActionError(res.error); return; }
+            setRemarcarOpen(false);
+            router.refresh();
+        });
+    };
 
     // Cliente confirma a data/valor propostos pelo profissional.
     const handleConfirmar = () => {
@@ -98,6 +131,7 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
             case 'cancelled': return <span className="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Cancelado</span>;
             case 'pending': return <span className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Aguardando</span>;
             case 'rescheduling': return <span className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide">Reagendando</span>;
+            case 'em-andamento': return <span className="bg-purple-500/20 text-purple-500 border border-purple-500/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wide animate-pulse">Em andamento</span>;
             default: return null;
         }
     };
@@ -124,7 +158,8 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
                     {/* Status Strip */}
                     <div className={`h-2 w-full ${appointment.status === 'upcoming' ? 'bg-blue-500' :
                         appointment.status === 'completed' ? 'bg-emerald-500' :
-                            appointment.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
+                            appointment.status === 'em-andamento' ? 'bg-purple-500' :
+                                appointment.status === 'cancelled' ? 'bg-red-500' : 'bg-yellow-500'
                         }`}></div>
 
                     <div className="p-8 md:p-10">
@@ -140,27 +175,36 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
 
                             {/* Actions Group — ações ainda sem backend ficam visíveis e desabilitadas ("Em breve") */}
                             <div className="flex flex-wrap gap-3 w-full md:w-auto">
-                                {(appointment.status === 'upcoming' || appointment.status === 'pending') && !appointment.aguardandoConfirmacao && (
+                                {appointment.status === 'upcoming' && (
                                     <>
                                         <button
-                                            disabled
-                                            title="Em breve"
-                                            className="flex-1 md:flex-none px-5 py-2.5 bg-surface-light border border-border-dark text-white/40 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-not-allowed"
+                                            type="button"
+                                            onClick={onRemarcar}
+                                            className="flex-1 md:flex-none px-5 py-2.5 bg-surface-light border border-border-dark text-white hover:border-white/30 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 transition-colors"
                                         >
                                             <span className="material-symbols-outlined text-sm">edit_calendar</span>
                                             Remarcar
-                                            <EmBreve />
                                         </button>
                                         <button
-                                            disabled
-                                            title="Em breve"
-                                            className="flex-1 md:flex-none px-5 py-2.5 border border-red-500/20 text-red-500/40 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-not-allowed"
+                                            type="button"
+                                            onClick={onCancelar}
+                                            className="flex-1 md:flex-none px-5 py-2.5 border border-red-500/30 text-red-500 hover:bg-red-500/10 rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 transition-colors"
                                         >
                                             <span className="material-symbols-outlined text-sm">cancel</span>
                                             Cancelar
-                                            <EmBreve />
                                         </button>
                                     </>
+                                )}
+
+                                {appointment.status === 'cancelled' && (
+                                    <button
+                                        type="button"
+                                        onClick={onRemarcar}
+                                        className="flex-1 md:flex-none px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold text-xs uppercase tracking-wide flex items-center justify-center gap-2 transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">edit_calendar</span>
+                                        Reagendar
+                                    </button>
                                 )}
 
                                 {appointment.status === 'completed' && (
@@ -288,8 +332,43 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
                                     </div>
                                 )}
 
+                                {/* Cliente propôs nova data — aguardando o profissional */}
+                                {appointment.aguardandoProfissional && (
+                                    <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-2xl p-6 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-3 opacity-10">
+                                            <span className="material-symbols-outlined text-6xl text-yellow-500">hourglass_top</span>
+                                        </div>
+                                        <h3 className="text-xs font-bold text-yellow-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm">schedule</span>
+                                            Aguardando confirmação do profissional
+                                        </h3>
+                                        <div className="space-y-3 relative z-10">
+                                            <p className="text-sm text-white">Você propôs reagendar para:</p>
+                                            <div className="bg-background-dark/50 p-3 rounded-lg border border-yellow-500/10">
+                                                <p className="text-white font-bold">{appointment.fullDate}</p>
+                                                <p className="text-sm text-text-light mt-1">{appointment.time}</p>
+                                            </div>
+                                            <p className="text-xs text-text-light italic">O profissional vai confirmar ou propor outra data.</p>
+                                            {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
+                                            <button
+                                                type="button"
+                                                disabled={isPending}
+                                                onClick={onCancelar}
+                                                className="w-full mt-1 py-2 bg-red-600/20 text-red-500 hover:bg-red-600/30 rounded font-bold text-xs uppercase disabled:opacity-50"
+                                            >
+                                                Cancelar agendamento
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {/* Date & Time Card */}
                                 <div className="bg-surface-light/10 border border-white/5 rounded-2xl p-6">
+                                    {(appointment.aguardandoConfirmacao || appointment.aguardandoProfissional) && (
+                                        <p className="mb-4 text-[10px] text-yellow-500 font-bold uppercase tracking-wide bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-3 py-2">
+                                            Previsão — aguardando confirmação
+                                        </p>
+                                    )}
                                     <h3 className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">Agenda</h3>
 
                                     <div className="space-y-6">
@@ -305,12 +384,15 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
                                             </div>
                                         </div>
 
-                                        {/* Turno/Horário Block - Updated to Match Requested Style */}
+                                        {/* Horário Block — hora exata + turno */}
                                         <div>
-                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Turno/Horário</span>
+                                            <span className="text-primary font-bold text-[10px] uppercase tracking-widest block mb-2">Horário</span>
                                             <div className="flex items-center gap-3">
                                                 <span className="material-symbols-outlined text-white">{periodData.icon}</span>
-                                                <span className="text-white font-bold text-xl">{periodData.label}</span>
+                                                <div>
+                                                    <p className="text-white font-bold text-xl leading-tight">{appointment.time}</p>
+                                                    <p className="text-[10px] text-text-muted font-bold uppercase tracking-wide mt-0.5">{periodData.label}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -428,6 +510,75 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal — Cancelar (cliente) */}
+            {cancelarOpen && appointment && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in" onClick={() => !isPending && setCancelarOpen(false)}>
+                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-6 border-b border-border-dark flex items-center gap-2 text-red-500">
+                            <span className="material-symbols-outlined">cancel</span>
+                            <h3 className="text-xl font-bold text-white">Cancelar agendamento</h3>
+                        </div>
+                        <div className="p-6 space-y-4">
+                            <p className="text-text-muted text-sm">O cancelamento é imediato (não precisa de aprovação), mas registramos o motivo. Depois você pode reagendar por aqui.</p>
+                            <div>
+                                <label className="text-[10px] text-text-muted uppercase font-bold block mb-2">Motivo do cancelamento <span className="text-primary">*</span></label>
+                                <textarea
+                                    autoFocus
+                                    rows={3}
+                                    value={motivoCancel}
+                                    onChange={(e) => setMotivoCancel(e.target.value)}
+                                    placeholder="Conte o que aconteceu..."
+                                    className="w-full bg-background-dark border border-border-dark rounded-xl p-3 text-white text-sm placeholder-zinc-600 resize-none focus:border-primary outline-none"
+                                />
+                            </div>
+                            {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
+                        </div>
+                        <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark">
+                            <button type="button" onClick={() => setCancelarOpen(false)} disabled={isPending} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm disabled:opacity-50">Voltar</button>
+                            <button
+                                type="button"
+                                onClick={confirmarCancelar}
+                                disabled={!motivoCancel.trim() || isPending}
+                                className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors disabled:opacity-50"
+                            >
+                                {isPending ? 'Cancelando...' : 'Confirmar cancelamento'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal — Remarcar / Reagendar (cliente) */}
+            {remarcarOpen && appointment && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in" onClick={() => !isPending && setRemarcarOpen(false)}>
+                    <div className="bg-surface-dark border border-border-dark rounded-2xl w-full max-w-md shadow-2xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+                        <div className="p-6 border-b border-border-dark flex justify-between items-center">
+                            <div className="flex items-center gap-2 text-primary">
+                                <span className="material-symbols-outlined">edit_calendar</span>
+                                <h3 className="text-xl font-bold text-white">{appointment.status === 'cancelled' ? 'Reagendar' : 'Remarcar'} sessão</h3>
+                            </div>
+                            <button type="button" onClick={() => setRemarcarOpen(false)} className="text-text-muted hover:text-white"><span className="material-symbols-outlined">close</span></button>
+                        </div>
+                        <div className="p-6 overflow-y-auto space-y-4">
+                            <p className="text-text-muted text-sm">Escolha a nova data. O profissional vai confirmar ou propor outra.</p>
+                            <DateTimePicker onChange={setNovaData} />
+                            {actionError && <p className="text-red-500 text-xs">{actionError}</p>}
+                        </div>
+                        <div className="p-6 border-t border-border-dark flex justify-end gap-3 bg-background-dark rounded-b-2xl">
+                            <button type="button" onClick={() => setRemarcarOpen(false)} disabled={isPending} className="px-4 py-2 text-text-muted hover:text-white font-bold text-sm disabled:opacity-50">Voltar</button>
+                            <button
+                                type="button"
+                                onClick={confirmarRemarcar}
+                                disabled={!novaData || isPending}
+                                className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors disabled:opacity-50"
+                            >
+                                {isPending ? 'Enviando...' : 'Enviar proposta'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
