@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { aprovarSolicitacao, recusarSolicitacao } from '@/features/booking/actions/gerenciarSolicitacao';
 import DateTimePicker from '@/features/booking/components/DateTimePicker';
+import Avatar from '@/shared/components/Avatar';
 
 interface BookingRequest {
     id: string;
@@ -149,7 +150,7 @@ const BookingRequests: React.FC<{ requests: BookingRequest[] }> = ({ requests: i
                             {/* Avatar & Basic Info */}
                             <div className="flex items-center gap-4 w-full md:flex-1">
                                 <div className="relative">
-                                    <img src={req.clientAvatar} alt={req.clientName} className="size-16 rounded-xl object-cover bg-surface-light border border-border-dark" />
+                                    <Avatar src={req.clientAvatar || undefined} name={req.clientName} className="size-16 rounded-xl border border-border-dark" textClassName="text-2xl" />
                                 </div>
 
                                 <div className="min-w-0 flex-1">
@@ -202,7 +203,7 @@ const BookingRequests: React.FC<{ requests: BookingRequest[] }> = ({ requests: i
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-border-dark bg-surface-dark z-10 rounded-t-2xl sticky top-0">
                             <div className="flex items-center gap-4">
-                                <img src={selectedRequest.clientAvatar} alt={selectedRequest.clientName} className="size-14 rounded-full border-2 border-primary" />
+                                <Avatar src={selectedRequest.clientAvatar || undefined} name={selectedRequest.clientName} className="size-14 rounded-full border-2 border-primary" textClassName="text-xl" />
                                 <div>
                                     <h2 className="text-xl font-bold text-white leading-none">{selectedRequest.clientName}</h2>
                                     <div className="flex items-center gap-2 mt-1">

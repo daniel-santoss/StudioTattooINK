@@ -30,7 +30,6 @@ export interface PerfilData {
   portfolio?: PerfilPortfolioItem[];
 }
 
-const AVATAR_FALLBACK = '/images/tatuadores/tatuador1.jpg';
 const EXP_LABEL: Record<string, string> = {
   INICIANTE: 'Iniciante (Aprendiz)', DE_1_A_3: '1 a 3 anos', DE_3_A_5: '3 a 5 anos', MAIS_DE_5: 'Mais de 5 anos',
 };
@@ -54,7 +53,7 @@ export async function getPerfil(usuarioId: string): Promise<PerfilData | null> {
     name: u.nome,
     email: u.email,
     phone: u.telefone ?? '',
-    avatar: u.avatarUrl ?? AVATAR_FALLBACK,
+    avatar: u.avatarUrl ?? '',
   };
 
   if (u.tipo === 'PROFISSIONAL' && u.profissional) {

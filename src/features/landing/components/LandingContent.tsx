@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Avatar from '@/shared/components/Avatar';
 
 interface GalleryPreviewItem {
   id: string;
@@ -126,7 +127,11 @@ const LandingContent: React.FC<{ artists: ArtistPreview[]; galleryPreview: Galle
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {artists.map((artist) => (
               <div key={artist.id} className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-surface-dark cursor-pointer" onClick={() => router.push('/book')}>
-                <img src={artist.img} alt={artist.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                {artist.img ? (
+                  <img src={artist.img} alt={artist.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                ) : (
+                  <Avatar src={null} name={artist.name} className="absolute inset-0 w-full h-full rounded-none" textClassName="text-7xl" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
                   <p className="text-primary text-xs font-bold uppercase tracking-widest mb-1">{artist.style}</p>

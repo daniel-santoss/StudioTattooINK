@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Avatar from '@/shared/components/Avatar';
 
 interface PortfolioItem {
     id: string;
@@ -79,7 +80,7 @@ const Profile: React.FC<{ profile: UserProfile | null }> = ({ profile }) => {
 
                 <div className="relative pt-24 mb-8 flex flex-col md:flex-row items-end md:items-end gap-6">
                     <div className="relative">
-                        <img src={profile.avatar} alt="Avatar" className="size-32 rounded-2xl border-4 border-surface-dark bg-surface-dark object-cover shadow-2xl" />
+                        <Avatar src={profile.avatar || undefined} name={profile.name} className="size-32 rounded-2xl border-4 border-surface-dark shadow-2xl" textClassName="text-5xl" />
                     </div>
                     <div className="mb-2">
                         <h2 className="text-2xl font-bold text-white">{profile.name}</h2>

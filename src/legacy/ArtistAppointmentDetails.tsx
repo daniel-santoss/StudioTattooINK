@@ -7,6 +7,7 @@ import CopyButton from '@/shared/components/CopyButton';
 import { iniciarSessao, finalizarSessao, agendarProximaSessao } from '@/features/booking/actions/cicloSessao';
 import { confirmarRemarcacaoCliente, remarcarAgendamento } from '@/features/booking/actions/gerenciarAgendamento';
 import DateTimePicker from '@/features/booking/components/DateTimePicker';
+import Avatar from '@/shared/components/Avatar';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 // Interface adaptada para a visão do Artista (dados reais via prop)
@@ -292,7 +293,7 @@ const ArtistAppointmentDetails: React.FC<{ appointment: ArtistAppointmentView | 
                                         {appointment.clientType}
                                     </div>
 
-                                    <img src={appointment.clientAvatar} alt={appointment.clientName} className="size-24 rounded-2xl object-cover border-2 border-surface-dark shadow-lg" />
+                                    <Avatar src={appointment.clientAvatar || undefined} name={appointment.clientName} className="size-24 rounded-2xl border-2 border-surface-dark shadow-lg" textClassName="text-4xl" />
                                     <div className="flex-1 text-center sm:text-left">
                                         <h3 className="text-2xl font-bold text-white mb-2">{appointment.clientName}</h3>
                                         <div className="flex flex-col sm:flex-row items-center gap-4 text-sm text-text-muted mb-4">

@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Avatar from '@/shared/components/Avatar';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 interface Appointment {
@@ -103,11 +104,7 @@ const ClientDashboard: React.FC<{ appointments: Appointment[] }> = ({ appointmen
                             }`}></div>
                         <div className="flex flex-1 items-center gap-6 w-full">
                             <div className="relative shrink-0">
-                                <img
-                                    src={apt.image}
-                                    alt={apt.artist}
-                                    className="size-20 rounded-xl bg-zinc-900 border border-zinc-700 object-cover shadow-lg"
-                                />
+                                <Avatar src={apt.image || undefined} name={apt.artist} className="size-20 rounded-xl border border-zinc-700 shadow-lg" textClassName="text-3xl" />
                             </div>
 
                             <div className="flex-1 min-w-0">

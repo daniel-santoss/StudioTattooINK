@@ -1,16 +1,25 @@
 'use client';
 
-import React, { useActionState, useState } from 'react';
+import React, { useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { login, type AuthState } from '@/features/auth/actions/auth';
-import type { UserRole } from '@/shared/types';
+
+const SUCESSO_MSG: Record<string, string> = {
+  senha_criada: 'Senha criada com sucesso! Entre com a sua nova senha.',
+  candidatura: 'Candidatura enviada! Avisaremos assim que for aprovada.',
+  check: 'Conta criada! Verifique seu e-mail para confirmar o cadastro.',
+};
 
 const LoginForm: React.FC = () => {
   const searchParams = useSearchParams();
   const redirectPath = searchParams?.get('redirect') || '/';
+  const sucesso =
+    (searchParams?.get('senha_criada') && SUCESSO_MSG.senha_criada) ||
+    (searchParams?.get('candidatura') && SUCESSO_MSG.candidatura) ||
+    (searchParams?.get('check') && SUCESSO_MSG.check) ||
+    null;
 
-  const [role, setRole] = useState<UserRole>('client');
   const [state, formAction, pending] = useActionState<AuthState, FormData>(login, null);
 
   return (
@@ -31,18 +40,12 @@ const LoginForm: React.FC = () => {
           <p className="text-text-muted text-sm font-display tracking-wide">Acesse sua conta para continuar.</p>
         </div>
 
-        {/* Role Switcher */}
-        <div className="grid grid-cols-3 gap-1 p-1 bg-background-dark rounded-lg border border-border-dark mb-8">
-          <button type="button" onClick={() => setRole('client')} className={`py-2 rounded font-bold text-xs uppercase tracking-wide transition-all ${role === 'client' ? 'bg-surface-light text-white shadow' : 'text-text-muted hover:text-white'}`}>
-            Cliente
-          </button>
-          <button type="button" onClick={() => setRole('artist')} className={`py-2 rounded font-bold text-xs uppercase tracking-wide transition-all ${role === 'artist' ? 'bg-surface-light text-white shadow' : 'text-text-muted hover:text-white'}`}>
-            Tatuador
-          </button>
-          <button type="button" onClick={() => setRole('admin')} className={`py-2 rounded font-bold text-xs uppercase tracking-wide transition-all ${role === 'admin' ? 'bg-surface-light text-white shadow' : 'text-text-muted hover:text-white'}`}>
-            Gerente
-          </button>
-        </div>
+        {sucesso && (
+          <div className="mb-6 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm rounded-lg px-4 py-3 flex items-center gap-2">
+            <span className="material-symbols-outlined text-lg flex-shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+            {sucesso}
+          </div>
+        )}
 
         <form action={formAction} className="space-y-6">
           <input type="hidden" name="redirect" value={redirectPath} />
@@ -50,7 +53,7 @@ const LoginForm: React.FC = () => {
             <label className="text-xs font-bold text-text-muted uppercase tracking-widest">E-mail</label>
             <div className="relative group">
               <span className="material-symbols-outlined absolute left-3 top-2.5 text-text-muted group-focus-within:text-white transition-colors">mail</span>
-              <input key={role} name="email" type="email" required defaultValue={role === 'client' ? 'cliente@email.com' : (role === 'artist' ? 'artista@inkstudio.com' : 'admin@inkstudio.com')} className="w-full bg-background-dark border border-border-dark rounded-lg py-2.5 pl-10 text-white placeholder-zinc-700 focus:border-primary transition-all" />
+              <input name="email" type="email" required placeholder="seu@email.com" className="w-full bg-background-dark border border-border-dark rounded-lg py-2.5 pl-10 text-white placeholder-zinc-700 focus:border-primary transition-all" />
             </div>
           </div>
 
@@ -75,19 +78,15 @@ const LoginForm: React.FC = () => {
           )}
 
           <button type="submit" disabled={pending} className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3 rounded-lg shadow-[0_0_20px_rgba(212,17,50,0.3)] hover:shadow-[0_0_25px_rgba(212,17,50,0.5)] transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-            {pending ? 'Autenticando...' : (role === 'client' ? 'Entrar como Cliente' : 'Acessar Painel')}
+            {pending ? 'Autenticando...' : 'Entrar'}
             {!pending && <span className="material-symbols-outlined text-lg">arrow_forward</span>}
           </button>
         </form>
 
         <div className="mt-8 text-center border-t border-border-dark pt-6">
-          {role === 'admin' ? (
-            <p className="text-xs text-text-muted">Acesso restrito a funcionários autorizados.</p>
-          ) : (
-            <p className="text-xs text-text-muted">
-              Não tem uma conta? <Link href="/signup" className="text-white hover:text-primary transition-colors font-bold ml-1 underline">Cadastre-se</Link>
-            </p>
-          )}
+          <p className="text-xs text-text-muted">
+            Não tem uma conta? <Link href="/signup" className="text-white hover:text-primary transition-colors font-bold ml-1 underline">Cadastre-se</Link>
+          </p>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 
 import React, { useState } from 'react';
+import Avatar from '@/shared/components/Avatar';
 
 interface Report {
     id: string;
@@ -151,10 +152,11 @@ const Reports: React.FC<{ reports: Report[] }> = ({ reports }) => {
                 {filteredReports.length > 0 ? filteredReports.map((report) => (
                     <div key={report.id} className="bg-surface-dark border border-border-dark rounded-xl p-5 flex flex-col md:flex-row gap-6 hover:border-primary/30 transition-all group animate-fade-in">
                         <div className="flex flex-col items-center justify-center gap-2 min-w-[80px]">
-                            <img
-                                src={report.reporterImage}
-                                alt={report.reporterName}
-                                className="size-14 rounded-full object-cover border-2 border-surface-light shadow-lg"
+                            <Avatar
+                                src={report.reporterImage || undefined}
+                                name={report.reporterName}
+                                className="size-14 rounded-full border-2 border-surface-light shadow-lg"
+                                textClassName="text-xl"
                             />
                             <span className="text-[10px] uppercase font-bold text-text-muted tracking-wider">
                                 {report.type === 'client_report' ? 'Cliente' : 'Artista'}
@@ -180,7 +182,7 @@ const Reports: React.FC<{ reports: Report[] }> = ({ reports }) => {
                                 <div className="flex items-center gap-2">
                                     <span className="text-text-muted text-xs uppercase font-bold">Reportado:</span>
                                     <div className="flex items-center gap-2 bg-surface-light px-2 py-1 rounded border border-white/5">
-                                        <img src={report.reportedImage} alt={report.reportedName} className="size-5 rounded-full object-cover" />
+                                        <Avatar src={report.reportedImage || undefined} name={report.reportedName} className="size-5 rounded-full" textClassName="text-[9px]" />
                                         <span className="text-white font-bold">{report.reportedName}</span>
                                     </div>
                                 </div>
@@ -249,7 +251,7 @@ const Reports: React.FC<{ reports: Report[] }> = ({ reports }) => {
                                 <div>
                                     <p className="text-xs text-text-muted uppercase font-bold mb-2">Quem Reportou</p>
                                     <div className="flex items-center gap-3">
-                                        <img src={selectedReport.reporterImage} className="size-10 rounded-full border border-border-dark" />
+                                        <Avatar src={selectedReport.reporterImage || undefined} name={selectedReport.reporterName} className="size-10 rounded-full border border-border-dark" />
                                         <div>
                                             <p className="text-sm font-bold text-white">{selectedReport.reporterName}</p>
                                             <p className="text-xs text-text-muted capitalize">{selectedReport.type === 'client_report' ? 'Cliente' : 'Tatuador'}</p>
@@ -259,7 +261,7 @@ const Reports: React.FC<{ reports: Report[] }> = ({ reports }) => {
                                 <div>
                                     <p className="text-xs text-text-muted uppercase font-bold mb-2">Reportado</p>
                                     <div className="flex items-center gap-3 h-10 px-3 bg-surface-light rounded-lg border border-white/5">
-                                        <img src={selectedReport.reportedImage} className="size-6 rounded-full object-cover" />
+                                        <Avatar src={selectedReport.reportedImage || undefined} name={selectedReport.reportedName} className="size-6 rounded-full" textClassName="text-[10px]" />
                                         <p className="text-sm font-bold text-white">{selectedReport.reportedName}</p>
                                     </div>
                                 </div>

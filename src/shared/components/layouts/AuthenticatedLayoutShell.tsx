@@ -2,9 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useRouter, usePathname } from 'next/navigation';
 import { logout } from '@/features/auth/actions/auth';
+import Avatar from '@/shared/components/Avatar';
 import type { NavItem, UserRole } from '@/shared/types';
+
+const PrimeiroAcessoModal = dynamic(() => import('@/features/auth/components/PrimeiroAcessoModal'));
 
 const commonAdminItems: NavItem[] = [
   { label: 'Início', path: '/admin/dashboard', icon: 'dashboard' },
@@ -35,9 +39,10 @@ interface AuthenticatedLayoutShellProps {
   role: UserRole;
   name: string;
   avatarUrl?: string;
+  primeiroAcesso?: boolean;
 }
 
-const AuthenticatedLayoutShell: React.FC<AuthenticatedLayoutShellProps> = ({ children, role, name, avatarUrl }) => {
+const AuthenticatedLayoutShell: React.FC<AuthenticatedLayoutShellProps> = ({ children, role, name, avatarUrl, primeiroAcesso }) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -54,6 +59,8 @@ const AuthenticatedLayoutShell: React.FC<AuthenticatedLayoutShellProps> = ({ chi
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background-dark text-white font-body">
+      {/* Modal obrigatório de primeiro acesso — bloqueia toda a UI */}
+      {primeiroAcesso && <PrimeiroAcessoModal nomeUsuario={name} />}
       {/* Sidebar */}
       <aside className="hidden md:flex w-72 flex-col border-r border-border-dark bg-surface-dark flex-shrink-0" role="navigation" aria-label="Menu lateral">
         <div className="flex flex-col h-full p-6 justify-between">
@@ -98,7 +105,7 @@ const AuthenticatedLayoutShell: React.FC<AuthenticatedLayoutShellProps> = ({ chi
                 onClick={() => router.push('/admin/profile')}
                 className="flex items-center gap-3 flex-1 overflow-hidden cursor-pointer"
               >
-                <div className="size-10 rounded-full bg-cover bg-center border border-border-dark bg-surface-light" style={{ backgroundImage: `url(${avatarUrl || '/images/tatuadores/tatuador1.jpg'})` }}></div>
+                <Avatar src={avatarUrl || undefined} name={name} className="size-10 rounded-full" />
                 <div className="flex flex-col overflow-hidden flex-1 text-left">
                   <span className="text-sm font-bold text-white group-hover:text-primary transition-colors truncate">{name}</span>
                   <span className="text-xs text-text-muted truncate capitalize">{roleLabel}</span>

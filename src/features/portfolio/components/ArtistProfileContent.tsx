@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Avatar from '@/shared/components/Avatar';
 
 interface PortfolioItem {
   title: string;
@@ -27,7 +28,11 @@ const ArtistProfileContent: React.FC<{ artist: ArtistData }> = ({ artist }) => {
         {/* Header */}
         <div className="flex flex-col md:flex-row gap-8 items-start mb-16">
           <div className="w-40 h-40 rounded-2xl overflow-hidden border-2 border-primary flex-shrink-0">
-            <img src={artist.avatarUrl} alt={artist.name} className="w-full h-full object-cover object-top" />
+            {artist.avatarUrl ? (
+              <img src={artist.avatarUrl} alt={artist.name} className="w-full h-full object-cover object-top" />
+            ) : (
+              <Avatar src={null} name={artist.name} className="w-full h-full rounded-none" textClassName="text-8xl" />
+            )}
           </div>
           <div className="flex-1">
             <h1 className="font-tattoo text-5xl text-white mb-2">{artist.name}</h1>

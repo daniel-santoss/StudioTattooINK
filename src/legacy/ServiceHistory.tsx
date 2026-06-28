@@ -3,6 +3,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Avatar from '@/shared/components/Avatar';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 interface HistoryItem {
@@ -128,7 +129,7 @@ const ServiceHistory: React.FC<{ items: HistoryItem[] }> = ({ items }) => {
                             {/* Content */}
                             <div className="flex-1 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <img src={item.clientAvatar} alt={item.clientName} className="size-12 rounded-full border border-border-dark object-cover" />
+                                    <Avatar src={item.clientAvatar || undefined} name={item.clientName} className="size-12 rounded-full border border-border-dark" textClassName="text-lg" />
                                     <div>
                                         <h3 className="text-lg font-bold text-white leading-tight group-hover:text-primary transition-colors">{item.clientName}</h3>
                                         <p className="text-sm text-text-light mb-1">{item.service}</p>

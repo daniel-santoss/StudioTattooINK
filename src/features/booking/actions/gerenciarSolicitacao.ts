@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/shared/lib/prisma';
-import { getCurrentUser } from '@/features/auth/data/session';
+import { getCurrentUser, MSG_PRIMEIRO_ACESSO } from '@/features/auth/data/session';
 
 export type GerenciarState = { error?: string; ok?: boolean } | null;
 
@@ -13,6 +13,7 @@ export type GerenciarState = { error?: string; ok?: boolean } | null;
 export async function aprovarSolicitacao(_prev: GerenciarState, formData: FormData): Promise<GerenciarState> {
   const usuario = await getCurrentUser();
   if (!usuario) return { error: 'Sessão expirada.' };
+  if (usuario.primeiroAcesso) return { error: MSG_PRIMEIRO_ACESSO };
 
   const solicitacaoId = String(formData.get('solicitacaoId') ?? '');
   const dataHora = String(formData.get('dataHora') ?? ''); // "YYYY-MM-DDTHH:mm"
@@ -108,6 +109,7 @@ export async function aprovarSolicitacao(_prev: GerenciarState, formData: FormDa
 export async function recusarSolicitacao(_prev: GerenciarState, formData: FormData): Promise<GerenciarState> {
   const usuario = await getCurrentUser();
   if (!usuario) return { error: 'Sessão expirada.' };
+  if (usuario.primeiroAcesso) return { error: MSG_PRIMEIRO_ACESSO };
 
   const solicitacaoId = String(formData.get('solicitacaoId') ?? '');
   const motivo = String(formData.get('motivo') ?? '').trim();

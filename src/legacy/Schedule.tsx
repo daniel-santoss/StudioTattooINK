@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { cancelarAgendamento, remarcarAgendamento } from '@/features/booking/actions/gerenciarAgendamento';
 import DateTimePicker from '@/features/booking/components/DateTimePicker';
+import Avatar from '@/shared/components/Avatar';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
 interface ScheduleItem {
@@ -220,7 +221,7 @@ const Schedule: React.FC<{ items: ScheduleItem[]; role: string }> = ({ items, ro
 
                                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                     <div className="flex items-center gap-4 min-w-0">
-                                        <img src={item.clientAvatar} alt={item.clientName} className="size-12 rounded-full border border-border-dark object-cover shrink-0" />
+                                        <Avatar src={item.clientAvatar || undefined} name={item.clientName} className="size-12 rounded-full border border-border-dark shrink-0" textClassName="text-lg" />
                                         <div className="min-w-0">
                                             <p className="text-sm text-text-light flex items-center gap-1.5">
                                                 <span className="material-symbols-outlined text-[15px] text-text-muted">person</span>

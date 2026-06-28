@@ -5,7 +5,6 @@ import { getAllArtists } from '@/features/portfolio/data/artists';
 import { getGallery } from '@/features/portfolio/data/gallery';
 import { getCurrentUser } from '@/features/auth/data/session';
 
-const AVATAR_FALLBACK = '/images/tatuadores/tatuador1.jpg';
 
 export const metadata: Metadata = {
   title: 'Ink Studio — Tatuagem & Piercing | Agende sua Sessão',
@@ -26,7 +25,7 @@ export default async function HomePage() {
     id: a.id,
     name: a.name,
     style: a.styles[0] ?? a.role,
-    img: a.avatarUrl || AVATAR_FALLBACK,
+    img: a.avatarUrl || '',
   }));
 
   const galleryPreview = gallery.slice(0, 6).map((g) => ({

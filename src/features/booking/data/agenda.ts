@@ -40,7 +40,6 @@ function reais(centavos: number | null): string {
   return `R$ ${(centavos / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-const AVATAR_FALLBACK = '/images/tatuadores/tatuador1.jpg';
 
 const SCHED_STATUS: Record<string, ScheduleItem['status']> = {
   AGENDADO: 'confirmado', AGUARDANDO_CONFIRMACAO: 'pendente', EM_ANDAMENTO: 'em-andamento',
@@ -83,7 +82,7 @@ export async function getAgendaProfissional(profissionalId: string | null): Prom
       dateISO: isoDateFmt.format(a.iniciaEm),
       dateLabel: cardDate(a.iniciaEm),
       clientName: a.cliente?.usuario.nome ?? 'Cliente',
-      clientAvatar: a.cliente?.usuario.avatarUrl ?? AVATAR_FALLBACK,
+      clientAvatar: a.cliente?.usuario.avatarUrl ?? '',
       artistName: a.profissional.usuario.nome,
       service,
       status: SCHED_STATUS[a.status] ?? 'confirmado',
@@ -147,7 +146,7 @@ export async function getHistoricoProfissional(profissionalId: string | null): P
       day, month, year,
       time: timeFmt.format(a.iniciaEm),
       clientName: a.cliente?.usuario.nome ?? 'Cliente',
-      clientAvatar: a.cliente?.usuario.avatarUrl ?? AVATAR_FALLBACK,
+      clientAvatar: a.cliente?.usuario.avatarUrl ?? '',
       service: a.servico?.nome ?? a.observacoes ?? 'Sessão',
       status: a.status === 'CANCELADO' ? 'cancelado' : 'concluido',
       type: SCHED_TYPE[a.tipo] ?? 'tattoo',
@@ -230,7 +229,7 @@ export async function getAgendamentoDetalheProfissional(
   return {
     id: a.id,
     clientName: a.cliente?.usuario.nome ?? 'Cliente',
-    clientAvatar: a.cliente?.usuario.avatarUrl ?? AVATAR_FALLBACK,
+    clientAvatar: a.cliente?.usuario.avatarUrl ?? '',
     clientType,
     clientPhone: a.cliente?.usuario.telefone ?? '—',
     clientSessions: a.cliente?.totalSessoes ?? 0,

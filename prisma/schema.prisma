@@ -148,6 +148,8 @@ model Usuario {
   telefone  String?
   avatarUrl String?     @map("avatar_url")
   tipo      TipoUsuario
+  // true quando o profissional fez o primeiro login com senha temporária e ainda não trocou
+  primeiroAcesso Boolean @default(false) @map("primeiro_acesso")
 
   cliente      Cliente?
   profissional Profissional?
@@ -193,6 +195,9 @@ model Profissional {
   usuarioId String  @unique @map("usuario_id")
 
   titulo                 String // ex: "Tatuador / Body Piercer"
+  username               String?               @unique // @handle público (único); backfill p/ existentes
+  usernameAlteradoEm     DateTime?             @map("username_alterado_em") // controle da troca a cada 90 dias
+  cpf                    String?
   bio                    String?
   instagram              String?
   portfolioUrl           String?               @map("portfolio_url")
@@ -251,17 +256,20 @@ model ProfissionalGaleria {
 }
 
 model ProfissionalCandidatura {
-  id             String            @id @default(cuid())
-  nome           String
-  email          String
-  telefone       String?
-  dataNascimento DateTime?         @map("data_nascimento")
-  portfolioUrl   String            @map("portfolio_url")
-  experiencia    NivelExperiencia?
-  estilos        String[] // texto livre — candidato ainda não é Profissional
-  estiloCustom   String?           @map("estilo_custom")
-  avatarUrl      String?           @map("avatar_url")
-  status         StatusCandidatura @default(PENDENTE)
+  id              String            @id @default(cuid())
+  nome            String
+  email           String
+  cpf             String?
+  bio             String?
+  telefone        String?
+  dataNascimento  DateTime?         @map("data_nascimento")
+  portfolioUrl    String            @map("portfolio_url")
+  experiencia     NivelExperiencia?
+  estilos         String[] // texto livre — candidato ainda não é Profissional
+  estiloCustom    String?           @map("estilo_custom")
+  avatarUrl       String?           @map("avatar_url")
+  realizaPiercing Boolean           @default(false) @map("realiza_piercing")
+  status          StatusCandidatura @default(PENDENTE)
 
   criadoEm     DateTime @default(now()) @map("criado_em")
   atualizadoEm DateTime @updatedAt @map("atualizado_em")

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/shared/lib/prisma';
-import { getCurrentUser } from '@/features/auth/data/session';
+import { getCurrentUser, MSG_PRIMEIRO_ACESSO } from '@/features/auth/data/session';
 
 export type CicloState = { ok?: boolean; error?: string };
 
@@ -12,6 +12,7 @@ async function carregarSessao(agendamentoId: string) {
   if (!usuario?.profissional) {
     return { error: 'Apenas o profissional responsável pode alterar a sessão.' as const };
   }
+  if (usuario.primeiroAcesso) return { error: MSG_PRIMEIRO_ACESSO };
   const ag = await prisma.agendamento.findFirst({
     where: { id: agendamentoId, profissionalId: usuario.profissional.id, deletadoEm: null },
     select: { id: true, status: true, clienteId: true },
@@ -60,6 +61,7 @@ export async function finalizarSessao(agendamentoId: string): Promise<CicloState
   if (!usuario?.profissional) {
     return { error: 'Apenas o profissional responsável pode alterar a sessão.' };
   }
+  if (usuario.primeiroAcesso) return { error: MSG_PRIMEIRO_ACESSO };
   const ag = await prisma.agendamento.findFirst({
     where: { id: agendamentoId, profissionalId: usuario.profissional.id, deletadoEm: null },
     select: { id: true, status: true, clienteId: true },
@@ -108,6 +110,7 @@ export async function agendarProximaSessao(agendamentoId: string, proximaDataHor
   if (!usuario?.profissional) {
     return { error: 'Apenas o profissional responsável pode agendar a próxima sessão.' };
   }
+  if (usuario.primeiroAcesso) return { error: MSG_PRIMEIRO_ACESSO };
   if (!proximaDataHora) {
     return { error: 'Defina a data da próxima sessão.' };
   }

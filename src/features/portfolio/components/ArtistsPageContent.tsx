@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Avatar from '@/shared/components/Avatar';
 
 interface ArtistData {
   id: string;
@@ -31,7 +32,11 @@ const ArtistsPageContent: React.FC<{ artists: ArtistData[] }> = ({ artists }) =>
               className="group bg-surface-dark border border-border-dark rounded-2xl overflow-hidden hover:border-primary/50 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5"
             >
               <div className="aspect-square overflow-hidden relative">
-                <img src={artist.avatarUrl} alt={artist.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                {artist.avatarUrl ? (
+                  <img src={artist.avatarUrl} alt={artist.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                ) : (
+                  <Avatar src={null} name={artist.name} className="w-full h-full rounded-none" textClassName="text-7xl" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
               </div>
               <div className="p-5">

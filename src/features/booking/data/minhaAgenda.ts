@@ -23,7 +23,6 @@ const timeFmt = new Intl.DateTimeFormat('pt-BR', {
   hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo',
 });
 
-const AVATAR_FALLBACK = '/images/tatuadores/tatuador1.jpg';
 
 function reais(centavos: number | null): string {
   if (centavos == null) return 'A confirmar';
@@ -61,7 +60,7 @@ export async function getMinhaAgenda(clienteId: string): Promise<AgendaItem[]> {
     time: timeFmt.format(a.iniciaEm),
     status: AG_STATUS[a.status] ?? 'upcoming',
     price: reais(a.precoCentavos),
-    image: a.profissional.usuario.avatarUrl ?? AVATAR_FALLBACK,
+    image: a.profissional.usuario.avatarUrl ?? '',
   }));
 
   const daSolicitacao: AgendaItem[] = solicitacoes.map((s) => ({
@@ -72,7 +71,7 @@ export async function getMinhaAgenda(clienteId: string): Promise<AgendaItem[]> {
     time: s.periodoPreferido ?? '',
     status: SOL_STATUS[s.status] ?? 'pending',
     price: 'A confirmar',
-    image: s.profissional?.usuario.avatarUrl ?? AVATAR_FALLBACK,
+    image: s.profissional?.usuario.avatarUrl ?? '',
   }));
 
   return [...doAgendamento, ...daSolicitacao];
@@ -143,7 +142,7 @@ export async function getAgendamentoDetalhe(id: string, clienteId: string): Prom
       id: a.id,
       artist: a.profissional.usuario.nome,
       artistRole: a.profissional.titulo,
-      artistAvatar: a.profissional.usuario.avatarUrl ?? AVATAR_FALLBACK,
+      artistAvatar: a.profissional.usuario.avatarUrl ?? '',
       service: a.servicoContratado && a.servicoContratado.numeroSessoes > 1
         ? `${nomeBase} — Sessão ${a.numeroSessao}/${a.servicoContratado.numeroSessoes}`
         : nomeBase,
@@ -178,7 +177,7 @@ export async function getAgendamentoDetalhe(id: string, clienteId: string): Prom
     id: s.id,
     artist: s.profissional?.usuario.nome ?? 'A definir',
     artistRole: s.profissional?.titulo ?? 'A definir',
-    artistAvatar: s.profissional?.usuario.avatarUrl ?? AVATAR_FALLBACK,
+    artistAvatar: s.profissional?.usuario.avatarUrl ?? '',
     service: s.servico?.nome ?? s.descricao,
     fullDate: s.dataPreferida ? cap(fullDateFmt.format(s.dataPreferida)) : 'A combinar',
     time: s.periodoPreferido ?? 'A combinar',

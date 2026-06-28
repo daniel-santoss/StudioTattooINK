@@ -3,7 +3,6 @@ import { prisma } from '@/shared/lib/prisma';
 
 // Leitura (DAL) das telas de gestão do admin. Apenas dados reais do banco.
 
-const AVATAR_FALLBACK = '/images/tatuadores/tatuador1.jpg';
 const MESES_CAP = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
 function ddMonYear(d: Date | null): string {
@@ -24,9 +23,14 @@ export interface ClientData {
   email: string;
   lastVisit: string;
   status: 'Ativo' | 'Inativo';
+  statusRaw: 'PROSPECTO' | 'ATIVO' | 'INATIVO' | 'VIP';
   img: string;
   phone?: string;
   notes?: string;
+  dob?: string; // ISO ou ''
+  allergies?: string;
+  medicalNotes?: string;
+  totalSessoes: number;
 }
 
 export async function getClientes(): Promise<ClientData[]> {
@@ -39,13 +43,18 @@ export async function getClientes(): Promise<ClientData[]> {
   return clientes.map((c) => ({
     id: c.id,
     name: c.usuario.nome,
-    cpf: c.cpf ?? '—',
+    cpf: c.cpf ?? '',
     email: c.usuario.email,
     lastVisit: c.ultimaVisitaEm ? ddMonYear(c.ultimaVisitaEm) : 'Novo Cliente',
     status: c.status === 'INATIVO' ? 'Inativo' : 'Ativo',
-    img: c.usuario.avatarUrl ?? AVATAR_FALLBACK,
+    statusRaw: c.status,
+    img: c.usuario.avatarUrl ?? '',
     phone: c.usuario.telefone ?? '',
     notes: c.observacoes ?? '',
+    dob: c.dataNascimento ? c.dataNascimento.toISOString() : '',
+    allergies: c.alergias ?? '',
+    medicalNotes: c.observacoesMedicas ?? '',
+    totalSessoes: c.totalSessoes,
   }));
 }
 
@@ -58,9 +67,13 @@ export interface StaffMember {
   role: string;
   specialty: string;
   status: string;
+  statusRaw: 'DISPONIVEL' | 'EM_SESSAO' | 'FOLGA';
   email: string;
   phone: string;
   avatar: string;
+  username: string;
+  bio: string;
+  realizaPiercing: boolean;
 }
 
 const DISP_LABEL: Record<string, string> = {
@@ -77,13 +90,17 @@ export async function getProfissionais(): Promise<StaffMember[]> {
   return profissionais.map((p) => ({
     id: p.id,
     name: p.usuario.nome,
-    cpf: '—',
+    cpf: p.cpf ?? '',
     role: p.titulo,
     specialty: p.estilos.map((e) => e.estilo.nome).join(', ') || p.titulo,
     status: DISP_LABEL[p.disponibilidade] ?? 'Disponível',
+    statusRaw: p.disponibilidade,
     email: p.usuario.email,
-    phone: p.usuario.telefone ?? '—',
-    avatar: p.usuario.avatarUrl ?? AVATAR_FALLBACK,
+    phone: p.usuario.telefone ?? '',
+    avatar: p.usuario.avatarUrl ?? '',
+    username: p.username ?? '',
+    bio: p.bio ?? '',
+    realizaPiercing: p.oferece.includes('PIERCING'),
   }));
 }
 
@@ -101,6 +118,7 @@ export interface RequestData {
   customStyle?: string;
   requestDate: string;
   avatarUrl: string;
+  realizaPiercing: boolean;
 }
 
 const EXP_LABEL: Record<string, string> = {
@@ -124,7 +142,8 @@ export async function getCandidaturas(): Promise<RequestData[]> {
     styles: c.estiloCustom ? [...c.estilos, 'Outros'] : c.estilos,
     customStyle: c.estiloCustom ?? undefined,
     requestDate: ddMonYear(c.criadoEm),
-    avatarUrl: c.avatarUrl ?? AVATAR_FALLBACK,
+    avatarUrl: c.avatarUrl ?? '',
+    realizaPiercing: c.realizaPiercing,
   }));
 }
 
@@ -161,9 +180,9 @@ export async function getOcorrencias(): Promise<ReportItem[]> {
     id: o.id,
     type: o.relator?.tipo === 'PROFISSIONAL' ? 'artist_report' : 'client_report',
     reporterName: o.relator?.nome ?? '—',
-    reporterImage: o.relator?.avatarUrl ?? AVATAR_FALLBACK,
+    reporterImage: o.relator?.avatarUrl ?? '',
     reportedName: o.reportado?.nome ?? '—',
-    reportedImage: o.reportado?.avatarUrl ?? AVATAR_FALLBACK,
+    reportedImage: o.reportado?.avatarUrl ?? '',
     date: ddMonYear(o.criadoEm),
     category: o.categoria,
     description: o.descricao,

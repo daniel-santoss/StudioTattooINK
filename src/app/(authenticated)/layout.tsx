@@ -17,8 +17,14 @@ export default async function AuthenticatedLayout({ children }: { children: Reac
   const role = TIPO_TO_ROLE[usuario.tipo] ?? 'client';
 
   return (
-    <AuthenticatedLayoutShell role={role} name={usuario.nome} avatarUrl={usuario.avatarUrl ?? undefined}>
+    <AuthenticatedLayoutShell
+      role={role}
+      name={usuario.nome}
+      avatarUrl={usuario.avatarUrl ?? undefined}
+      primeiroAcesso={usuario.primeiroAcesso}
+    >
       {children}
     </AuthenticatedLayoutShell>
   );
 }
+

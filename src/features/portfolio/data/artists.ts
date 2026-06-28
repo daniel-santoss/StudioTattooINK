@@ -72,7 +72,7 @@ export async function getArtistsForMatch() {
     id: p.id,
     name: p.usuario.nome,
     styles: p.estilos.map((e) => e.estilo.nome),
-    img: p.usuario.avatarUrl ?? '/images/tatuadores/tatuador1.jpg',
+    img: p.usuario.avatarUrl ?? '',
     summary: p.bio ?? '',
     portfolio: p.portfolio.map((item) => ({
       title: item.titulo, desc: item.descricao ?? '', img: item.imagemUrl,

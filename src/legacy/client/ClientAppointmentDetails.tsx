@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { confirmarData, recusarData } from '@/features/booking/actions/confirmarAgendamento';
 import { clienteCancelar, clienteRemarcar } from '@/features/booking/actions/gerenciarAgendamentoCliente';
 import DateTimePicker from '@/features/booking/components/DateTimePicker';
+import Avatar from '@/shared/components/Avatar';
 import CopyButton from '@/shared/components/CopyButton';
 function useNavigate() { const r = useRouter(); return (p: string | number) => typeof p === 'number' ? r.back() : r.push(p); }
 
@@ -238,7 +239,7 @@ const ClientAppointmentDetails: React.FC<{ appointment: AppointmentDetail | null
 
                                 {/* Artist Section */}
                                 <div className="bg-surface-light/20 rounded-2xl p-6 border border-white/5 flex items-center gap-5">
-                                    <img src={appointment.artistAvatar} alt={appointment.artist} className="size-16 rounded-xl object-cover border-2 border-surface-dark" />
+                                    <Avatar src={appointment.artistAvatar || undefined} name={appointment.artist} className="size-16 rounded-xl border-2 border-surface-dark" textClassName="text-2xl" />
                                     <div>
                                         <p className="text-text-muted text-xs font-bold uppercase tracking-widest mb-1">Profissional</p>
                                         <h3 className="text-xl font-bold text-white">{appointment.artist}</h3>

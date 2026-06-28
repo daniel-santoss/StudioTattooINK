@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/shared/lib/prisma';
-import { getCurrentUser } from '@/features/auth/data/session';
+import { getCurrentUser, MSG_PRIMEIRO_ACESSO } from '@/features/auth/data/session';
 import { propostaPendentePorCliente } from '@/features/booking/lib/proposta';
 
 export type GestaoAgendamentoState = { ok?: boolean; error?: string };
@@ -23,6 +23,7 @@ function revalidar(agendamentoId: string) {
 async function carregarParaGestao(agendamentoId: string) {
   const usuario = await getCurrentUser();
   if (!usuario) return { error: 'Sessão expirada.' as const };
+  if (usuario.primeiroAcesso) return { error: MSG_PRIMEIRO_ACESSO };
 
   const ehAdmin = usuario.tipo === 'ADMIN';
   const meuProfId = usuario.profissional?.id ?? null;

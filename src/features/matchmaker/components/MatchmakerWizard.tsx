@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useMatchmaker } from '@/features/matchmaker/hooks/useMatchmaker';
 import { matchArtists, getTattooStyles, getPiercingTypes, getPlacementOptions } from '@/features/matchmaker/services/matchingEngine';
+import Avatar from '@/shared/components/Avatar';
 import type { MatchArtist } from '@/shared/types';
 
 const MatchmakerWizard: React.FC<{ artists: MatchArtist[] }> = ({ artists }) => {
@@ -143,7 +144,11 @@ const MatchmakerWizard: React.FC<{ artists: MatchArtist[] }> = ({ artists }) => 
               {recommendations.map((artist) => (
                 <div key={artist.id} className="bg-[#121212] border border-border-dark rounded-2xl overflow-hidden hover:border-primary/50 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:shadow-primary/5">
                   <div className="h-72 overflow-hidden relative">
-                    <img src={artist.img} alt={artist.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                    {artist.img ? (
+                      <img src={artist.img} alt={artist.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                    ) : (
+                      <Avatar src={null} name={artist.name} className="w-full h-full rounded-none" textClassName="text-7xl" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
                     <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
                       <div>
@@ -203,7 +208,7 @@ const MatchmakerWizard: React.FC<{ artists: MatchArtist[] }> = ({ artists }) => 
             <div className="p-6 md:p-8 border-b border-border-dark flex items-center justify-between sticky top-0 bg-[#121212] z-10">
               <div className="flex items-center gap-5">
                 <div className="relative">
-                  <img src={selectedArtist.img} alt={selectedArtist.name} className="size-[64px] rounded-full object-cover border-[3px] border-primary" />
+                  <Avatar src={selectedArtist.img || undefined} name={selectedArtist.name} className="size-[64px] rounded-full border-[3px] border-primary" textClassName="text-2xl" />
                 </div>
                 <div>
                   <h2 className="text-3xl font-black text-white leading-tight mb-1">{selectedArtist.name}</h2>
