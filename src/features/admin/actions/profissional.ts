@@ -143,3 +143,19 @@ export async function excluirProfissional(id: string): Promise<ProfissionalAdmin
   revalidatePath('/admin/staff');
   return { ok: true };
 }
+
+/** Reativa um tatuador desativado (limpa Usuario.deletadoEm). */
+export async function reativarProfissional(id: string): Promise<ProfissionalAdminState> {
+  if (!(await exigirAdmin())) return { error: 'Apenas administradores podem reativar tatuadores.' };
+
+  const prof = await prisma.profissional.findUnique({ where: { id }, select: { usuarioId: true } });
+  if (!prof) return { error: 'Tatuador não encontrado.' };
+
+  await prisma.usuario.update({
+    where: { id: prof.usuarioId },
+    data: { deletadoEm: null },
+  });
+
+  revalidatePath('/admin/staff');
+  return { ok: true };
+}

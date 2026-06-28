@@ -24,6 +24,7 @@ export interface ClientData {
   lastVisit: string;
   status: 'Ativo' | 'Inativo';
   statusRaw: 'PROSPECTO' | 'ATIVO' | 'INATIVO' | 'VIP';
+  ativo: boolean; // conta ativa (NÃO soft-deleted)
   img: string;
   phone?: string;
   notes?: string;
@@ -33,9 +34,9 @@ export interface ClientData {
   totalSessoes: number;
 }
 
+// Inclui também clientes desativados (soft-delete) — a tela filtra por `ativo`.
 export async function getClientes(): Promise<ClientData[]> {
   const clientes = await prisma.cliente.findMany({
-    where: { usuario: { deletadoEm: null } },
     include: { usuario: true },
     orderBy: { usuario: { nome: 'asc' } },
   });
@@ -48,6 +49,7 @@ export async function getClientes(): Promise<ClientData[]> {
     lastVisit: c.ultimaVisitaEm ? ddMonYear(c.ultimaVisitaEm) : 'Novo Cliente',
     status: c.status === 'INATIVO' ? 'Inativo' : 'Ativo',
     statusRaw: c.status,
+    ativo: c.usuario.deletadoEm === null,
     img: c.usuario.avatarUrl ?? '',
     phone: c.usuario.telefone ?? '',
     notes: c.observacoes ?? '',
@@ -68,6 +70,7 @@ export interface StaffMember {
   specialty: string;
   status: string;
   statusRaw: 'DISPONIVEL' | 'EM_SESSAO' | 'FOLGA';
+  ativo: boolean; // conta ativa (NÃO soft-deleted)
   email: string;
   phone: string;
   avatar: string;
@@ -80,9 +83,9 @@ const DISP_LABEL: Record<string, string> = {
   DISPONIVEL: 'Disponível', EM_SESSAO: 'Em Sessão', FOLGA: 'Folga',
 };
 
+// Inclui também tatuadores desativados (soft-delete) — a tela filtra por `ativo`.
 export async function getProfissionais(): Promise<StaffMember[]> {
   const profissionais = await prisma.profissional.findMany({
-    where: { usuario: { deletadoEm: null } },
     include: { usuario: true, estilos: { include: { estilo: true } } },
     orderBy: { usuario: { nome: 'asc' } },
   });
@@ -95,6 +98,7 @@ export async function getProfissionais(): Promise<StaffMember[]> {
     specialty: p.estilos.map((e) => e.estilo.nome).join(', ') || p.titulo,
     status: DISP_LABEL[p.disponibilidade] ?? 'Disponível',
     statusRaw: p.disponibilidade,
+    ativo: p.usuario.deletadoEm === null,
     email: p.usuario.email,
     phone: p.usuario.telefone ?? '',
     avatar: p.usuario.avatarUrl ?? '',

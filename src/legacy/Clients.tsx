@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { criarCliente, atualizarCliente, excluirCliente } from '@/features/admin/actions/cliente';
+import { criarCliente, atualizarCliente, excluirCliente, reativarCliente } from '@/features/admin/actions/cliente';
 import { maskCPF, maskTelefone } from '@/shared/lib/masks';
 import Avatar from '@/shared/components/Avatar';
 import CopyButton from '@/shared/components/CopyButton';
@@ -15,6 +15,7 @@ interface ClientData {
     lastVisit: string;
     status: 'Ativo' | 'Inativo';
     statusRaw: 'PROSPECTO' | 'ATIVO' | 'INATIVO' | 'VIP';
+    ativo: boolean;
     img: string;
     phone?: string;
     notes?: string;
@@ -37,6 +38,7 @@ const labelCls = 'text-xs font-bold text-text-muted uppercase tracking-widest bl
 const Clients: React.FC<{ clients: ClientData[] }> = ({ clients }) => {
     const router = useRouter();
     const [search, setSearch] = useState('');
+    const [filtroStatus, setFiltroStatus] = useState<'ativos' | 'desativados' | 'todos'>('ativos');
     const [isPending, startTransition] = useTransition();
     const [actionError, setActionError] = useState<string | null>(null);
 
@@ -50,11 +52,13 @@ const Clients: React.FC<{ clients: ClientData[] }> = ({ clients }) => {
     const [editForm, setEditForm] = useState({ nome: '', email: '', telefone: '', status: 'ATIVO' as ClientData['statusRaw'], observacoes: '', alergias: '', observacoesMedicas: '' });
     const [addForm, setAddForm] = useState({ nome: '', email: '', telefone: '', cpf: '' });
 
-    const filtered = clients.filter((c) =>
-        c.name.toLowerCase().includes(search.toLowerCase()) ||
-        c.email.toLowerCase().includes(search.toLowerCase()) ||
-        c.cpf.includes(search)
-    );
+    const filtered = clients
+        .filter((c) => filtroStatus === 'todos' ? true : filtroStatus === 'ativos' ? c.ativo : !c.ativo)
+        .filter((c) =>
+            c.name.toLowerCase().includes(search.toLowerCase()) ||
+            c.email.toLowerCase().includes(search.toLowerCase()) ||
+            c.cpf.includes(search)
+        );
 
     const abrirEditar = (c: ClientData) => {
         setActionError(null);
@@ -117,6 +121,15 @@ const Clients: React.FC<{ clients: ClientData[] }> = ({ clients }) => {
         });
     };
 
+    const reativar = (id: string) => {
+        setActionError(null);
+        startTransition(async () => {
+            const res = await reativarCliente(id);
+            if (res?.error) { setActionError(res.error); return; }
+            router.refresh();
+        });
+    };
+
     return (
         <div className="p-6 md:p-8 lg:p-12 max-w-7xl mx-auto w-full">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
@@ -148,6 +161,18 @@ const Clients: React.FC<{ clients: ClientData[] }> = ({ clients }) => {
             {actionError && !view && !edit && !confirmDelete && !addOpen && (
                 <div className="mb-4 bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">{actionError}</div>
             )}
+
+            <div className="flex gap-1 bg-surface-dark border border-border-dark rounded-lg p-1 mb-4 w-fit">
+                {([['ativos', 'Ativos'], ['desativados', 'Desativados'], ['todos', 'Todos']] as const).map(([val, label]) => (
+                    <button
+                        key={val}
+                        onClick={() => setFiltroStatus(val)}
+                        className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wide transition-all ${filtroStatus === val ? 'bg-primary text-white' : 'text-text-muted hover:text-white'}`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
 
             <div className="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden shadow-2xl">
                 <div className="overflow-x-auto">
@@ -185,23 +210,35 @@ const Clients: React.FC<{ clients: ClientData[] }> = ({ clients }) => {
                                         <p className="text-xs text-text-muted">{client.phone}</p>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${client.status === 'Ativo' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                                            'bg-red-500/10 text-red-500 border-red-500/20'
-                                            }`}>
-                                            {client.status}
-                                        </span>
+                                        {client.ativo ? (
+                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${client.status === 'Ativo' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                                'bg-red-500/10 text-red-500 border-red-500/20'
+                                                }`}>
+                                                {client.status}
+                                            </span>
+                                        ) : (
+                                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border bg-zinc-500/10 text-zinc-400 border-zinc-500/30">Desativado</span>
+                                        )}
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-1">
                                             <button onClick={() => setView(client)} title="Ver detalhes" className="size-8 rounded flex items-center justify-center text-text-muted hover:text-white hover:bg-white/10 transition-colors">
                                                 <span className="material-symbols-outlined text-lg">visibility</span>
                                             </button>
-                                            <button onClick={() => abrirEditar(client)} title="Editar" className="size-8 rounded flex items-center justify-center text-text-muted hover:text-white hover:bg-white/10 transition-colors">
-                                                <span className="material-symbols-outlined text-lg">edit_note</span>
-                                            </button>
-                                            <button onClick={() => { setActionError(null); setConfirmDelete(client); }} title="Excluir" className="size-8 rounded flex items-center justify-center text-red-500/70 hover:text-red-500 hover:bg-red-500/10 transition-colors">
-                                                <span className="material-symbols-outlined text-lg">delete</span>
-                                            </button>
+                                            {client.ativo ? (
+                                                <>
+                                                    <button onClick={() => abrirEditar(client)} title="Editar" className="size-8 rounded flex items-center justify-center text-text-muted hover:text-white hover:bg-white/10 transition-colors">
+                                                        <span className="material-symbols-outlined text-lg">edit_note</span>
+                                                    </button>
+                                                    <button onClick={() => { setActionError(null); setConfirmDelete(client); }} title="Desativar" className="size-8 rounded flex items-center justify-center text-red-500/70 hover:text-red-500 hover:bg-red-500/10 transition-colors">
+                                                        <span className="material-symbols-outlined text-lg">delete</span>
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <button onClick={() => reativar(client.id)} disabled={isPending} title="Reativar" className="size-8 rounded flex items-center justify-center text-emerald-500/80 hover:text-emerald-500 hover:bg-emerald-500/10 transition-colors disabled:opacity-50">
+                                                    <span className="material-symbols-outlined text-lg">restore</span>
+                                                </button>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>

@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { criarProfissional, atualizarProfissional, excluirProfissional } from '@/features/admin/actions/profissional';
+import { criarProfissional, atualizarProfissional, excluirProfissional, reativarProfissional } from '@/features/admin/actions/profissional';
 import { maskCPF, maskTelefone } from '@/shared/lib/masks';
 import Avatar from '@/shared/components/Avatar';
 import CopyButton from '@/shared/components/CopyButton';
@@ -15,6 +15,7 @@ interface StaffMember {
     specialty: string;
     status: string;
     statusRaw: 'DISPONIVEL' | 'EM_SESSAO' | 'FOLGA';
+    ativo: boolean;
     email: string;
     phone: string;
     avatar: string;
@@ -84,6 +85,7 @@ export const RatingDisplay: React.FC<{
 const Staff: React.FC<{ staff: StaffMember[] }> = ({ staff }) => {
     const router = useRouter();
     const [search, setSearch] = useState('');
+    const [filtroStatus, setFiltroStatus] = useState<'ativos' | 'desativados' | 'todos'>('ativos');
     const [isPending, startTransition] = useTransition();
     const [actionError, setActionError] = useState<string | null>(null);
 
@@ -96,11 +98,13 @@ const Staff: React.FC<{ staff: StaffMember[] }> = ({ staff }) => {
     const [editForm, setEditForm] = useState({ nome: '', email: '', telefone: '', realizaPiercing: false, bio: '' });
     const [addForm, setAddForm] = useState({ nome: '', email: '', telefone: '', cpf: '', realizaPiercing: false });
 
-    const filtered = staff.filter((m) =>
-        m.name.toLowerCase().includes(search.toLowerCase()) ||
-        m.email.toLowerCase().includes(search.toLowerCase()) ||
-        m.cpf.includes(search)
-    );
+    const filtered = staff
+        .filter((m) => filtroStatus === 'todos' ? true : filtroStatus === 'ativos' ? m.ativo : !m.ativo)
+        .filter((m) =>
+            m.name.toLowerCase().includes(search.toLowerCase()) ||
+            m.email.toLowerCase().includes(search.toLowerCase()) ||
+            m.cpf.includes(search)
+        );
 
     const abrirEditar = (m: StaffMember) => {
         setActionError(null);
@@ -159,6 +163,15 @@ const Staff: React.FC<{ staff: StaffMember[] }> = ({ staff }) => {
         });
     };
 
+    const reativar = (id: string) => {
+        setActionError(null);
+        startTransition(async () => {
+            const res = await reativarProfissional(id);
+            if (res?.error) { setActionError(res.error); return; }
+            router.refresh();
+        });
+    };
+
     const servicos = (m: StaffMember) => m.realizaPiercing ? 'Tatuagem · Piercing' : 'Tatuagem';
 
     return (
@@ -193,6 +206,18 @@ const Staff: React.FC<{ staff: StaffMember[] }> = ({ staff }) => {
                 <div className="mb-4 bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">{actionError}</div>
             )}
 
+            <div className="flex gap-1 bg-surface-dark border border-border-dark rounded-lg p-1 mb-4 w-fit">
+                {([['ativos', 'Ativos'], ['desativados', 'Desativados'], ['todos', 'Todos']] as const).map(([val, label]) => (
+                    <button
+                        key={val}
+                        onClick={() => setFiltroStatus(val)}
+                        className={`px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wide transition-all ${filtroStatus === val ? 'bg-primary text-white' : 'text-text-muted hover:text-white'}`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+
             <div className="bg-surface-dark border border-border-dark rounded-2xl overflow-hidden shadow-2xl">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
@@ -201,7 +226,7 @@ const Staff: React.FC<{ staff: StaffMember[] }> = ({ staff }) => {
                                 <th className="px-6 py-4">Tatuador</th>
                                 <th className="px-6 py-4">CPF</th>
                                 <th className="px-6 py-4">Contato</th>
-                                <th className="px-6 py-4">Serviços</th>
+                                <th className="px-6 py-4">Status</th>
                                 <th className="px-6 py-4 text-right">Ações</th>
                             </tr>
                         </thead>
@@ -229,19 +254,31 @@ const Staff: React.FC<{ staff: StaffMember[] }> = ({ staff }) => {
                                         <p className="text-xs text-text-muted">{member.phone}</p>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="text-text-light">{servicos(member)}</span>
+                                        {member.ativo ? (
+                                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Ativo</span>
+                                        ) : (
+                                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border bg-zinc-500/10 text-zinc-400 border-zinc-500/30">Desativado</span>
+                                        )}
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-1">
                                             <button onClick={() => setView(member)} title="Ver detalhes" className="size-8 rounded flex items-center justify-center text-text-muted hover:text-white hover:bg-white/10 transition-colors">
                                                 <span className="material-symbols-outlined text-lg">visibility</span>
                                             </button>
-                                            <button onClick={() => abrirEditar(member)} title="Editar" className="size-8 rounded flex items-center justify-center text-text-muted hover:text-white hover:bg-white/10 transition-colors">
-                                                <span className="material-symbols-outlined text-lg">edit_note</span>
-                                            </button>
-                                            <button onClick={() => { setActionError(null); setConfirmDelete(member); }} title="Excluir" className="size-8 rounded flex items-center justify-center text-red-500/70 hover:text-red-500 hover:bg-red-500/10 transition-colors">
-                                                <span className="material-symbols-outlined text-lg">delete</span>
-                                            </button>
+                                            {member.ativo ? (
+                                                <>
+                                                    <button onClick={() => abrirEditar(member)} title="Editar" className="size-8 rounded flex items-center justify-center text-text-muted hover:text-white hover:bg-white/10 transition-colors">
+                                                        <span className="material-symbols-outlined text-lg">edit_note</span>
+                                                    </button>
+                                                    <button onClick={() => { setActionError(null); setConfirmDelete(member); }} title="Desativar" className="size-8 rounded flex items-center justify-center text-red-500/70 hover:text-red-500 hover:bg-red-500/10 transition-colors">
+                                                        <span className="material-symbols-outlined text-lg">delete</span>
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <button onClick={() => reativar(member.id)} disabled={isPending} title="Reativar" className="size-8 rounded flex items-center justify-center text-emerald-500/80 hover:text-emerald-500 hover:bg-emerald-500/10 transition-colors disabled:opacity-50">
+                                                    <span className="material-symbols-outlined text-lg">restore</span>
+                                                </button>
+                                            )}
                                         </div>
                                     </td>
                                 </tr>

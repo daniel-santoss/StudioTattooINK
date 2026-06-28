@@ -139,3 +139,19 @@ export async function excluirCliente(id: string): Promise<ClienteAdminState> {
   revalidatePath('/admin/clients');
   return { ok: true };
 }
+
+/** Reativa um cliente desativado (limpa Usuario.deletadoEm). */
+export async function reativarCliente(id: string): Promise<ClienteAdminState> {
+  if (!(await exigirAdmin())) return { error: 'Apenas administradores podem reativar clientes.' };
+
+  const cliente = await prisma.cliente.findUnique({ where: { id }, select: { usuarioId: true } });
+  if (!cliente) return { error: 'Cliente não encontrado.' };
+
+  await prisma.usuario.update({
+    where: { id: cliente.usuarioId },
+    data: { deletadoEm: null },
+  });
+
+  revalidatePath('/admin/clients');
+  return { ok: true };
+}
